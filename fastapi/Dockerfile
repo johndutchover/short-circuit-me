@@ -1,5 +1,4 @@
-# use alpine linux
-FROM postgres:alpine
+FROM python:3.9
 
 # current working directory
 WORKDIR /code
