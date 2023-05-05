@@ -13,5 +13,5 @@ RUN pip install --no-cache-dir --upgrade -r /code/requirements.txt
 # copy app dir inside code dir
 COPY ./app /code/app
 
-# placeholder to run stuff
-# CMD [""]
+# run uvicorn (from FastAPI quickstart) to verify
+CMD ["uvicorn", "app.main:app", "--proxy-headers", "--host", "0.0.0.0", "--port", "80"]
