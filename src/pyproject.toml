@@ -1,15 +1,15 @@
 [tool.poetry]
-name = "fastapi"
+name = "short-circuit-me"
 version = "0.1.0"
 description = ""
 authors = ["John Dutchover <johndutchover@users.noreply.github.com>"]
+repository = "https://github.com/johndutchover/short-circuit-me"
 readme = "README.md"
 
 [tool.poetry.dependencies]
 python = "^3.11"
 typer = "^0.9.0"
 streamlit = "^1.22.0"
-
 
 [build-system]
 requires = ["poetry-core"]
