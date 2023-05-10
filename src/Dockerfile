@@ -4,7 +4,7 @@ FROM python:3.11
 WORKDIR /code
 
 # copy requirements only first
-COPY ./requirements.txt /code/requirements.txt
+COPY requirements.txt /code
 
 # install package dependencies exclude cache
 RUN pip install --no-cache-dir --upgrade -r /code/requirements.txt
