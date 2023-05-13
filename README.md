@@ -1,2 +1,2 @@
 # short-circuit-me
-Notification API
+Notification API for Slack
