@@ -4,8 +4,7 @@ FROM python:3.10-slim
 
 RUN mkdir /app
 WORKDIR /app
-COPY frontend/ /app
-RUN ls /app
+COPY . .
 COPY pyproject.toml /app
 
 ENV PYTHONPATH=${PYTHONPATH}:${PWD}
