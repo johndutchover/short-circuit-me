@@ -2,6 +2,11 @@
 
 import streamlit as st
 
+st.set_page_config(
+    page_title="Simple Dashboard",
+    page_icon="✅",
+    layout="wide",
+)
 
 def get_important_notifications():
     return 42
