@@ -9,10 +9,10 @@ View your Streamlit app in your browser
 
 #### Python poetry
 `poetry shell`
-`streamlit run short_circuit_me.py`
+`streamlit run streamlit_app.py`
 '''To run this file:
         - from VSCode, use "Run Python File" instead of "Run Code" (properly activates venv)
         - from PyCharm...set Python interpreter to .venv/bin/python
         - from external terminal, use "poetry shell" followed by:
-            streamlit run short_circuit_me.py
+            streamlit run streamlit_app.py
 '''
