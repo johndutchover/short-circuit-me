@@ -32,6 +32,13 @@ df
 x = st.slider('x') 
 st.write(x, 'Short-circuit-me power level is', x * x)
 
+# bar chart
+chart_data = pd.DataFrame(
+    np.random.randn(20, 3),
+    columns=["Normal", "Important", "Critical"])
+
+st.bar_chart(chart_data)
+
 #'''To run this file:
 #- from VSCode, use "Run Python File" instead of "Run Code" (properly activates venv)
 #- from PyCharm...set default python interpreter to venv
