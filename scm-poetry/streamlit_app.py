@@ -22,6 +22,12 @@ df = pd.DataFrame({
   'Total messages': [10, 20, 30, 40]
 })
 
+df = pd.DataFrame({
+  'Important messages': [1, 2, 3, 4, 3, 2,],
+  'Normal messages': [10, 20, 30, 40, 20, 30],
+  'Critical messages': [10, 20, 30, 40, 33, 23]
+})
+
 # page title
 st.title('Notification Overview Dashboard')
 # body
