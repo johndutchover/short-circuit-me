@@ -15,5 +15,5 @@ View your Streamlit app in your browser
         - from VSCode, use "Run Python File" instead of "Run Code" (properly activates venv)
         - from PyCharm...set Python interpreter to .venv/bin/python
         - from external terminal, use "poetry shell" followed by:
-            streamlit run streamlit_app.py
+            `streamlit run streamlit_app.py`
 '''

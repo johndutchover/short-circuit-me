@@ -1,4 +1,5 @@
 # app/Dockerfile
+LABEL="0.2"
 
 FROM python:3.10-slim
 
