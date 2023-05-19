@@ -40,7 +40,7 @@ x = st.slider('x')
 st.write(x, 'Short-circuit-me power level is', x * x)
 
 # bar chart
-st.bar_chart(
+st.area_chart(
     df_weekly,
     x="important_messages",
     y="days"
