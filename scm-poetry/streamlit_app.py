@@ -42,7 +42,7 @@ st.write(x, 'Short-circuit-me power level is', x * x)
 # bar chart
 st.bar_chart(
     df_weekly,
-    x=None,
+    x="important_messages",
     y="days"
     )
 
