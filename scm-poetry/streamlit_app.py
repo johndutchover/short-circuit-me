@@ -23,9 +23,10 @@ df = pd.DataFrame({
 })
 
 df_weekly = pd.DataFrame({
-  'Important messages': [1, 2, 3, 4, 3, 2, 3],
-  'Normal messages': [10, 20, 30, 40, 220, 29, 30],
-  'Critical messages': [0, 2, 3, 4, 3, 4, 3],
+  'important_messages': [1, 2, 3, 4, 3, 2, 3],
+  'normal_messages': [10, 20, 30, 40, 220, 29, 30],
+  'critical_messages': [0, 2, 3, 4, 3, 4, 3],
+  'days': ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
 })
 
 # page title
@@ -38,9 +39,14 @@ df
 x = st.slider('x') 
 st.write(x, 'Short-circuit-me power level is', x * x)
 
-st.header("Bar Chart")
+# bar chart
 days=["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
-st.bar_chart(data=df_weekly,x=days)
+
+st.bar_chart(
+    df_weekly,
+    x=["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
+    y="days"
+    )
 
 #'''To run this file:
 #- from VSCode, use "Run Python File" instead of "Run Code" (properly activates venv)
