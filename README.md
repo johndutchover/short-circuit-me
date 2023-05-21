@@ -1,6 +1,6 @@
 # short-circuit-me
 
-## Notification API for Slack
+## An _Electric_ API for Slack
 
 ### api.slack.com
 
