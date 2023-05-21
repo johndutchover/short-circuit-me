@@ -6,5 +6,5 @@
 
 #### Bolt for Python
 
-<https://slack.dev/bolt-python/>
-<https://github.com/slackapi/bolt-python>
+Package slack_bolt
+<https://slack.dev/bolt-python/api-docs/slack_bolt/>
