@@ -2,7 +2,7 @@
 
 ## scm-poetry
 
-```
+```text
 ├── Dockerfile
 ├── README.md
 ├── pages
