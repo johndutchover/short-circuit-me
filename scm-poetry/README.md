@@ -43,6 +43,30 @@ Build frontend image:
 
 Run the frontend container:
 
+## scm-poetry
+
+```
+├── Dockerfile
+├── README.md
+├── pages
+├── poetry.lock
+├── pyproject.toml
+├── scm_poetry
+│   └── __init__.py
+├── streamlit_app.py
+└── tests
+    ├── __init__.py
+    └── test.py
+```
+
+## Docker container
+
+Build frontend image:
+
+ `docker build -t frontend .`
+
+Run the frontend container:
+
 `docker run -p 8501:8501 frontend`
 
 View your Streamlit app in your browser
@@ -64,12 +88,12 @@ Run the backend container:
 
 To run this file:
 
-#### terminal
-- from external terminal, use `poetry shell` followed by:
-  `streamlit run streamlit_app.py`
+`poetry shell`
+`streamlit run streamlit_app.py`
 
-#### PyCharm
-- from PyCharm...set Python interpreter to .venv/bin/python
+To run this file:
 
-#### VSCode
 - from VSCode, use "Run Python File" instead of "Run Code" (properly activates venv)
+- from PyCharm...set Python interpreter to .venv/bin/python
+- from external terminal, use `poetry shell` followed by:
+    `streamlit run streamlit_app.py`
