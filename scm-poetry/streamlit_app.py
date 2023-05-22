@@ -51,7 +51,7 @@ values = st.slider(
 st.write('Values:', values)
 
 # bokeh: create a new plot with a title and axis labels
-p = figure(title="Bokeh plot", x_axis_label='messages', y_axis_label='day')
+p = figure(title="Bokeh plot", x_axis_label='day', y_axis_label='messages')
 # add multiple renderers
 p.line(x1, y1, legend_label="Important", color="blue", line_width=2, line_dash="dotdash")
 p.line(x1, y2, legend_label="Normal", color="green", line_width=2, line_dash="dotted")
