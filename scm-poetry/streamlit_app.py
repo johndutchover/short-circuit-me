@@ -22,8 +22,8 @@ def get_critical_notifications():
     return 7
 
 df = pd.DataFrame({
-  'Important messages': [1, 2, 3, 4],
-  'Total messages': [10, 20, 30, 40]
+  'Important messages': [1, 2, 3, 4, 3, 2, 3],
+  'Total messages': [11, 24, 36, 47, 27, 35, 36]
 })
 
 df_weekly = pd.DataFrame({
@@ -35,9 +35,9 @@ df_weekly = pd.DataFrame({
 
 # prepare some data
 x1 = [10, 20, 30, 40, 30, 50, 40]
-y1 = [1, 2, 3, 4, 3, 2, 3]
-y2 = [10, 20, 30, 40, 22, 29, 30]
-y3 = [0, 2, 3, 4, 3, 4, 3]
+y1 = [5, 7, 9, 11, 15, 19, 20]
+y2 = [10, 17, 21, 24, 28, 31, 32]
+y3 = [3, 5, 7, 9, 5, 4, 3]
 
 # page title
 st.title('Notification Overview Dashboard')
@@ -53,16 +53,16 @@ st.write('Values:', values)
 # bokeh: create a new plot with a title and axis labels
 p = figure(title="Bokeh plot", x_axis_label='messages', y_axis_label='day')
 # add multiple renderers
-p.line(x1, y1, legend_label="Important", color="blue", line_width=2)
-p.line(x1, y2, legend_label="Normal", color="green", line_width=2)
-p.line(x1, y3, legend_label="Critical", color="red", line_width=2)
+p.line(x1, y1, legend_label="Important", color="blue", line_width=2, line_dash="dotdash")
+p.line(x1, y2, legend_label="Normal", color="green", line_width=2, line_dash="dotted")
+p.line(x1, y3, legend_label="Critical", color="red", line_width=2, line_dash="dotted")
 st.bokeh_chart(p, use_container_width=True)
 
 # st.area chart
 st.area_chart(
     df_weekly,
-    x="important_messages",
-    y="days"
+    x="days",
+    y="important_messages"
     )
 
 #'''To run this file:
