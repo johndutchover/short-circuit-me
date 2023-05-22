@@ -23,13 +23,13 @@ def get_critical_notifications():
 
 df = pd.DataFrame({
   'Important messages': [1, 2, 3, 4, 3, 2, 3],
-  'Total messages': [11, 24, 36, 47, 27, 35, 36]
+  'Total messages': [14, 27, 40, 53, 28, 35, 36]
 })
 
 df_weekly = pd.DataFrame({
   'important_messages': [1, 2, 3, 4, 3, 2, 3],
   'normal_messages': [10, 20, 30, 40, 22, 29, 30],
-  'critical_messages': [0, 2, 3, 4, 3, 4, 3],
+  'critical_messages': [3, 5, 7, 9, 3, 4, 3],
   'days': ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
 })
 
