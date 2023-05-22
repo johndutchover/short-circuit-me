@@ -7,6 +7,7 @@
 import streamlit as st
 import pandas as pd
 import numpy as np
+from bokeh.plotting import figure
 
 st.set_page_config(
     page_title="Simple Dashboard",
@@ -17,30 +18,52 @@ st.set_page_config(
 def get_important_notifications():
     return 42
 
+def get_critical_notifications():
+    return 7
+
 df = pd.DataFrame({
-  'Important messages': [1, 2, 3, 4],
-  'Total messages': [10, 20, 30, 40]
+  'Important messages': [1, 2, 3, 4, 3, 2, 3],
+  'Total messages': [14, 27, 40, 53, 28, 35, 36]
 })
 
 df_weekly = pd.DataFrame({
-  'Important messages': [1, 2, 3, 4, 3, 2, 3],
-  'Normal messages': [10, 20, 30, 40, 220, 29, 30],
-  'Critical messages': [0, 2, 3, 4, 3, 4, 3]
+  'important_messages': [1, 2, 3, 4, 3, 2, 3],
+  'normal_messages': [10, 20, 30, 40, 22, 29, 30],
+  'critical_messages': [3, 5, 7, 9, 3, 4, 3],
+  'days': ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
 })
+
+# prepare some data
+x1 = [10, 20, 30, 40, 30, 50, 40]
+y1 = [5, 7, 9, 11, 15, 19, 20]
+y2 = [10, 17, 21, 24, 28, 31, 32]
+y3 = [3, 5, 7, 9, 5, 4, 3]
 
 # page title
 st.title('Notification Overview Dashboard')
 # body
-st.text(f'You got {get_important_notifications()} important notifications.')
-# call dataframe
-df
+st.text(f'You got {get_important_notifications()} important and {get_critical_notifications()} critical notifications.')
+
 # widget (slider)
-x = st.slider('x') 
-st.write(x, 'Short-circuit-me power level is', x * x)
+values = st.slider(
+    'Select a range of messages to include',
+    0.0, 100.0, (25.0, 75.0))
+st.write('Values:', values)
 
-# bar chart
+# bokeh: create a new plot with a title and axis labels
+p = figure(title="Bokeh plot", x_axis_label='day', y_axis_label='messages')
+# add multiple renderers
+p.line(x1, y1, legend_label="Important", color="blue", line_width=2, line_dash="dotdash")
+p.line(x1, y2, legend_label="Normal", color="green", line_width=2, line_dash="dotted")
+p.line(x1, y3, legend_label="Critical", color="red", line_width=2, line_dash="dotted")
+st.bokeh_chart(p, use_container_width=True)
 
-st.bar_chart(data=df_weekly, x=["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"])
+# st.area chart
+st.area_chart(
+    df_weekly,
+    x="days",
+    y="important_messages"
+    )
 
 #'''To run this file:
 #- from VSCode, use "Run Python File" instead of "Run Code" (properly activates venv)
