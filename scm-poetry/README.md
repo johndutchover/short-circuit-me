@@ -39,7 +39,7 @@
 
 Build frontend image:
 
- `docker build -t frontend .`
+ `cd scm-poetry/frontend && docker build -t frontend .`
 
 Run the frontend container:
 
@@ -47,6 +47,13 @@ Run the frontend container:
 
 View your Streamlit app in your browser
 <http://0.0.0.0:8501>
+
+Build backend (slack-bolt) image:
+
+ `cd scm-poetry/backend && docker build -t bolt .`
+
+Run the backend container:
+- tbd
 
 ## Usage
 
