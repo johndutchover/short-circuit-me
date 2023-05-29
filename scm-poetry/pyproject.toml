@@ -12,6 +12,7 @@ packages = [
 [tool.poetry.dependencies]
 python = "^3.10"
 slack-bolt = "^1.18.0"
+pip-tools = "^6.13.0"
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^7.3.1"
