@@ -5,8 +5,8 @@ from slack_bolt import App
 
 # Initializes your app with your bot token and signing secret
 slackboltapp = App(
-    token=os.environ.get("SLACK_BOT_TOKEN"),
-    signing_secret=os.environ.get("SLACK_SIGNING_SECRET")
+    token=os.environ.get("POETRY_SLACK_BOT_TOKEN"),
+    signing_secret=os.environ.get("POETRY_SLACK_SIGNING_SECRET")
 )
 
 # Add functionality here
