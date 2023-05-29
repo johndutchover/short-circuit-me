@@ -4,7 +4,10 @@ version = "0.1.0"
 description = ""
 authors = ["John Dutchover <johndutchover@users.noreply.github.com>"]
 readme = "README.md"
-packages = [{include = "scm_poetry"}]
+packages = [
+    {include = "scm_poetry"},
+    {include = "slack_bolt"},
+]
 
 [tool.poetry.dependencies]
 python = "^3.10"
