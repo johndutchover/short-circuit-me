@@ -1,9 +1,9 @@
-# https://api.slack.com/apps/A058DBF7NCQ
+# https://api.slack.com/apps/A059F0MBC4Q
 import os
 # Use the package we installed
 from slack_bolt import App
 
-# Initializes your app with your bot token and signing secret
+# Initializes app-level (xapp) token and signing secret
 slackboltapp = App(
     token=os.environ.get("POETRY_SLACK_BOT_TOKEN"),
     signing_secret=os.environ.get("POETRY_SLACK_SIGNING_SECRET")
