@@ -9,7 +9,7 @@
 ├── poetry.lock
 ├── pyproject.toml
 ├── scm_poetry
-│   └── __init__.py
+│ └── __init__.py
 ├── streamlit_app.py
 └── tests
     ├── __init__.py
