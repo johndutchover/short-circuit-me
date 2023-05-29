@@ -1,22 +1,41 @@
-# Frontend
+# short-circuit-me
 
-## scm-poetry
+## project structure
+```text
+├── scm-poetry/
+├── src/
+├── requirements.txt
+```
+
+### Poetry project: scm-poetry
 
 ```text
-├── Dockerfile
-├── README.md
-├── pages
-├── poetry.lock
-├── pyproject.toml
+├── backend
+│ └── __init__.py
+│ └── pyproject.toml
+├── frontend
+│ └── __init__.py
+│ └── Dockerfile
+│ └── pyproject.toml
+│ └── streamlit_app.py
 ├── scm_poetry
 │ └── __init__.py
-├── streamlit_app.py
 └── tests
     ├── __init__.py
     └── test.py
+├── .python-version
+├── poetry.lock
+├── pyproject.toml
+├── README.md
 ```
 
-## Docker container
+#### Package: frontend
+
+
+#### Package: backend
+
+
+## Docker
 
 Build frontend image:
 
@@ -29,14 +48,21 @@ Run the frontend container:
 View your Streamlit app in your browser
 <http://0.0.0.0:8501>
 
-### Python poetry
+## Usage
 
-`poetry shell`
-`streamlit run streamlit_app.py`
+### Start Streamlit dashboard
+`poetry run streamlit run frontend/streamlit_app.py`
+
+### IDEs
 
 To run this file:
 
-- from VSCode, use "Run Python File" instead of "Run Code" (properly activates venv)
-- from PyCharm...set Python interpreter to .venv/bin/python
+#### terminal
 - from external terminal, use `poetry shell` followed by:
-    `streamlit run streamlit_app.py`
+  `streamlit run streamlit_app.py`
+
+#### PyCharm
+- from PyCharm...set Python interpreter to .venv/bin/python
+
+#### VSCode
+- from VSCode, use "Run Python File" instead of "Run Code" (properly activates venv)
