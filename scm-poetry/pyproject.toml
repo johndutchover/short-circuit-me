@@ -29,9 +29,6 @@ typer = "^0.9.0"
 flake8 = "^6.0.0"
 black = "^23.3.0"
 
-#[tool.poetry.scripts]
-#poetry = 'poetry console: run'
-
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
