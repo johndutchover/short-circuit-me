@@ -1,8 +1,13 @@
 # https://api.slack.com/apps/A059F0MBC4Q
 import os
+from dotenv import load_dotenv
+
 # Use the package we installed
 from slack_bolt import App
 from slack_bolt.adapter.socket_mode import SocketModeHandler
+
+# load dotenv
+load_dotenv()
 
 # Initializes app-level (xapp) token and signing secret
 slackboltapp = App(
