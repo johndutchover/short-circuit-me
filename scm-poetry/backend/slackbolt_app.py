@@ -15,7 +15,7 @@ slackboltapp = App(
 
 
 # Request URLs (development use)
-#if __name__ == "__main__":
+# if __name__ == "__main__":
 #    slackboltapp.start(port=int(os.environ.get("PORT", 3000)))
 
 # using WebSockets
