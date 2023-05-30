@@ -1,7 +1,7 @@
 # comment
 venv
 env
-.env
+backend/.env
 .git
 __pycache__
 *.pyc
