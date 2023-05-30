@@ -7,7 +7,7 @@ from slack_bolt.adapter.socket_mode import SocketModeHandler
 # Initializes app-level (xapp) token and signing secret
 slackboltapp = App(
     token=os.environ.get("POETRY_SCM_XOXB_TOKEN"),
-    signing_secret=os.environ.get("POETRY_SCM_BOT_SIGNINGSECRET")
+    # signing_secret=os.environ.get("POETRY_SCM_BOT_SIGNINGSECRET") # not required for socket mode
 )
 
 # Add functionality here
