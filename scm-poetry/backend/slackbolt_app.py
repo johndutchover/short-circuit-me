@@ -28,7 +28,20 @@ api = FastAPI()
 
 
 # Listens to incoming messages that contain "hello"
-@app.message("hello")   # TODO handle mixed-case
+# @app.message("hello")   # TODO handle mixed-case
+# def handle_hello_message(body, say, logger):
+#     # Extract relevant information from the message body
+#     channel_id = body["channel"]
+#     user_id = body["user"]
+#     text = body["text"]
+#
+#     # Log the message
+#     logger.info(f"Received message in channel '{channel_id}' from user '{user_id}': {text}")
+#
+#     # Reply to the message
+#     say(f"Hello <@{user_id}>! You said: {text}")
+
+
 def message_hello(message, say):
     # say() sends a message to the channel where the event was triggered
     say(
@@ -64,6 +77,7 @@ if __name__ == "__main__":
     handler = SocketModeHandler(app, os.environ["POETRY_SCM_XAPP_TOKEN"]).start()
     handler.start()
 
-# development use
+# Start the Bolt app
 # if __name__ == "__main__":
+#    app.start(port=3000)
 #    slackboltapp.start(port=int(os.environ.get("PORT", 3000)))
