@@ -28,7 +28,7 @@ api = FastAPI()
 
 
 # Listens to incoming messages that contain "hello"
-@app.message("hello")   # FIX handle mixed-case
+@app.message("hello")   # TODO handle mixed-case
 def message_hello(message, say):
     # say() sends a message to the channel where the event was triggered
     say(
