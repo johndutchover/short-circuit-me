@@ -4,7 +4,7 @@ from dotenv import load_dotenv
 from slack_bolt import App
 from slack_bolt.adapter.socket_mode import SocketModeHandler
 
-# load dotenv
+# read local .env file
 load_dotenv()
 
 # Initializes your app with your bot token and socket mode handler
@@ -12,6 +12,9 @@ app = App(
     token=os.environ.get("POETRY_SCM_XOXB_TOKEN"),
     # signing_secret=os.environ.get("POETRY_SCM_BOT_SIGNINGSECRET") # not required for socket mode
 )
+
+
+# Add middleware / listeners here
 
 
 # Listens to incoming messages that contain "hello"
@@ -43,9 +46,15 @@ def action_button_click(body, ack, say):
     say(f"<@{body['user']['id']}> clicked the button")
 
 
+@app.event("message")
+def handle_message_events(body, logger):
+    logger.info(body)
+
+
 # Start app using WebSockets
 if __name__ == "__main__":
-    SocketModeHandler(app, os.environ["POETRY_SCM_XAPP_TOKEN"]).start()
+    handler = SocketModeHandler(app, os.environ["POETRY_SCM_XAPP_TOKEN"]).start()
+    handler.start()
 
 # development use
 # if __name__ == "__main__":
