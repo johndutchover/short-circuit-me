@@ -6,6 +6,9 @@ from fastapi import FastAPI
 from slack_bolt.adapter.fastapi import SlackRequestHandler
 from slack_bolt.adapter.socket_mode import SocketModeHandler
 
+import datetime
+from collections import defaultdict
+
 load_dotenv()  # read local .env file
 
 # Initializes your app with your bot token and socket mode handler
@@ -16,6 +19,7 @@ app = App(
 app_handler = SlackRequestHandler(app)
 api = FastAPI()
 
+counter = 0
 
 
 @app.message("help")
@@ -63,6 +67,7 @@ def message_hello(message, say):
         text=f"Hey there <@{message['user']}>!"
     )
 
+    print("Hello")
 
 @app.event("message")
 def handle_message_events(body, logger):
