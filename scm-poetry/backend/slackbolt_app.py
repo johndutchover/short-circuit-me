@@ -1,9 +1,8 @@
 # https://api.slack.com/apps/A059F0MBC4Q
 import os
-import re
 from dotenv import load_dotenv
 from slack_bolt import App
-from fastapi import FastAPI, Request
+from fastapi import FastAPI
 from slack_bolt.adapter.fastapi import SlackRequestHandler
 from slack_bolt.adapter.socket_mode import SocketModeHandler
 
@@ -18,9 +17,9 @@ app_handler = SlackRequestHandler(app)
 api = FastAPI()
 
 
-@api.post("/slack/events")
-async def endpoint(req: Request):
-    return await app_handler.handle(req)
+# @api.post("/slack/events")
+# async def endpoint(req: Request):
+#    return await app_handler.handle(req)
 
 
 # Add middleware / listeners here
@@ -29,7 +28,7 @@ async def endpoint(req: Request):
 
 
 # Listens to incoming messages that contain "hello"
-@app.message("hello")
+@app.message("hello")   # FIX handle mixed-case
 def message_hello(message, say):
     # say() sends a message to the channel where the event was triggered
     say(
@@ -48,31 +47,16 @@ def message_hello(message, say):
     )
 
 
+@app.event("message")
+def handle_message_events(body, logger):
+    logger.info(body)
+
+
 @app.action("button_click")
 def action_button_click(body, ack, say):
     # Acknowledge the action
     ack()
     say(f"<@{body['user']['id']}> clicked the button")
-
-
-@app.event("message")
-def handle_message():
-    pass
-
-
-@app.message("test")
-def test_message(logger, body):
-    logger.info(body)
-
-
-@app.message(re.compile("bug"))
-def mention_bug(logger, body):
-    logger.info(body)
-
-
-@app.event("message")
-def ack_the_rest_of_message_events(logger, body):
-    logger.info(body)
 
 
 # Start app using WebSockets
