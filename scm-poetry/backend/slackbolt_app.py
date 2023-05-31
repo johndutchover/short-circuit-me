@@ -3,6 +3,7 @@ import os
 import re
 from dotenv import load_dotenv
 from slack_bolt import App
+from fastapi import FastAPI, Request
 from slack_bolt.adapter.fastapi import SlackRequestHandler
 from slack_bolt.adapter.socket_mode import SocketModeHandler
 
@@ -14,6 +15,12 @@ app = App(
     # signing_secret=os.environ.get("POETRY_SCM_BOT_SIGNINGSECRET") # not required for socket mode
 )
 app_handler = SlackRequestHandler(app)
+api = FastAPI()
+
+
+@api.post("/slack/events")
+async def endpoint(req: Request):
+    return await app_handler.handle(req)
 
 
 # Add middleware / listeners here
@@ -49,8 +56,8 @@ def action_button_click(body, ack, say):
 
 
 @app.event("message")
-def handle_message_events(body, logger):
-    logger.info(body)
+def handle_message():
+    pass
 
 
 @app.message("test")
