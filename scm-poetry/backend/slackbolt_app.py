@@ -1,25 +1,27 @@
 # https://api.slack.com/apps/A059F0MBC4Q
 import os
+import re
 from dotenv import load_dotenv
 from slack_bolt import App
+from slack_bolt.adapter.fastapi import SlackRequestHandler
 from slack_bolt.adapter.socket_mode import SocketModeHandler
 
-# read local .env file
-load_dotenv()
+load_dotenv()  # read local .env file
 
 # Initializes your app with your bot token and socket mode handler
 app = App(
     token=os.environ.get("POETRY_SCM_XOXB_TOKEN"),
     # signing_secret=os.environ.get("POETRY_SCM_BOT_SIGNINGSECRET") # not required for socket mode
 )
+app_handler = SlackRequestHandler(app)
 
 
 # Add middleware / listeners here
+# To learn available listener arguments,
+# visit https://slack.dev/bolt-python/api-docs/slack_bolt/kwargs_injection/args.html
 
 
 # Listens to incoming messages that contain "hello"
-# To learn available listener arguments,
-# visit https://slack.dev/bolt-python/api-docs/slack_bolt/kwargs_injection/args.html
 @app.message("hello")
 def message_hello(message, say):
     # say() sends a message to the channel where the event was triggered
@@ -48,6 +50,21 @@ def action_button_click(body, ack, say):
 
 @app.event("message")
 def handle_message_events(body, logger):
+    logger.info(body)
+
+
+@app.message("test")
+def test_message(logger, body):
+    logger.info(body)
+
+
+@app.message(re.compile("bug"))
+def mention_bug(logger, body):
+    logger.info(body)
+
+
+@app.event("message")
+def ack_the_rest_of_message_events(logger, body):
     logger.info(body)
 
 
