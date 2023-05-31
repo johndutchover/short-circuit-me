@@ -17,9 +17,13 @@ app_handler = SlackRequestHandler(app)
 api = FastAPI()
 
 
-# @api.post("/slack/events")
-# async def endpoint(req: Request):
-#    return await app_handler.handle(req)
+
+@app.message("help")
+def increase_notification_count():
+    global counter
+    counter += 1
+
+    print(counter)
 
 
 # Add middleware / listeners here
@@ -28,7 +32,6 @@ api = FastAPI()
 
 
 # Listens to incoming messages that contain "hello"
-# @app.message("hello")   # TODO handle mixed-case
 # def handle_hello_message(body, say, logger):
 #     # Extract relevant information from the message body
 #     channel_id = body["channel"]
@@ -42,6 +45,7 @@ api = FastAPI()
 #     say(f"Hello <@{user_id}>! You said: {text}")
 
 
+@app.message("hello")  # TODO handle mixed-case
 def message_hello(message, say):
     # say() sends a message to the channel where the event was triggered
     say(
