@@ -6,6 +6,10 @@
       <sourceFolder url="file://$MODULE_DIR$/scm-poetry/tests" isTestSource="true" />
       <excludeFolder url="file://$MODULE_DIR$/.env" />
       <excludeFolder url="file://$MODULE_DIR$/scm-poetry/.venv" />
+      <excludeFolder url="file://$MODULE_DIR$/.history" />
+      <excludeFolder url="file://$MODULE_DIR$/scm-poetry/.history" />
+      <excludeFolder url="file://$MODULE_DIR$/scm-poetry/backend/.venv" />
+      <excludeFolder url="file://$MODULE_DIR$/scm-poetry/frontend/.venv" />
       <excludePattern pattern="*/.venv" />
     </content>
     <orderEntry type="jdk" jdkName="Poetry (scm)" jdkType="Python SDK" />
