@@ -154,8 +154,6 @@ files = [
 name = "bokeh"
 version = "2.4.3"
 description = "Interactive plots and applications in the browser from Python"
-<<<<<<< HEAD
-=======
 optional = false
 python-versions = ">=3.7"
 files = [
@@ -176,7 +174,6 @@ typing-extensions = ">=3.10.0"
 name = "cachetools"
 version = "5.3.0"
 description = "Extensible memoizing collections and decorators"
->>>>>>> d9f5c35 (5-fix-charts-in-streamlit-dashboard (#6))
 optional = false
 python-versions = ">=3.7"
 files = [
@@ -1711,8 +1708,3 @@ testing = ["big-O", "flake8 (<5)", "jaraco.functools", "jaraco.itertools", "more
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-<<<<<<< HEAD
-content-hash = "b59c7eb04c52b6e241094681b860f8792f841f091fd33bfd60de74f779c96235"
-=======
-content-hash = "ce888b45dda37ccfba12e3d83bf26460eacd287aeb2590ee8c205330ec49233e"
->>>>>>> d9f5c35 (5-fix-charts-in-streamlit-dashboard (#6))

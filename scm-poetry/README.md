@@ -59,6 +59,22 @@ Run the frontend container:
     └── test.py
 ```
 
+## scm-poetry
+
+```
+├── Dockerfile
+├── README.md
+├── pages
+├── poetry.lock
+├── pyproject.toml
+├── scm_poetry
+│   └── __init__.py
+├── streamlit_app.py
+└── tests
+    ├── __init__.py
+    └── test.py
+```
+
 ## Docker container
 
 Build frontend image:
