@@ -8,14 +8,11 @@ from slack_bolt.adapter.socket_mode import SocketModeHandler
 load_dotenv()
 
 # Initializes your app with your bot token and socket mode handler
-app = App(token=os.environ.get("POETRY_SCM_XOXB_TOKEN"))
+app = App(
+    token=os.environ.get("POETRY_SCM_XOXB_TOKEN"),
+    # signing_secret=os.environ.get("POETRY_SCM_BOT_SIGNINGSECRET") # not required for socket mode
+)
 
-
-# Initializes app-level (xapp) token and signing secret
-# slackboltapp = App(
-#    token=os.environ.get("POETRY_SCM_XOXB_TOKEN"),
-#    # signing_secret=os.environ.get("POETRY_SCM_BOT_SIGNINGSECRET") # not required for socket mode
-# )
 
 # Listens to incoming messages that contain "hello"
 # To learn available listener arguments,
@@ -23,7 +20,27 @@ app = App(token=os.environ.get("POETRY_SCM_XOXB_TOKEN"))
 @app.message("hello")
 def message_hello(message, say):
     # say() sends a message to the channel where the event was triggered
-    say(f"Hey there <@{message['user']}>!")
+    say(
+        blocks=[
+            {
+                "type": "section",
+                "text": {"type": "mrkdwn", "text": f"Hey there <@{message['user']}>!"},
+                "accessory": {
+                    "type": "button",
+                    "text": {"type": "plain_text", "text": "Click Me"},
+                    "action_id": "button_click"
+                }
+            }
+        ],
+        text=f"Hey there <@{message['user']}>!"
+    )
+
+
+@app.action("button_click")
+def action_button_click(body, ack, say):
+    # Acknowledge the action
+    ack()
+    say(f"<@{body['user']['id']}> clicked the button")
 
 
 # Start app using WebSockets
@@ -33,4 +50,3 @@ if __name__ == "__main__":
 # development use
 # if __name__ == "__main__":
 #    slackboltapp.start(port=int(os.environ.get("PORT", 3000)))
-
