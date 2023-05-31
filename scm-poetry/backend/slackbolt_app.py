@@ -75,7 +75,6 @@ if __name__ == "__main__":
     handler = SocketModeHandler(app, os.environ["POETRY_SCM_XAPP_TOKEN"]).start()
     app.start(port=int(os.environ.get("PORT", 3000)))
 
-
 # Start the Bolt app
 # if __name__ == "__main__":
 #    app.start(port=3000)
