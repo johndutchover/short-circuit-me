@@ -26,10 +26,11 @@ def message_hello(message, say):
     say(f"Hey there <@{message['user']}>!")
 
 
-# Request URLs (development use)
+# Start app using WebSockets
+if __name__ == "__main__":
+    SocketModeHandler(app, os.environ["POETRY_SCM_XAPP_TOKEN"]).start()
+
+# development use
 # if __name__ == "__main__":
 #    slackboltapp.start(port=int(os.environ.get("PORT", 3000)))
 
-# using WebSockets
-if __name__ == "__main__":
-    SocketModeHandler(app, os.environ["POETRY_SCM_XAPP_TOKEN"]).start()
