@@ -2,7 +2,7 @@
 import os
 from dotenv import load_dotenv
 from slack_bolt import App
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 from slack_bolt.adapter.fastapi import SlackRequestHandler
 from slack_bolt.adapter.socket_mode import SocketModeHandler
 
@@ -15,6 +15,11 @@ app = App(
 )
 app_handler = SlackRequestHandler(app)
 api = FastAPI()
+
+
+@api.post("/slack/events")
+async def endpoint(req: Request):
+    return await app_handler.handle(req)
 
 counter = 0
 
@@ -30,20 +35,6 @@ def increase_notification_count():
 # Add middleware / listeners here
 # To learn available listener arguments,
 # visit https://slack.dev/bolt-python/api-docs/slack_bolt/kwargs_injection/args.html
-
-
-# Listens to incoming messages that contain "hello"
-# def handle_hello_message(body, say, logger):
-#     # Extract relevant information from the message body
-#     channel_id = body["channel"]
-#     user_id = body["user"]
-#     text = body["text"]
-#
-#     # Log the message
-#     logger.info(f"Received message in channel '{channel_id}' from user '{user_id}': {text}")
-#
-#     # Reply to the message
-#     say(f"Hello <@{user_id}>! You said: {text}")
 
 
 @app.message("hello")  # TODO handle mixed-case
@@ -82,9 +73,10 @@ def action_button_click(body, ack, say):
 # Start app using WebSockets
 if __name__ == "__main__":
     handler = SocketModeHandler(app, os.environ["POETRY_SCM_XAPP_TOKEN"]).start()
-    handler.start()
+    app.start(port=int(os.environ.get("PORT", 3000)))
+
 
 # Start the Bolt app
 # if __name__ == "__main__":
 #    app.start(port=3000)
-#    slackboltapp.start(port=int(os.environ.get("PORT", 3000)))
+#    app.start(port=int(os.environ.get("PORT", 3000)))
