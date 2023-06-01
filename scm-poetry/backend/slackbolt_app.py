@@ -1,5 +1,7 @@
 # https://api.slack.com/apps/A059F0MBC4Q
 import os
+import re
+
 from dotenv import load_dotenv
 from slack_bolt import App
 from fastapi import FastAPI, Request
@@ -24,8 +26,11 @@ async def endpoint(req: Request):
 
 counter = 0
 
+str_help = r"(?:\bhelp\b)"
+regex_help = re.compile(str_help, flags=re.I)
 
-@app.message("help")
+
+@app.message(regex_help)
 def increase_notification_count():
     global counter
     counter += 1
@@ -37,8 +42,11 @@ def increase_notification_count():
 # To learn available listener arguments,
 # visit https://slack.dev/bolt-python/api-docs/slack_bolt/kwargs_injection/args.html
 
+str_hello = r"(?:\bhello\b)"
+regex_hello = re.compile(str_hello, flags=re.I)
 
-@app.message("hello")  # TODO handle mixed-case
+
+@app.message(regex_hello)  # TODO handle mixed-case
 def message_hello(message, say):
     # say() sends a message to the channel where the event was triggered
     say(
@@ -74,7 +82,6 @@ def action_button_click(body, ack, say):
 # Start app using WebSockets
 if __name__ == "__main__":
     handler = SocketModeHandler(app, os.environ["POETRY_SCM_XAPP_TOKEN"]).start()
-    app.start(port=int(os.environ.get("PORT", 3000)))
 
 # Start the Bolt app
 # if __name__ == "__main__":
