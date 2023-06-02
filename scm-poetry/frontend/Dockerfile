@@ -1,17 +1,17 @@
 # app/Dockerfile
 
-FROM python:3.10-slim
+FROM python:3.10.11-slim
 
 RUN mkdir /app
 WORKDIR /app
 COPY pyproject.toml /app
-COPY . .
+COPY streamlit_app.py /app
 
 ENV PYTHONPATH=${PYTHONPATH}:${PWD}
 
 RUN pip3 install poetry
 RUN poetry config virtualenvs.create false
-RUN poetry install --without dev
+RUN poetry install
 
 EXPOSE 8501
 

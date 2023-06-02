@@ -1,0 +1,18 @@
+version: '3'
+
+services:
+  frontend:
+    build: ./scm-poetry/frontend
+    ports:
+      - 8501:8501
+    depends_on:
+      - backend
+    volumes:
+      - ./storage:/storage
+  backend:
+    build: ./scm-poetry/backend
+    ports:
+      - 3000:3000
+    volumes:
+      - ./storage:/storage
+
