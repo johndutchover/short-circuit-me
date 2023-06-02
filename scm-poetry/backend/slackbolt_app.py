@@ -1,4 +1,3 @@
-# https://api.slack.com/apps/A059F0MBC4Q
 import os
 import re
 
