@@ -1,3 +1,24 @@
+"""
+Module backend.slackbolt_app
+
+This module provides a collection of functions/classes for performing various operations.
+
+Functions:
+    - action_button_click
+    - endpoint
+    - handle_message_events
+    - increase_notification_counters
+    - message_hello
+    - function_name_2: Description of function_name_2.
+
+Classes:
+    - ClassName1: Description of ClassName1.
+    - ClassName2: Description of ClassName2.
+
+Usage:
+    from module_name import function_name_1, ClassName1
+    ...
+"""
 import os
 import re
 
@@ -57,7 +78,7 @@ regex_hello = re.compile(str_hello, flags=re.I)
 @app.message(regex_hello)
 def message_hello(message, say):
     """
-    increment counter of help strings
+    increment counter of "hello" strings
     say() sends a message to the channel where the event was triggered
     :param message:
     :param say:
