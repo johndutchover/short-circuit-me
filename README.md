@@ -1,6 +1,6 @@
 # short-circuit-me
 
-## An _Electric_ API for Slack
+## A _Notification_ API for Slack
 
 ### api.slack.com
 
@@ -8,3 +8,5 @@
 
 Package slack_bolt
 <https://slack.dev/bolt-python/api-docs/slack_bolt/>
+
+[![Pylint](https://github.com/johndutchover/short-circuit-me/actions/workflows/pylint.yml/badge.svg)](https://github.com/johndutchover/short-circuit-me/actions/workflows/pylint.yml)
