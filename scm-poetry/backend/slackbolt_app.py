@@ -21,6 +21,11 @@ api = FastAPI()
 
 @api.post("/slack/events")
 async def endpoint(req: Request):
+    """
+    something to do with endpoint
+    :param req:
+    :return:
+    """
     return await app_handler.handle(req)
 
 
@@ -32,6 +37,10 @@ regex_help = re.compile(str_help, flags=re.I)
 
 @app.message(regex_help)
 def increase_notification_count():
+    """
+    increment counter of help strings
+    :return:
+    """
     global counter
     counter += 1
 
@@ -46,9 +55,15 @@ str_hello = r"(?:\bhello\b)"
 regex_hello = re.compile(str_hello, flags=re.I)
 
 
-@app.message(regex_hello)  # TODO handle mixed-case
+@app.message(regex_hello)
 def message_hello(message, say):
-    # say() sends a message to the channel where the event was triggered
+    """
+    increment counter of help strings
+    say() sends a message to the channel where the event was triggered
+    :param message:
+    :param say:
+    :return:
+    """
     say(
         blocks=[
             {
@@ -69,12 +84,24 @@ def message_hello(message, say):
 
 @app.event("message")
 def handle_message_events(body, logger):
+    """
+    hangle Slack message events
+    :param body:
+    :param logger:
+    :return:
+    """
     logger.info(body)
 
 
 @app.action("button_click")
 def action_button_click(body, ack, say):
-    # Acknowledge the action
+    """
+    Acknowledge the action
+    :param body:
+    :param ack:
+    :param say:
+    :return:
+    """
     ack()
     say(f"<@{body['user']['id']}> clicked the button")
 
