@@ -21,6 +21,7 @@ Usage:
 """
 import os
 import re
+import csv
 
 from dotenv import load_dotenv
 from slack_bolt import App
@@ -37,6 +38,27 @@ app = App(
 )
 app_handler = SlackRequestHandler(app)
 api = FastAPI()
+
+
+@api.post("/write_to_csv/")
+async def write_to_csv(request_body: dict):
+    """
+    very basic FastAPI endpoint which writes JSON request body to a CSV file
+    :param request_body:
+    :return:
+    """
+    # Assuming request_body is something like {"data": [{"name": "John", "age": 20}, {"name": "Jane", "age": 25}]}
+
+    data = request_body.get('data', [])
+    if data:
+        keys = data[0].keys()
+        with open('people.csv', 'w', newline='') as output_file:
+            dict_writer = csv.DictWriter(output_file, keys)
+            dict_writer.writeheader()
+            dict_writer.writerows(data)
+        return {"message": "Successfully written to csv file!"}
+    else:
+        return {"error": "Empty data in request body"}
 
 
 @api.post("/slack/events")
