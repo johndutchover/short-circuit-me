@@ -73,7 +73,7 @@ async def endpoint(req: Request):
 
 counter = 0
 
-str_help = r"(?:\bhelp\b)"
+str_help = r"(?:help)"
 regex_help = re.compile(str_help, flags=re.I)
 
 
@@ -93,7 +93,7 @@ def increase_notification_count():
 # To learn available listener arguments,
 # visit https://slack.dev/bolt-python/api-docs/slack_bolt/kwargs_injection/args.html
 
-str_hello = r"(?:\bhello\b)"
+str_hello = r"(?:hello)"
 regex_hello = re.compile(str_hello, flags=re.I)
 
 
