@@ -5,22 +5,23 @@ DEPENDENCY_2 = scm-poetry/backend
 # Build the dependencies
 $(DEPENDENCY_1):
     # Build command for dependency 1
-	docker build -t frontend:frontend scm-poetry/frontend
+	docker build -t frontend scm-poetry/frontend
 
 $(DEPENDENCY_2):
     # Build command for dependency 2
-	docker build -t backend:backend scm-poetry/backend
+	docker build -t backend scm-poetry/backend
 
 # Build the application
 build: $(DEPENDENCY_1) $(DEPENDENCY_2)
     # Build command for the main application
-	docker build -t frontend:frontend scm-poetry/frontend
-	docker build -t backend:backend scm-poetry/backend
+	docker build -t frontend scm-poetry/frontend
+	docker build -t backend scm-poetry/backend
 
 # Run the application
 run:
-	docker run -d -p 8501:8501 frontend:frontend
-#	docker run -d -p 3000:3000 backend:backend
+	docker run --name frontend -d -p 8501:8501 frontend:frontend
+	docker run --name backend -d backend:backend
+#	docker run --name backend -d -p 3000:3000 backend:backend
     # Add more lines for additional subdirectories if needed
 
 # Stop the application
