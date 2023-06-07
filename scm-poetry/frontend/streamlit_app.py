@@ -19,11 +19,9 @@ def get_important_notifications():
 def get_critical_notifications():
     return 7
 
+df = pd.read_csv("../backend/message_counts.csv")
 
-df = pd.DataFrame({
-    'Important messages': [1, 2, 3, 4],
-    'Total messages': [10, 20, 30, 40]
-})
+st.table(df)
 
 df_weekly = pd.DataFrame({
     'important_messages': [1, 2, 3, 4, 3, 2, 3],
