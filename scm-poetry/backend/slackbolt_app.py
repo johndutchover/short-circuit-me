@@ -145,6 +145,7 @@ def message_urgent(message, say):
     # increase_urgent_count()
     increase_counter(message_type="urgent")
 
+
 str_p2 = r"(?:important)"
 regex_p2 = re.compile(str_p2, flags=re.I)
 
