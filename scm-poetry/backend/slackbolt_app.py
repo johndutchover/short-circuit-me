@@ -60,15 +60,64 @@ regex_p1 = re.compile(str_p1, flags=re.I)
 
 
 @app.message(regex_p1)
-def increase_notification_count():
+def message_urgent(message, say):
     """
     increment counter of Priority 1 (urgent) string matches
+    say() sends a message to the channel where the event was triggered
+    :param message:
+    :param say:
     :return:
     """
-    global counter  # TODO temporary use of global for POC
-    counter += 1
+    say(
+        blocks=[
+            {
+                "type": "section",
+                "text": {"type": "mrkdwn", "text": f"Hey there <@{message['user']}>!"},
+                "accessory": {
+                    "type": "button",
+                    "text": {"type": "plain_text", "text": "Click to escalate"},
+                    "action_id": "button_click"
+                }
+            }
+        ],
+        text=f"Hey there <@{message['user']}>!"
+    )
 
-    print(counter)
+    def increase_urgent_count():
+        """
+        increment counter of Priority 1 (urgent) string matches
+        :return:
+        """
+        global counter  # TODO temporary use of global for POC
+        counter += 1
+
+        print("Urgent message logged: ", counter)
+
+    def urgent_to_csv(item: message):
+        """
+        very basic FastAPI endpoint which writes JSON request body to a CSV file
+        :param item:
+        :return:
+        """
+        # name of csv file
+        filename = "output_urgent.csv"
+
+        # writing to csv file
+        with open(filename, 'a') as csvfile:
+            # creating a csv dict writer object
+            writer = csv.DictWriter(csvfile, fieldnames=['user', 'channel', 'text'])
+
+            # writing headers (field names) if the file is new/empty
+            if os.stat(filename).st_size == 0:
+                writer.writeheader()
+
+            # writing data rows
+            writer.writerow({k: item.get(k) for k in ['user', 'channel', 'text']})
+
+        return {"success": True}
+
+    urgent_to_csv(message)
+    increase_urgent_count()
 
 
 str_p2 = r"(?:important)"
@@ -76,15 +125,33 @@ regex_p2 = re.compile(str_p2, flags=re.I)
 
 
 @app.message(regex_p2)
-def increase_notification_count():
-    """
-    increment counter of Priority 2 (important) string matches
-    :return:
-    """
-    global counter  # TODO temporary use of global for POC
-    counter += 1
+def message_important(message, say):
+    say(
+        blocks=[
+            {
+                "type": "section",
+                "text": {"type": "mrkdwn", "text": f"Hey there <@{message['user']}>!"},
+                "accessory": {
+                    "type": "button",
+                    "text": {"type": "plain_text", "text": "Click if important"},
+                    "action_id": "button_click"
+                }
+            }
+        ],
+        text=f"Hey there <@{message['user']}>!"
+    )
 
-    print(counter)
+    def increase_important_count():
+        """
+        increment counter of Priority 2 (important) string matches
+        :return:
+        """
+        global counter  # TODO temporary use of global for POC
+        counter += 1
+
+        print("Important message logged: ", counter)
+
+    increase_important_count()
 
 
 str_p3 = r"(?:hello)"
