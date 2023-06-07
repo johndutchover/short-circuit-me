@@ -114,14 +114,14 @@ def message_hello(message, say):
         # writing to csv file
         with open(filename, 'a') as csvfile:
             # creating a csv dict writer object
-            writer = csv.DictWriter(csvfile, fieldnames=['user', 'ts', 'text'])
+            writer = csv.DictWriter(csvfile, fieldnames=['user', 'channel', 'text'])
 
             # writing headers (field names) if the file is new/empty
             if os.stat(filename).st_size == 0:
                 writer.writeheader()
 
             # writing data rows
-            writer.writerow({k: item.get(k) for k in ['user', 'ts', 'text']})
+            writer.writerow({k: item.get(k) for k in ['user', 'channel', 'text']})
 
         return {"success": True}
 
