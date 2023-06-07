@@ -26,12 +26,13 @@ import csv
 
 import pandas as pd
 from dotenv import load_dotenv
+from pandas import DataFrame
 from slack_bolt import App
 from fastapi import FastAPI, Request
 from slack_bolt.adapter.fastapi import SlackRequestHandler
 from slack_bolt.adapter.socket_mode import SocketModeHandler
 
-from typing import Literal
+from typing import Literal, Any
 
 load_dotenv()  # read local .env file
 
@@ -63,16 +64,16 @@ else:
 
 def increase_counter(message_type: str):  # Literal["normal", "important", "urgent"]
 
-    message_counts = pd.read_csv("message_counts.csv")
+    message_counts_df: DataFrame | Any = pd.read_csv("message_counts.csv")
 
     now = datetime.datetime.now()
     formatted_date = now.strftime("%Y-%m-%d")
 
-    if formatted_date not in message_counts.index:
-        message_counts.loc[formatted_date, :] = 0
+    if formatted_date not in message_counts_df.index:
+        message_counts_df.loc[formatted_date, :] = 0
 
-    message_counts.loc[formatted_date, message_type] += 1
-    message_counts.to_csv("message_counts.csv")
+    message_counts_df.loc[formatted_date, message_type] += 1
+    message_counts_df.to_csv("message_counts.csv")
 
 
 counter = 0
