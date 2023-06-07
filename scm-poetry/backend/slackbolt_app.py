@@ -102,14 +102,14 @@ def message_hello(message, say):
 
     print("Hello")
 
-    def write_to_csv(item: message):
+    def hello_to_csv(item: message):
         """
         very basic FastAPI endpoint which writes JSON request body to a CSV file
         :param item:
         :return:
         """
         # name of csv file
-        filename = "output.csv"
+        filename = "output_hello.csv"
 
         # writing to csv file
         with open(filename, 'a') as csvfile:
@@ -125,7 +125,7 @@ def message_hello(message, say):
 
         return {"success": True}
 
-    write_to_csv(message)
+    hello_to_csv(message)
 
 
 @app.event("message")
