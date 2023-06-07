@@ -8,7 +8,7 @@ Functions:
     - endpoint
     - handle_message_events
     - increase_notification_counters
-    - message_hello
+    - message_normal
     - function_name_2: Description of function_name_2.
 
 Classes:
@@ -52,34 +52,49 @@ async def endpoint(req: Request):
 
 counter = 0
 
-str_help = r"(?:help)"
-regex_help = re.compile(str_help, flags=re.I)
+# Add middleware / listeners here
+# args here: https://slack.dev/bolt-python/api-docs/slack_bolt/kwargs_injection/args.html
+
+str_p1 = r"(?:help)"
+regex_p1 = re.compile(str_p1, flags=re.I)
 
 
-@app.message(regex_help)
+@app.message(regex_p1)
 def increase_notification_count():
     """
-    increment counter of help strings
+    increment counter of Priority 1 (urgent) string matches
     :return:
     """
-    global counter
+    global counter  # TODO temporary use of global for POC
     counter += 1
 
     print(counter)
 
 
-# Add middleware / listeners here
-# To learn available listener arguments,
-# visit https://slack.dev/bolt-python/api-docs/slack_bolt/kwargs_injection/args.html
-
-str_hello = r"(?:hello)"
-regex_hello = re.compile(str_hello, flags=re.I)
+str_p2 = r"(?:important)"
+regex_p2 = re.compile(str_p2, flags=re.I)
 
 
-@app.message(regex_hello)
-def message_hello(message, say):
+@app.message(regex_p2)
+def increase_notification_count():
     """
-    increment counter of "hello" strings
+    increment counter of Priority 2 (important) string matches
+    :return:
+    """
+    global counter  # TODO temporary use of global for POC
+    counter += 1
+
+    print(counter)
+
+
+str_p3 = r"(?:hello)"
+regex_p3 = re.compile(str_p3, flags=re.I)
+
+
+@app.message(regex_p3)
+def message_normal(message, say):
+    """
+    increment counter of Priority 3 (normal) string matches
     say() sends a message to the channel where the event was triggered
     :param message:
     :param say:
@@ -102,14 +117,14 @@ def message_hello(message, say):
 
     print("Hello")
 
-    def hello_to_csv(item: message):
+    def normal_to_csv(item: message):
         """
         very basic FastAPI endpoint which writes JSON request body to a CSV file
         :param item:
         :return:
         """
         # name of csv file
-        filename = "output_hello.csv"
+        filename = "output_normal.csv"
 
         # writing to csv file
         with open(filename, 'a') as csvfile:
@@ -125,7 +140,7 @@ def message_hello(message, say):
 
         return {"success": True}
 
-    hello_to_csv(message)
+    normal_to_csv(message)
 
 
 @app.event("message")
