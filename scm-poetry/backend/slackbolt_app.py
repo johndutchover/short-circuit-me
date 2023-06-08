@@ -22,17 +22,15 @@ Usage:
 import datetime
 import os
 import re
-import csv
+from typing import Any
 
 import pandas as pd
 from dotenv import load_dotenv
+from fastapi import FastAPI, Request
 from pandas import DataFrame
 from slack_bolt import App
-from fastapi import FastAPI, Request
 from slack_bolt.adapter.fastapi import SlackRequestHandler
 from slack_bolt.adapter.socket_mode import SocketModeHandler
-
-from typing import Literal, Any
 
 load_dotenv()  # read local .env file
 
@@ -62,7 +60,7 @@ else:
     message_counts.to_csv("message_counts.csv")
 
 
-def increase_counter(message_type: str):  # Literal["normal", "important", "urgent"]
+def increase_counter(message_type: str):  # Literal["normal", "important", "urgent"] TODO what is this?
 
     message_counts_df: DataFrame | Any = pd.read_csv("message_counts.csv")
 
@@ -110,3 +108,9 @@ def message_urgent(message, say):
         ],
         text=f"Hey there <@{message['user']}>!"
     )
+    increase_counter(message)
+
+
+# Start app using WebSockets
+if __name__ == "__main__":
+    handler = SocketModeHandler(app, os.environ["POETRY_SCM_XAPP_TOKEN"]).start()
