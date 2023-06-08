@@ -8,6 +8,7 @@
 import streamlit as st
 import pandas as pd
 from bokeh.plotting import figure
+from pandas.errors import EmptyDataError
 
 st.set_page_config(page_title="Simple Dashboard", page_icon="✅")
 
@@ -20,9 +21,11 @@ def get_critical_notifications():
     return 7
 
 
-df_messages = pd.read_csv("backend/message_counts.csv", skiprows=1)
-
-st.table(df_messages)
+try:
+    df_messages = pd.read_csv("backend/message_counts.csv", skiprows=1)
+    st.table(df_messages)
+except EmptyDataError:
+    st.text('INFO: The message_counts.csv file is empty')
 
 df_weekly = pd.DataFrame({
     'important_messages': [1, 2, 3, 4, 3, 2, 3],
