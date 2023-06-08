@@ -111,6 +111,17 @@ def message_urgent(message, say):
     increase_counter(message)
 
 
+@app.event("message")
+def handle_message_events(body, logger):
+    """
+    hangle Slack message events
+    :param body:
+    :param logger:
+    :return:
+    """
+    logger.info(body)
+
+
 # Start app using WebSockets
 if __name__ == "__main__":
     handler = SocketModeHandler(app, os.environ["POETRY_SCM_XAPP_TOKEN"]).start()
