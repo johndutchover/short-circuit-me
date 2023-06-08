@@ -39,6 +39,12 @@ app = App(
 app_handler = SlackRequestHandler(app)
 api = FastAPI()
 
+if os.path.exists("message_counts.csv"):
+    message_counts = pd.read_csv("message_counts.csv")
+else:
+    message_counts = pd.DataFrame(columns=["normal", "important", "urgent"])
+    message_counts.to_csv("message_counts.csv")
+
 
 @api.post("/slack/events")
 async def endpoint(req: Request):
@@ -48,13 +54,6 @@ async def endpoint(req: Request):
     :return:
     """
     return await app_handler.handle(req)
-
-
-if os.path.exists("message_counts.csv"):
-    message_counts = pd.read_csv("message_counts.csv")
-else:
-    message_counts = pd.DataFrame(columns=["normal", "important", "urgent"])
-    message_counts.to_csv("message_counts.csv")
 
 
 def increase_counter(message_type: str):
@@ -80,6 +79,10 @@ counter_urgent = 0
 
 str_p1 = r"(?:help)"
 regex_p1 = re.compile(str_p1, flags=re.I)
+str_p2 = r"(?:important)"
+regex_p2 = re.compile(str_p2, flags=re.I)
+str_p3 = r"(?:hello)"
+regex_p3 = re.compile(str_p3, flags=re.I)
 
 
 @app.message(regex_p1)
@@ -105,7 +108,6 @@ def message_urgent(message, say):
         ],
         text=f"Hey there <@{message['user']}>!"
     )
-    increase_counter(message)
 
 
 @app.event("message")
