@@ -19,7 +19,8 @@ def get_important_notifications():
 def get_critical_notifications():
     return 7
 
-df = pd.read_csv("../backend/message_counts.csv")
+
+df = pd.read_csv("backend/message_counts.csv")
 
 st.table(df)
 
