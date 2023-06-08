@@ -119,6 +119,19 @@ def handle_message_events(body, logger):
     logger.info(body)
 
 
+@app.action("button_click")
+def action_button_click(body, ack, say):
+    """
+    Acknowledge the action
+    :param body:
+    :param ack:
+    :param say:
+    :return:
+    """
+    ack()
+    say(f"<@{body['user']['id']}> clicked the button")
+
+
 # Start app using WebSockets
 if __name__ == "__main__":
     handler = SocketModeHandler(app, os.environ["POETRY_SCM_XAPP_TOKEN"]).start()
