@@ -21,8 +21,14 @@ def get_critical_notifications():
     return 7
 
 
+# page title
+st.title('Notification Overview Dashboard')
+# body st.text(f'You got {get_important_notifications()} important and {get_critical_notifications()} critical
+# notifications.')
+st.subheader('Slack :zap: :blue[notification] summary')
+
 try:
-    df_messages = pd.read_csv("backend/message_counts.csv", skiprows=1)
+    df_messages = pd.read_csv("backend/message_counts.csv", header='infer')
     st.table(df_messages)
 except EmptyDataError:
     st.text('INFO: The message_counts.csv file is empty')
@@ -39,11 +45,6 @@ x1 = [10, 20, 30, 40, 30, 50, 40]
 y1 = [1, 2, 3, 4, 3, 2, 3]
 y2 = [10, 20, 30, 40, 22, 29, 30]
 y3 = [0, 2, 3, 4, 3, 4, 3]
-
-# page title
-st.title('Notification Overview Dashboard')
-# body
-st.text(f'You got {get_important_notifications()} important and {get_critical_notifications()} critical notifications.')
 
 # widget (slider)
 values = st.slider(
