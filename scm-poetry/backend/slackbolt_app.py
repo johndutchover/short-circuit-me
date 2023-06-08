@@ -108,6 +108,7 @@ def message_urgent(message, say):
         ],
         text=f"Hey there <@{message['user']}>!"
     )
+    increase_counter('urgent')
 
 
 @app.event("message")
@@ -118,6 +119,7 @@ def handle_message_events(body, logger):
     :param logger:
     :return:
     """
+    increase_counter('normal')
     logger.info(body)
 
 
