@@ -28,7 +28,7 @@ st.title('Notification Overview Dashboard')
 st.subheader('Slack :zap: :blue[notification] summary')
 
 try:
-    df_messages = pd.read_csv("backend/message_counts.csv", header='infer')
+    df_messages = pd.read_csv("message_counts.csv", header='infer')
     st.table(df_messages)
 except EmptyDataError:
     st.text('INFO: The message_counts.csv file is empty')

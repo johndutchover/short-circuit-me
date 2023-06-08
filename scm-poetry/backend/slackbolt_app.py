@@ -67,6 +67,7 @@ def increase_counter(message_type: str):
 
     message_counts_df.loc[formatted_date, message_type] += 1
     message_counts_df.to_csv("message_counts.csv")
+    message_counts_df.to_csv("../frontend/message_counts.csv")
 
 
 counter = 0

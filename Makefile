@@ -19,9 +19,8 @@ build: $(DEPENDENCY_1) $(DEPENDENCY_2)
 
 # Run the application
 run:
-	docker run --name frontend -d -p 8501:8501 frontend:frontend
-	docker run --name backend -d backend:backend
-#	docker run --name backend -d -p 3000:3000 backend:backend
+	docker run --name frontend -d -p 8501:8501 frontend:latest
+	docker run --name backend -d -p 3000:3000 backend:latest
     # Add more lines for additional subdirectories if needed
 
 # Stop the application
