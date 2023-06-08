@@ -1,12 +1,25 @@
 # short-circuit-me
 
-## A _Notification_ API for Slack
+## Notification broker for Slack
 
-### api.slack.com
+### Makefile
+- Build containers
+    - `make build`
 
-#### Bolt for Python
+- Run containers
+  - `make run`
 
-Package slack_bolt
-<https://slack.dev/bolt-python/api-docs/slack_bolt/>
+- Stop containers
+  - `make stop`
+
+- Cleanup images
+  - `make clean`
+
+#### api.slack.com
+
+##### Bolt for Python
+
+[Package slack_bolt](https://slack.dev/bolt-python/api-docs/slack_bolt/)
+
 
 [![Pylint](https://github.com/johndutchover/short-circuit-me/actions/workflows/pylint.yml/badge.svg)](https://github.com/johndutchover/short-circuit-me/actions/workflows/pylint.yml)

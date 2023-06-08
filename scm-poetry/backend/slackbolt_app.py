@@ -4,28 +4,28 @@ Module backend.slackbolt_app
 This module provides a collection of functions/classes for performing various operations.
 
 Functions:
-    - action_button_click
-    - endpoint
-    - handle_message_events
-    - increase_notification_counters
-    - message_hello
-    - function_name_2: Description of function_name_2.
+    - endpoint(req)
+    - handle_message_events(body, logger)
+    - increase_counter(message_type)
+    - message_urgent(message, say)
 
 Classes:
-    - ClassName1: Description of ClassName1.
-    - ClassName2: Description of ClassName2.
+    - N/A
 
 Usage:
     from module_name import function_name_1, ClassName1
     ...
 """
+import datetime
 import os
 import re
-import csv
+from typing import Any
 
+import pandas as pd
 from dotenv import load_dotenv
-from slack_bolt import App
 from fastapi import FastAPI, Request
+from pandas import DataFrame
+from slack_bolt import App
 from slack_bolt.adapter.fastapi import SlackRequestHandler
 from slack_bolt.adapter.socket_mode import SocketModeHandler
 
@@ -39,68 +39,55 @@ app = App(
 app_handler = SlackRequestHandler(app)
 api = FastAPI()
 
-
-@api.post("/write_to_csv/")
-async def write_to_csv(request_body: dict):
-    """
-    very basic FastAPI endpoint which writes JSON request body to a CSV file
-    :param request_body:
-    :return:
-    """
-    # Assuming request_body is something like {"data": [{"name": "John", "age": 20}, {"name": "Jane", "age": 25}]}
-
-    data = request_body.get('data', [])
-    if data:
-        keys = data[0].keys()
-        with open('people.csv', 'w', newline='') as output_file:
-            dict_writer = csv.DictWriter(output_file, keys)
-            dict_writer.writeheader()
-            dict_writer.writerows(data)
-        return {"message": "Successfully written to csv file!"}
-    else:
-        return {"error": "Empty data in request body"}
+if os.path.exists("message_counts.csv"):
+    message_counts = pd.read_csv("message_counts.csv")
+else:
+    message_counts = pd.DataFrame(columns=["normal", "important", "urgent"])
+    message_counts.to_csv("message_counts.csv")
 
 
 @api.post("/slack/events")
 async def endpoint(req: Request):
     """
-    something to do with endpoint
+    endpoint which handles incoming requests from Slack
     :param req:
     :return:
     """
     return await app_handler.handle(req)
 
 
+def increase_counter(message_type: str):
+    message_counts_df: DataFrame | Any = pd.read_csv("message_counts.csv", index_col=0)
+
+    now = datetime.datetime.now()
+    formatted_date = now.strftime("%Y-%m-%d")
+
+    if formatted_date not in message_counts_df.index:
+        message_counts_df.loc[formatted_date] = [0, 0, 0]
+
+    message_counts_df.loc[formatted_date, message_type] += 1
+    message_counts_df.to_csv("message_counts.csv")
+
+
 counter = 0
-
-str_help = r"(?:help)"
-regex_help = re.compile(str_help, flags=re.I)
-
-
-@app.message(regex_help)
-def increase_notification_count():
-    """
-    increment counter of help strings
-    :return:
-    """
-    global counter
-    counter += 1
-
-    print(counter)
-
+counter_important = 0
+counter_urgent = 0
 
 # Add middleware / listeners here
-# To learn available listener arguments,
-# visit https://slack.dev/bolt-python/api-docs/slack_bolt/kwargs_injection/args.html
+# args here: https://slack.dev/bolt-python/api-docs/slack_bolt/kwargs_injection/args.html
 
-str_hello = r"(?:hello)"
-regex_hello = re.compile(str_hello, flags=re.I)
+str_p1 = r"(?:help)"
+regex_p1 = re.compile(str_p1, flags=re.I)
+str_p2 = r"(?:important)"
+regex_p2 = re.compile(str_p2, flags=re.I)
+str_p3 = r"(?:hello)"
+regex_p3 = re.compile(str_p3, flags=re.I)
 
 
-@app.message(regex_hello)
-def message_hello(message, say):
+@app.message(regex_p1)
+def message_urgent(message, say):
     """
-    increment counter of "hello" strings
+    increment counter of Priority 1 (urgent) string matches
     say() sends a message to the channel where the event was triggered
     :param message:
     :param say:
@@ -113,15 +100,14 @@ def message_hello(message, say):
                 "text": {"type": "mrkdwn", "text": f"Hey there <@{message['user']}>!"},
                 "accessory": {
                     "type": "button",
-                    "text": {"type": "plain_text", "text": "Click Me"},
+                    "text": {"type": "plain_text", "text": "Click to escalate"},
                     "action_id": "button_click"
                 }
             }
         ],
         text=f"Hey there <@{message['user']}>!"
     )
-
-    print("Hello")
+    increase_counter('urgent')
 
 
 @app.event("message")
@@ -132,6 +118,7 @@ def handle_message_events(body, logger):
     :param logger:
     :return:
     """
+    increase_counter('normal')
     logger.info(body)
 
 
@@ -151,8 +138,3 @@ def action_button_click(body, ack, say):
 # Start app using WebSockets
 if __name__ == "__main__":
     handler = SocketModeHandler(app, os.environ["POETRY_SCM_XAPP_TOKEN"]).start()
-
-# Start the Bolt app
-# if __name__ == "__main__":
-#    app.start(port=3000)
-#    app.start(port=int(os.environ.get("PORT", 3000)))

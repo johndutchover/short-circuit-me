@@ -5,7 +5,7 @@ FROM python:3.10.11-slim
 RUN mkdir /bolt
 WORKDIR /bolt
 COPY .env /bolt
-COPY pyproject.toml /bolt
+COPY pyproject.toml /bolt/
 COPY slackbolt_app.py /bolt
 
 ENV PYTHONPATH=${PYTHONPATH}:${PWD}
