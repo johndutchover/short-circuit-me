@@ -15,6 +15,7 @@ pydantic = ">=1.8.0,<2.0.0"
 uvicorn = ">=0.15.0,<0.16.0"
 requests = "^2.3.0"
 asyncio = "^3.4.3"
+pandas = "^2.0.2"
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^7.3.1"

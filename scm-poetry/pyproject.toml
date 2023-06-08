@@ -18,7 +18,7 @@ streamlit = "~1.22.0"
 watchdog = "^3.0.0"
 asyncio = "^3.4.3"
 numpy = "^1.24.3"
-pandas = "^2.0.1"
+pandas = "^2.0.2"
 plotly = "^5.14.1"
 bokeh = "2.4.3"
 
