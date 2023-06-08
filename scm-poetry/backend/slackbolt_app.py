@@ -4,13 +4,10 @@ Module backend.slackbolt_app
 This module provides a collection of functions/classes for performing various operations.
 
 Functions:
-    - action_button_click
-    - endpoint
-    - handle_message_events
-    - increase_counter
-    - message_normal
-    - message_important
-    - message_urgent
+    - endpoint(req)
+    - handle_message_events(body, logger)
+    - increase_counter(message_type)
+    - message_urgent(message, say)
 
 Classes:
     - N/A
@@ -60,15 +57,15 @@ else:
     message_counts.to_csv("message_counts.csv")
 
 
-def increase_counter(message_type: str):  # Literal["normal", "important", "urgent"] TODO what is this?
-
-    message_counts_df: DataFrame | Any = pd.read_csv("message_counts.csv")
+def increase_counter(message_type: str):
+    message_counts_df: DataFrame | Any = pd.read_csv("message_counts.csv", index_col=0)
 
     now = datetime.datetime.now()
     formatted_date = now.strftime("%Y-%m-%d")
 
     if formatted_date not in message_counts_df.index:
-        message_counts_df.loc[formatted_date, :] = 0
+        new_row = pd.Series([0, 0, 0], index=message_counts_df.columns, name=formatted_date)
+        message_counts_df = message_counts_df.append(new_row)
 
     message_counts_df.loc[formatted_date, message_type] += 1
     message_counts_df.to_csv("message_counts.csv")
