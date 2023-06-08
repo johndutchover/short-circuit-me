@@ -63,8 +63,7 @@ def increase_counter(message_type: str):
     formatted_date = now.strftime("%Y-%m-%d")
 
     if formatted_date not in message_counts_df.index:
-        new_row = pd.Series([0, 0, 0], index=message_counts_df.columns, name=formatted_date)
-        message_counts_df = message_counts_df.append(new_row)
+        message_counts.loc[formatted_date, :] = 0
 
     message_counts_df.loc[formatted_date, message_type] += 1
     message_counts_df.to_csv("message_counts.csv")
