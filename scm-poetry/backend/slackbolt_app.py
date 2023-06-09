@@ -76,6 +76,7 @@ async def create_item(item: Item):
     return {"inserted_id": str(result.inserted_id)}
 '''
 
+
 @api.post("/slack/events")
 async def endpoint(req: Request):
     """
