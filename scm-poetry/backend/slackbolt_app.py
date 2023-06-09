@@ -36,17 +36,11 @@ load_dotenv()  # read local .env file
 # MongoDB connection
 load_dotenv()  # read local .env file
 uri = os.environ.get("POETRY_MONGODB_URL")
-# db = uri.messagedb
 
 # Create a new client and connect to the server
 client = MongoClient(uri, server_api=ServerApi('1'))
-
-# Send a ping to confirm a successful connection
-try:
-    client.admin.command('ping')
-    # print("Pinged your deployment. You successfully connected to MongoDB!")
-except Exception as e:
-    print(e)
+db = client["messagesdb"]
+collection = db["slackcollection"]
 
 # Initializes your app with your bot token and socket mode handler
 app = App(
