@@ -25,33 +25,28 @@ import pandas as pd
 from dotenv import load_dotenv
 from fastapi import FastAPI, Request
 from pandas import DataFrame
-from pydantic import BaseModel
 from pymongo.mongo_client import MongoClient
 from pymongo.server_api import ServerApi
 from slack_bolt import App
 from slack_bolt.adapter.fastapi import SlackRequestHandler
 from slack_bolt.adapter.socket_mode import SocketModeHandler
 
-
-# Define the data model
-class Item(BaseModel):
-    date: str
-    count1: int
-    flag: int
-    count2: int
-    count3: int
-
-
 load_dotenv()  # read local .env file
 
 # MongoDB connection
 load_dotenv()  # read local .env file
 uri = os.environ.get("POETRY_MONGODB_URL")
+# db = uri.messagedb
 
 # Create a new client and connect to the server
 client = MongoClient(uri, server_api=ServerApi('1'))
-db = client["messagesdb"]
-collection = db["slackcollection"]
+
+# Send a ping to confirm a successful connection
+try:
+    client.admin.command('ping')
+    # print("Pinged your deployment. You successfully connected to MongoDB!")
+except Exception as e:
+    print(e)
 
 # Initializes your app with your bot token and socket mode handler
 app = App(
@@ -60,16 +55,6 @@ app = App(
 )
 app_handler = SlackRequestHandler(app)
 api = FastAPI()
-
-
-# Define a POST method for creating a MongoDB document
-@app.post("/items/")
-async def create_item(item: Item):
-    # Convert the item to a dict so it can be stored in MongoDB
-    item_dict = item.dict()
-    result = collection.insert_one(item_dict)
-    return {"inserted_id": str(result.inserted_id)}
-
 
 if os.path.exists("data/message_counts.csv"):
     message_counts = pd.read_csv("data/message_counts.csv")
