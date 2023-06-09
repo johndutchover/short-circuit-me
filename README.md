@@ -1,25 +1,29 @@
-# short-circuit-me
+## short-circuit-me
 
-## Notification broker for Slack
+[![Pylint](https://github.com/johndutchover/short-circuit-me/actions/workflows/pylint.yml/badge.svg)](https://github.com/johndutchover/short-circuit-me/actions/workflows/pylint.yml)
 
-### Makefile
-- Build containers
-    - `make build`
+### Notification insights for Slack
 
-- Run containers
-  - `make run`
+#### Bolt for Python
+- [Package slack_bolt](https://slack.dev/bolt-python/api-docs/slack_bolt/)
 
-- Stop containers
-  - `make stop`
+#### Makefile
 
-- Cleanup images
-  - `make clean`
+##### build
+- `make build`
+  - copy message_counts.csv from backend
+  - build docker images
 
-#### api.slack.com
+##### run
+- `make run` 
+  - start application containers
 
-##### Bolt for Python
+##### stop
+- `make stop`
 
-[Package slack_bolt](https://slack.dev/bolt-python/api-docs/slack_bolt/)
+##### clean
+- `make clean`
+  - cleanup docker containers
 
 
 [![Pylint](https://github.com/johndutchover/short-circuit-me/actions/workflows/pylint.yml/badge.svg)](https://github.com/johndutchover/short-circuit-me/actions/workflows/pylint.yml)
