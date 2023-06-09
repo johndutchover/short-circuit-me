@@ -1,12 +1,8 @@
 # Makefile
 
 # Define dependencies
-POETRY_HOME = scm-poetry/
 FRONTEND_DEP_1 = scm-poetry/frontend
 BACKEND_DEP_2 = scm-poetry/backend
-
-# List of destination directories for csv copy
-DESTINATIONS := $(FRONTEND_DEP_1) $(POETRY_HOME)
 
 # Build the dependencies
 $(FRONTEND_DEP_1):
