@@ -25,6 +25,7 @@ import pandas as pd
 from dotenv import load_dotenv
 from fastapi import FastAPI, Request
 from pandas import DataFrame
+from pydantic import BaseModel
 from pymongo.mongo_client import MongoClient
 from pymongo.server_api import ServerApi
 from slack_bolt import App
@@ -32,6 +33,15 @@ from slack_bolt.adapter.fastapi import SlackRequestHandler
 from slack_bolt.adapter.socket_mode import SocketModeHandler
 
 load_dotenv()  # read local .env file
+
+
+# Define the data model
+class Item(BaseModel):
+    date: str
+    count1: int
+    flag: int
+    count2: int
+
 
 # MongoDB connection
 load_dotenv()  # read local .env file
@@ -55,6 +65,15 @@ if os.path.exists("../data/message_counts.csv"):
 else:
     message_counts = pd.DataFrame(columns=["normal", "important", "urgent"])
     message_counts.to_csv("../data/message_counts.csv")
+
+
+# Define a POST method for creating a MongoDB document
+@api.post("/items/")
+async def create_item(item: Item):
+    # Convert the item to a dict so it can be stored in MongoDB
+    item_dict = item.dict()
+    result = collection.insert_one(item_dict)
+    return {"inserted_id": str(result.inserted_id)}
 
 
 @api.post("/slack/events")
