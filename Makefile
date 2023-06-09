@@ -1,7 +1,7 @@
 # Makefile
 
 # Define dependencies
-POETRY_HOME = scm-poetry
+POETRY_HOME = scm-poetry/
 FRONTEND_DEP_1 = scm-poetry/frontend
 BACKEND_DEP_2 = scm-poetry/backend
 
