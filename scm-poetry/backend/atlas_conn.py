@@ -5,9 +5,7 @@ from pymongo.server_api import ServerApi
 from dotenv import load_dotenv
 
 load_dotenv() # read local .env file
-svcpass = os.environ.get("POETRY_ATLAS_SVCPWD")
-
-uri = f"mongodb+srv://clustersvc:{svcpass}@cluster0.doa190d.mongodb.net/?retryWrites=true&w=majority"
+uri = os.environ.get("POETRY_MONGODB_URL")
 
 # Create a new client and connect to the server
 client = MongoClient(uri, server_api=ServerApi('1'))
