@@ -39,11 +39,14 @@ app = App(
 app_handler = SlackRequestHandler(app)
 api = FastAPI()
 
+''' This appears to be redundant.
 if os.path.exists("message_counts.csv"):
     message_counts = pd.read_csv("message_counts.csv")
 else:
     message_counts = pd.DataFrame(columns=["normal", "important", "urgent"])
     message_counts.to_csv("message_counts.csv")
+    message_counts.to_csv("../frontend/message_counts.csv")
+'''
 
 
 @api.post("/slack/events")
@@ -67,7 +70,7 @@ def increase_counter(message_type: str):
 
     message_counts_df.loc[formatted_date, message_type] += 1
     message_counts_df.to_csv("message_counts.csv")
-    message_counts_df.to_csv("../frontend/message_counts.csv")
+    message_counts_df.to_csv("frontend/message_counts.csv")
 
 
 counter = 0
