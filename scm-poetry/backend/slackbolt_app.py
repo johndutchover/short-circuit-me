@@ -26,7 +26,7 @@ from dotenv import load_dotenv
 from fastapi import FastAPI, Request
 from pandas import DataFrame
 from pydantic import BaseModel
-from pymongo.mongo_client import MongoClient
+from motor.motor_asyncio import AsyncIOMotorClient
 from pymongo.server_api import ServerApi
 from slack_bolt import App
 from slack_bolt.adapter.fastapi import SlackRequestHandler
@@ -48,7 +48,7 @@ load_dotenv()  # read local .env file
 uri = os.environ.get("POETRY_MONGODB_URL")
 
 # Create a new client and connect to the server
-client = MongoClient(uri, server_api=ServerApi('1'))
+client = motor.motor_asyncio.AsyncIOMotorClient(os.environ["POETRY_MONGODB_URL"])
 db = client["messagesdb"]
 collection = db["slackcollection"]
 
