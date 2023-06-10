@@ -43,14 +43,16 @@ class Item(BaseModel):
     count2: int
 
 
-# MongoDB connection
 load_dotenv()  # read local .env file
+# MongoDB Atlas connection string
 uri = os.environ.get("POETRY_MONGODB_URL")
 
-# Create a new client and connect to the server
-client = motor.motor_asyncio.AsyncIOMotorClient(os.environ["POETRY_MONGODB_URL"])
+# Set the Stable API version when creating a new client
+client = AsyncIOMotorClient(uri, server_api=ServerApi('1'))
+# database name in MongoDB
 db = client["messagesdb"]
-collection = db["slackcollection"]
+# collection name in MongoDB
+collection = db["slackcoll"]
 
 # Initializes your app with your bot token and socket mode handler
 app = App(
