@@ -21,7 +21,6 @@ numpy = "^1.24.3"
 pandas = "^2.0.2"
 plotly = "^5.14.1"
 bokeh = "2.4.3"
-pymongo = "^4.3.3"
 motor = "^3.1.2"
 
 [tool.poetry.group.dev.dependencies]
