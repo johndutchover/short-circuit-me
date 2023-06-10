@@ -19,13 +19,12 @@ Usage:
 import datetime
 import os
 import re
-from typing import Any
 
+import asyncio
 import pandas as pd
 from dotenv import load_dotenv
 from fastapi import FastAPI, Request
 from motor import motor_asyncio
-from pandas import DataFrame
 from pydantic import BaseModel
 from slack_bolt import App
 from slack_bolt.adapter.fastapi import SlackRequestHandler
@@ -88,17 +87,25 @@ async def endpoint(req: Request):
     return await app_handler.handle(req)
 
 
-def increase_counter(message_type: str):
-    message_counts_df: DataFrame | Any = pd.read_csv("../data/message_counts.csv", index_col=0)
-
+async def increase_counter(message_type: str):
     now = datetime.datetime.now()
     formatted_date = now.strftime("%Y-%m-%d")
 
-    if formatted_date not in message_counts_df.index:
-        message_counts_df.loc[formatted_date] = [0, 0, 0]
+    current_data = await collection.find_one({"date": formatted_date})
 
-    message_counts_df.loc[formatted_date, message_type] += 1
-    message_counts_df.to_csv("../data/message_counts.csv")
+    if current_data is None:
+        new_data = {
+            "date": formatted_date,
+            "normal": 0,
+            "important": 0,
+            "urgent": 0
+        }
+        await collection.insert_one(new_data)
+    else:
+        new_data = current_data
+
+    new_data[message_type] += 1
+    await collection.replace_one({"date": formatted_date}, new_data)
 
 
 counter = 0
@@ -125,6 +132,9 @@ def message_urgent(message, say):
     :param say:
     :return:
     """
+    loop = asyncio.new_event_loop()
+    asyncio.set_event_loop(loop)
+    loop.run_until_complete(increase_counter('urgent'))
     say(
         blocks=[
             {
@@ -139,7 +149,34 @@ def message_urgent(message, say):
         ],
         text=f"Hey there <@{message['user']}>!"
     )
-    increase_counter('urgent')
+
+
+@app.message(regex_p2)
+def message_important(message, say):
+    """
+    increment counter of Priority 2 (important) string matches
+    say() sends a message to the channel where the event was triggered
+    :param message:
+    :param say:
+    :return:
+    """
+    loop = asyncio.new_event_loop()
+    asyncio.set_event_loop(loop)
+    loop.run_until_complete(increase_counter('important'))
+    say(
+        blocks=[
+            {
+                "type": "section",
+                "text": {"type": "mrkdwn", "text": f"Hey there <@{message['user']}>!"},
+                "accessory": {
+                    "type": "button",
+                    "text": {"type": "plain_text", "text": "This better be important"},
+                    "action_id": "button_click"
+                }
+            }
+        ],
+        text=f"Hey there <@{message['user']}>!"
+    )
 
 
 @app.event("message")
@@ -150,7 +187,9 @@ def handle_message_events(body, logger):
     :param logger:
     :return:
     """
-    increase_counter('normal')
+    loop = asyncio.new_event_loop()
+    asyncio.set_event_loop(loop)
+    loop.run_until_complete(increase_counter('normal'))
     logger.info(body)
 
 
