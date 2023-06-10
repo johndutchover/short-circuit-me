@@ -24,10 +24,9 @@ from typing import Any
 import pandas as pd
 from dotenv import load_dotenv
 from fastapi import FastAPI, Request
+from motor import motor_asyncio
 from pandas import DataFrame
 from pydantic import BaseModel
-from motor.motor_asyncio import AsyncIOMotorClient
-from pymongo.server_api import ServerApi
 from slack_bolt import App
 from slack_bolt.adapter.fastapi import SlackRequestHandler
 from slack_bolt.adapter.socket_mode import SocketModeHandler
@@ -48,7 +47,7 @@ load_dotenv()  # read local .env file
 uri = os.environ.get("POETRY_MONGODB_URL")
 
 # Set the Stable API version when creating a new client
-client = AsyncIOMotorClient(uri, server_api=ServerApi('1'))
+client = motor_asyncio.AsyncIOMotorClient(os.environ["POETRY_MONGODB_URL"])
 # database name in MongoDB
 db = client["messagesdb"]
 # collection name in MongoDB
