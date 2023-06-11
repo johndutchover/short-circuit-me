@@ -20,7 +20,6 @@ import datetime
 import os
 import re
 
-import pandas as pd
 from dotenv import load_dotenv
 from fastapi import FastAPI, Request
 from motor import motor_asyncio
@@ -59,11 +58,13 @@ app = App(
 app_handler = SlackRequestHandler(app)
 api = FastAPI()
 
+'''
 if os.path.exists("../data/message_counts.csv"):
     message_counts = pd.read_csv("../data/message_counts.csv")
 else:
     message_counts = pd.DataFrame(columns=["normal", "important", "urgent"])
     message_counts.to_csv("../data/message_counts.csv")
+'''
 
 '''
 # Define a POST method for creating a MongoDB document
