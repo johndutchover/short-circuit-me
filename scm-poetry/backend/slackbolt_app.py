@@ -20,7 +20,6 @@ import datetime
 import os
 import re
 
-import asyncio
 import pandas as pd
 from dotenv import load_dotenv
 from fastapi import FastAPI, Request
@@ -124,7 +123,7 @@ regex_p3 = re.compile(str_p3, flags=re.I)
 
 
 @app.message(regex_p1)
-def message_urgent(message, say):
+async def message_urgent(message, say):
     """
     increment counter of Priority 1 (urgent) string matches
     say() sends a message to the channel where the event was triggered
@@ -132,9 +131,6 @@ def message_urgent(message, say):
     :param say:
     :return:
     """
-    loop = asyncio.new_event_loop()
-    asyncio.set_event_loop(loop)
-    loop.run_until_complete(increase_counter('urgent'))
     say(
         blocks=[
             {
@@ -152,7 +148,7 @@ def message_urgent(message, say):
 
 
 @app.message(regex_p2)
-def message_important(message, say):
+async def message_important(message, say):
     """
     increment counter of Priority 2 (important) string matches
     say() sends a message to the channel where the event was triggered
@@ -160,9 +156,6 @@ def message_important(message, say):
     :param say:
     :return:
     """
-    loop = asyncio.new_event_loop()
-    asyncio.set_event_loop(loop)
-    loop.run_until_complete(increase_counter('important'))
     say(
         blocks=[
             {
@@ -180,30 +173,15 @@ def message_important(message, say):
 
 
 @app.event("message")
-def handle_message_events(body, logger):
+async def handle_message_events(body, logger):
     """
-    hangle Slack message events
+    handle Slack message events
     :param body:
     :param logger:
     :return:
     """
-    loop = asyncio.new_event_loop()
-    asyncio.set_event_loop(loop)
-    loop.run_until_complete(increase_counter('normal'))
     logger.info(body)
-
-
-@app.action("button_click")
-def action_button_click(body, ack, say):
-    """
-    Acknowledge the action
-    :param body:
-    :param ack:
-    :param say:
-    :return:
-    """
-    ack()
-    say(f"<@{body['user']['id']}> clicked the button")
+    await increase_counter('normal')
 
 
 # Start app using WebSockets
