@@ -5,7 +5,7 @@ FROM python:3.10.11-slim
 WORKDIR /bolt
 COPY .env /bolt
 COPY pyproject.toml /bolt
-COPY slackbolt_app.py /bolt
+COPY slackbolt_csv.py /bolt
 COPY message_counts.csv /bolt
 
 ENV PYTHONPATH /bolt:${PYTHONPATH}
