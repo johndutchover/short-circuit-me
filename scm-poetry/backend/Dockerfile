@@ -17,4 +17,4 @@ RUN poetry install
 # HEALTHCHECK CMD curl --fail http://localhost:3000/_stcore/health
 
 EXPOSE 3000
-ENTRYPOINT ["python", "slackbolt_app.py", "--server.port=3000", "--server.address=0.0.0.0"]
+ENTRYPOINT ["python", "slackbolt_csv.py", "--server.port=3000", "--server.address=0.0.0.0"]

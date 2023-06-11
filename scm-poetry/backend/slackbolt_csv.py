@@ -25,28 +25,11 @@ import pandas as pd
 from dotenv import load_dotenv
 from fastapi import FastAPI, Request
 from pandas import DataFrame
-from pymongo.mongo_client import MongoClient
-from pymongo.server_api import ServerApi
 from slack_bolt import App
 from slack_bolt.adapter.fastapi import SlackRequestHandler
 from slack_bolt.adapter.socket_mode import SocketModeHandler
 
 load_dotenv()  # read local .env file
-
-# MongoDB connection
-load_dotenv()  # read local .env file
-uri = os.environ.get("POETRY_MONGODB_URL")
-# db = uri.messagedb
-
-# Create a new client and connect to the server
-client = MongoClient(uri, server_api=ServerApi('1'))
-
-# Send a ping to confirm a successful connection
-try:
-    client.admin.command('ping')
-    # print("Pinged your deployment. You successfully connected to MongoDB!")
-except Exception as e:
-    print(e)
 
 # Initializes your app with your bot token and socket mode handler
 app = App(
