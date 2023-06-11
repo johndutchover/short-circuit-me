@@ -12,6 +12,7 @@
 ##### build
 - `make build`
   - copy message_counts.csv from backend
+    - use `slackbolt_csv.app` which bypasses MongoDB Atlas
   - build docker images
 
 ##### run

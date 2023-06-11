@@ -19,36 +19,17 @@ Usage:
 import datetime
 import os
 import re
+from typing import Any
 
+import pandas as pd
 from dotenv import load_dotenv
 from fastapi import FastAPI, Request
-from motor import motor_asyncio
-from pydantic import BaseModel
+from pandas import DataFrame
 from slack_bolt import App
 from slack_bolt.adapter.fastapi import SlackRequestHandler
 from slack_bolt.adapter.socket_mode import SocketModeHandler
 
 load_dotenv()  # read local .env file
-
-
-# Define the data model
-class Item(BaseModel):
-    date: str
-    count1: int
-    flag: int
-    count2: int
-
-
-load_dotenv()  # read local .env file
-# MongoDB Atlas connection string
-uri = os.environ.get("POETRY_MONGODB_URL")
-
-# Set the Stable API version when creating a new client
-client = motor_asyncio.AsyncIOMotorClient(os.environ["POETRY_MONGODB_URL"])
-# database name in MongoDB
-db = client["messagesdb"]
-# collection name in MongoDB
-collection = db["slackcoll"]
 
 # Initializes your app with your bot token and socket mode handler
 app = App(
@@ -58,13 +39,11 @@ app = App(
 app_handler = SlackRequestHandler(app)
 api = FastAPI()
 
-'''
 if os.path.exists("../data/message_counts.csv"):
     message_counts = pd.read_csv("../data/message_counts.csv")
 else:
     message_counts = pd.DataFrame(columns=["normal", "important", "urgent"])
     message_counts.to_csv("../data/message_counts.csv")
-'''
 
 
 @api.post("/slack/events")
@@ -77,25 +56,17 @@ async def endpoint(req: Request):
     return await app_handler.handle(req)
 
 
-async def increase_counter(message_type: str):
+def increase_counter(message_type: str):
+    message_counts_df: DataFrame | Any = pd.read_csv("../data/message_counts.csv", index_col=0)
+
     now = datetime.datetime.now()
     formatted_date = now.strftime("%Y-%m-%d")
 
-    current_data = await collection.find_one({"date": formatted_date})
+    if formatted_date not in message_counts_df.index:
+        message_counts_df.loc[formatted_date] = [0, 0, 0]
 
-    if current_data is None:
-        new_data = {
-            "date": formatted_date,
-            "normal": 0,
-            "important": 0,
-            "urgent": 0
-        }
-        await collection.insert_one(new_data)
-    else:
-        new_data = current_data
-
-    new_data[message_type] += 1
-    await collection.replace_one({"date": formatted_date}, new_data)
+    message_counts_df.loc[formatted_date, message_type] += 1
+    message_counts_df.to_csv("../data/message_counts.csv")
 
 
 counter = 0
@@ -114,7 +85,7 @@ regex_p3 = re.compile(str_p3, flags=re.I)
 
 
 @app.message(regex_p1)
-async def message_urgent(message, say):
+def message_urgent(message, say):
     """
     increment counter of Priority 1 (urgent) string matches
     say() sends a message to the channel where the event was triggered
@@ -136,43 +107,32 @@ async def message_urgent(message, say):
         ],
         text=f"Hey there <@{message['user']}>!"
     )
-
-
-@app.message(regex_p2)
-async def message_important(message, say):
-    """
-    increment counter of Priority 2 (important) string matches
-    say() sends a message to the channel where the event was triggered
-    :param message:
-    :param say:
-    :return:
-    """
-    say(
-        blocks=[
-            {
-                "type": "section",
-                "text": {"type": "mrkdwn", "text": f"Hey there <@{message['user']}>!"},
-                "accessory": {
-                    "type": "button",
-                    "text": {"type": "plain_text", "text": "This better be important"},
-                    "action_id": "button_click"
-                }
-            }
-        ],
-        text=f"Hey there <@{message['user']}>!"
-    )
+    increase_counter('urgent')
 
 
 @app.event("message")
-async def handle_message_events(body, logger):
+def handle_message_events(body, logger):
     """
-    handle Slack message events
+    hangle Slack message events
     :param body:
     :param logger:
     :return:
     """
+    increase_counter('normal')
     logger.info(body)
-    await increase_counter('normal')
+
+
+@app.action("button_click")
+def action_button_click(body, ack, say):
+    """
+    Acknowledge the action
+    :param body:
+    :param ack:
+    :param say:
+    :return:
+    """
+    ack()
+    say(f"<@{body['user']['id']}> clicked the button")
 
 
 # Start app using WebSockets
