@@ -66,16 +66,6 @@ else:
     message_counts.to_csv("../data/message_counts.csv")
 '''
 
-'''
-# Define a POST method for creating a MongoDB document
-@api.post("/items/")
-async def create_item(item: Item):
-    # Convert the item to a dict so it can be stored in MongoDB
-    item_dict = item.dict()
-    result = collection.insert_one(item_dict)
-    return {"inserted_id": str(result.inserted_id)}
-'''
-
 
 @api.post("/slack/events")
 async def endpoint(req: Request):
