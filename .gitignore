@@ -396,4 +396,5 @@ $RECYCLE.BIN/
 # End of https://www.toptal.com/developers/gitignore/api/git,vim,linux,macos,python,windows,visualstudiocode,jetbrains+all,direnv
 # project exclusions
 message_counts.csv
+secrets.toml
 # End of project exclusions
