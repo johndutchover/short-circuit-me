@@ -1,5 +1,6 @@
 # https://docs.streamlit.io/library/get-started/create-an-app
 # .io/how-to-build-a-real-time-live-dashboard-with-streamlit/#2-how-to-do-a-basic-dashboard-setup
+import os
 
 # If you are using Streamlit version 1.10.0 or higher, your main script should live in a directory other than the
 # root directory. When using Docker, you can use the WORKDIR command to specify the directory where your main script
@@ -8,9 +9,19 @@
 import streamlit as st
 import pandas as pd
 from bokeh.plotting import figure
+from dotenv import load_dotenv
 from pandas.errors import EmptyDataError
+from pymongo import MongoClient
 
 st.set_page_config(page_title="Simple Dashboard", page_icon="✅")
+
+load_dotenv()  # read local .env file
+# MongoDB Atlas connection string
+uri = os.environ.get("POETRY_MONGODB_URL")
+# Connect to MongoDB Atlas
+client = MongoClient(os.environ["POETRY_MONGODB_URL"])
+db = client["messagesdb"]
+collection = db["slackcoll"]
 
 
 def get_important_notifications():
@@ -71,4 +82,4 @@ st.area_chart(
 # - from VSCode, use "Run Python File" instead of "Run Code" (properly activates venv)
 # - from PyCharm...set default python interpreter to venv
 # - from external terminal, use `poetry shell` followed by:
-#  - `streamlit run streamlit_app.py`'''
+#  - `streamlit run streamlit_csv.py`'''
