@@ -4,8 +4,7 @@
 
 ### Notification insights for Slack
 
-#### Bolt for Python
-- [Package slack_bolt](https://slack.dev/bolt-python/api-docs/slack_bolt/)
+### Usage
 
 #### Makefile
 
@@ -17,11 +16,16 @@
 
 ##### run
 - `make run` 
-  - start application containers
+  - Launch application containers
+    -  Opens Streamlit (sleep 7)
 
 ##### stop
 - `make stop`
 
+##### start
+- `make start`
+  - start application containers
+
 ##### clean
 - `make clean`
-  - cleanup docker containers
+  - cleanup unused containers
