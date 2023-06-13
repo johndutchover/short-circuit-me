@@ -3,6 +3,7 @@
 FROM python:3.10.11-slim
 WORKDIR /app
 ENV PYTHONPATH /app:${PYTHONPATH}
+COPY .env /app
 COPY pyproject.toml /app
 COPY streamlit_csv.py /app
 #COPY message_counts.csv /app
