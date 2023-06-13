@@ -2,11 +2,10 @@
 
 FROM python:3.10.11-slim
 WORKDIR /app
-ENV PYTHONPATH /app:${PYTHONPATH}
+ENV PYTHONPATH /app
 COPY .env /app
 COPY pyproject.toml /app
 COPY streamlit_csv.py /app
-#COPY message_counts.csv /app
 RUN pip3 install poetry
 RUN poetry config virtualenvs.create false
 RUN poetry install
