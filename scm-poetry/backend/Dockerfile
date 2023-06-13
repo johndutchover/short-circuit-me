@@ -6,7 +6,7 @@ ENV PYTHONPATH /bolt:${PYTHONPATH}
 COPY .env /bolt
 COPY pyproject.toml /bolt
 COPY slackbolt_csv.py /bolt
-COPY message_counts.csv /bolt
+# COPY message_counts.csv /bolt
 RUN pip3 install poetry
 RUN poetry config virtualenvs.create false
 RUN poetry install

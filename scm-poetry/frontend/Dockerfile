@@ -5,7 +5,7 @@ WORKDIR /app
 ENV PYTHONPATH /app:${PYTHONPATH}
 COPY pyproject.toml /app
 COPY streamlit_csv.py /app
-COPY message_counts.csv /app
+#COPY message_counts.csv /app
 RUN pip3 install poetry
 RUN poetry config virtualenvs.create false
 RUN poetry install

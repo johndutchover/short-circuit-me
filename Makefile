@@ -1,12 +1,12 @@
 # Makefile
 
 # Define dependencies
-DATA_HOME = scm-poetry/data
+DATA_HOME = scm-poetry/frontend
 FRONTEND_DEP_1 = scm-poetry/frontend
 BACKEND_DEP_2 = scm-poetry/backend
 
 # List of destination directories for csv sync
-DESTINATIONS := $(FRONTEND_DEP_1) $(DATA_HOME)
+DESTINATIONS := $(BACKEND_DEP_2)
 
 # Build the dependencies
 $(FRONTEND_DEP_1):
@@ -20,7 +20,7 @@ $(BACKEND_DEP_2):
 # Copy the CSV file created by backend to scm-poetry and frontend
 copy_csv:
 	for dir in $(DESTINATIONS); do \
-		cp scm-poetry/backend/message_counts.csv $$dir/message_counts.csv; \
+		cp scm-poetry/frontend/message_counts.csv $$dir/message_counts.csv; \
 	done
 
 # Build the application
@@ -31,8 +31,8 @@ build:
 
 # Run the application and mount scm-poetry as /frontend on containers
 run:
-	docker run --name frontend -d -p 8501:8501 -v $(PWD):/frontend frontend:latest
-	docker run --name backend -d -p 3000:3000 -v $(PWD):/frontend backend:latest
+	docker run --name frontend -d -p 8501:8501 -v ./scm-poetry/frontend/message_counts.csv:/app/message_counts.csv frontend:latest
+	docker run --name backend -d -p 3000:3000 -v ./scm-poetry/frontend/message_counts.csv:/bolt/message_counts.csv backend:latest
 	sleep 7
 	open http://localhost:8501
 
