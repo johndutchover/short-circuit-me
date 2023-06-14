@@ -63,7 +63,7 @@ async def endpoint(req: Request):
 
 
 def increase_counter(message_type: str):
-    message_counts_df: DataFrame | Any = pd.read_csv("message_counts.csv", index_col=0)
+    message_counts_df: DataFrame | Any = pd.read_csv(message_counts_path, index_col=0)
 
     now = datetime.datetime.now()
     formatted_date = now.strftime("%Y-%m-%d")
