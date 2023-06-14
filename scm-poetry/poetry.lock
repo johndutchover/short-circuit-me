@@ -23,27 +23,6 @@ toolz = "*"
 dev = ["black", "docutils", "flake8", "ipython", "m2r", "mistune (<2.0.0)", "pytest", "recommonmark", "sphinx", "vega-datasets"]
 
 [[package]]
-name = "anyio"
-version = "3.7.0"
-description = "High level compatibility layer for multiple asynchronous event loop implementations"
-optional = false
-python-versions = ">=3.7"
-files = [
-    {file = "anyio-3.7.0-py3-none-any.whl", hash = "sha256:eddca883c4175f14df8aedce21054bfca3adb70ffe76a9f607aef9d7fa2ea7f0"},
-    {file = "anyio-3.7.0.tar.gz", hash = "sha256:275d9973793619a5374e1c89a4f4ad3f4b0a5510a2b5b939444bee8f4c4d37ce"},
-]
-
-[package.dependencies]
-exceptiongroup = {version = "*", markers = "python_version < \"3.11\""}
-idna = ">=2.8"
-sniffio = ">=1.1"
-
-[package.extras]
-doc = ["Sphinx (>=6.1.0)", "packaging", "sphinx-autodoc-typehints (>=1.2.0)", "sphinx-rtd-theme", "sphinxcontrib-jquery"]
-test = ["anyio[trio]", "coverage[toml] (>=4.5)", "hypothesis (>=4.0)", "mock (>=4)", "psutil (>=5.9)", "pytest (>=7.0)", "pytest-mock (>=3.6.1)", "trustme", "uvloop (>=0.17)"]
-trio = ["trio (<0.22)"]
-
-[[package]]
 name = "asgiref"
 version = "3.7.2"
 description = "ASGI specs, helper code, and adapters"
@@ -412,27 +391,6 @@ files = [
 
 [package.extras]
 test = ["pytest (>=6)"]
-
-[[package]]
-name = "fastapi"
-version = "0.95.2"
-description = "FastAPI framework, high performance, easy to learn, fast to code, ready for production"
-optional = false
-python-versions = ">=3.7"
-files = [
-    {file = "fastapi-0.95.2-py3-none-any.whl", hash = "sha256:d374dbc4ef2ad9b803899bd3360d34c534adc574546e25314ab72c0c4411749f"},
-    {file = "fastapi-0.95.2.tar.gz", hash = "sha256:4d9d3e8c71c73f11874bcf5e33626258d143252e329a01002f767306c64fb982"},
-]
-
-[package.dependencies]
-pydantic = ">=1.6.2,<1.7 || >1.7,<1.7.1 || >1.7.1,<1.7.2 || >1.7.2,<1.7.3 || >1.7.3,<1.8 || >1.8,<1.8.1 || >1.8.1,<2.0.0"
-starlette = ">=0.27.0,<0.28.0"
-
-[package.extras]
-all = ["email-validator (>=1.1.1)", "httpx (>=0.23.0)", "itsdangerous (>=1.1.0)", "jinja2 (>=2.11.2)", "orjson (>=3.2.1)", "python-multipart (>=0.0.5)", "pyyaml (>=5.3.1)", "ujson (>=4.0.1,!=4.0.2,!=4.1.0,!=4.2.0,!=4.3.0,!=5.0.0,!=5.1.0)", "uvicorn[standard] (>=0.12.0)"]
-dev = ["pre-commit (>=2.17.0,<3.0.0)", "ruff (==0.0.138)", "uvicorn[standard] (>=0.12.0,<0.21.0)"]
-doc = ["mdx-include (>=1.4.1,<2.0.0)", "mkdocs (>=1.1.2,<2.0.0)", "mkdocs-markdownextradata-plugin (>=0.1.7,<0.3.0)", "mkdocs-material (>=8.1.4,<9.0.0)", "pyyaml (>=5.3.1,<7.0.0)", "typer-cli (>=0.0.13,<0.0.14)", "typer[all] (>=0.6.1,<0.8.0)"]
-test = ["anyio[trio] (>=3.2.1,<4.0.0)", "black (==23.1.0)", "coverage[toml] (>=6.5.0,<8.0)", "databases[sqlite] (>=0.3.2,<0.7.0)", "email-validator (>=1.1.1,<2.0.0)", "flask (>=1.1.2,<3.0.0)", "httpx (>=0.23.0,<0.24.0)", "isort (>=5.0.6,<6.0.0)", "mypy (==0.982)", "orjson (>=3.2.1,<4.0.0)", "passlib[bcrypt] (>=1.7.2,<2.0.0)", "peewee (>=3.13.3,<4.0.0)", "pytest (>=7.1.3,<8.0.0)", "python-jose[cryptography] (>=3.3.0,<4.0.0)", "python-multipart (>=0.0.5,<0.0.7)", "pyyaml (>=5.3.1,<7.0.0)", "ruff (==0.0.138)", "sqlalchemy (>=1.3.18,<1.4.43)", "types-orjson (==3.6.2)", "types-ujson (==5.7.0.1)", "ujson (>=4.0.1,!=4.0.2,!=4.1.0,!=4.2.0,!=4.3.0,!=5.0.0,!=5.1.0,<6.0.0)"]
 
 [[package]]
 name = "flake8"
@@ -880,6 +838,17 @@ spss = ["pyreadstat (>=1.1.2)"]
 sql-other = ["SQLAlchemy (>=1.4.16)"]
 test = ["hypothesis (>=6.34.2)", "pytest (>=7.0.0)", "pytest-asyncio (>=0.17.0)", "pytest-xdist (>=2.2.0)"]
 xml = ["lxml (>=4.6.3)"]
+
+[[package]]
+name = "pathlib"
+version = "1.0.1"
+description = "Object-oriented filesystem paths"
+optional = false
+python-versions = "*"
+files = [
+    {file = "pathlib-1.0.1-py3-none-any.whl", hash = "sha256:f35f95ab8b0f59e6d354090350b44a80a80635d22efdedfa84c7ad1cf0a74147"},
+    {file = "pathlib-1.0.1.tar.gz", hash = "sha256:6940718dfc3eff4258203ad5021090933e5c04707d5ca8cc9e73c94a7894ea9f"},
+]
 
 [[package]]
 name = "pathspec"
@@ -1631,34 +1600,6 @@ files = [
 ]
 
 [[package]]
-name = "sniffio"
-version = "1.3.0"
-description = "Sniff out which async library your code is running under"
-optional = false
-python-versions = ">=3.7"
-files = [
-    {file = "sniffio-1.3.0-py3-none-any.whl", hash = "sha256:eecefdce1e5bbfb7ad2eeaabf7c1eeb404d7757c379bd1f7e5cce9d8bf425384"},
-    {file = "sniffio-1.3.0.tar.gz", hash = "sha256:e60305c5e5d314f5389259b7f22aaa33d8f7dee49763119234af3755c55b9101"},
-]
-
-[[package]]
-name = "starlette"
-version = "0.27.0"
-description = "The little ASGI library that shines."
-optional = false
-python-versions = ">=3.7"
-files = [
-    {file = "starlette-0.27.0-py3-none-any.whl", hash = "sha256:918416370e846586541235ccd38a474c08b80443ed31c578a418e2209b3eef91"},
-    {file = "starlette-0.27.0.tar.gz", hash = "sha256:6a6b0d042acb8d469a01eba54e9cda6cbd24ac602c4cd016723117d6a7e73b75"},
-]
-
-[package.dependencies]
-anyio = ">=3.4.0,<5"
-
-[package.extras]
-full = ["httpx (>=0.22.0)", "itsdangerous", "jinja2", "python-multipart", "pyyaml"]
-
-[[package]]
 name = "streamlit"
 version = "1.22.0"
 description = "A faster way to build and share data apps"
@@ -2043,4 +1984,4 @@ testing = ["big-O", "flake8 (<5)", "jaraco.functools", "jaraco.itertools", "more
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "c45bc729e6b06f9aef25a6e5331b0dd3d0aad666567272e8d7e63d8b68858942"
+content-hash = "0644125a4d6c11aedd65afd3232427f40a3e599c3c1447ab0049be22cfd7361c"
