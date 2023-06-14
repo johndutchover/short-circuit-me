@@ -10,4 +10,5 @@ RUN pip3 install poetry
 RUN poetry config virtualenvs.create false
 RUN poetry install
 EXPOSE 3000
-ENTRYPOINT ["python", "slackbolt_csv.py", "--server.port=3000", "--server.address=0.0.0.0"]
+ENTRYPOINT ["python", "slackbolt_csv.py"]
+CMD ["--port=3000"]
