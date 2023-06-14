@@ -20,13 +20,20 @@ import datetime
 import os
 import re
 
+
 from dotenv import load_dotenv
-from fastapi import FastAPI, Request
+from fastapi import FastAPI
 from motor import motor_asyncio
 from pydantic import BaseModel
 from slack_bolt import App
 from slack_bolt.adapter.fastapi import SlackRequestHandler
 from slack_bolt.adapter.socket_mode import SocketModeHandler
+import pathlib
+
+from starlette.requests import Request
+
+cfd = pathlib.Path(__file__).parent
+message_counts_path = cfd / "message_counts.csv"
 
 load_dotenv()  # read local .env file
 
@@ -39,7 +46,6 @@ class Item(BaseModel):
     count2: int
 
 
-load_dotenv()  # read local .env file
 # MongoDB Atlas connection string
 uri = os.environ.get("POETRY_MONGODB_URL")
 

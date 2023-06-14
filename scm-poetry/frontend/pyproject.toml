@@ -1,12 +1,14 @@
 [tool.poetry]
-name = "frontend"
-version = "0.3.2"
-description = "short-circuit-me frontend"
+name = "scm-poetry"
+version = "0.3.3"
+description = "short-circuit-me poetry"
 authors = ["John Dutchover <johndutchover@users.noreply.github.com>"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
 python = "^3.10"
+fastapi = "^0.97.0"
+slack-bolt = "^1.18.0"
 pip-tools = "^6.13.0"
 python-dotenv = "^1.0.0"
 pydantic = ">=1.8.0,<2.0.0"
@@ -16,7 +18,7 @@ streamlit = "~1.22.0"
 watchdog = "^3.0.0"
 asyncio = "^3.4.3"
 numpy = "^1.24.3"
-pandas = "^2.0.1"
+pandas = "^2.0.2"
 plotly = "^5.14.1"
 bokeh = "2.4.3"
 motor = "^3.1.2"
