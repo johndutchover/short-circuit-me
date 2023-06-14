@@ -58,14 +58,6 @@ app = App(
 app_handler = SlackRequestHandler(app)
 api = FastAPI()
 
-'''
-if os.path.exists("data/message_counts.csv"):
-    message_counts = pd.read_csv("../frontend/message_counts.csv")
-else:
-    message_counts = pd.DataFrame(columns=["normal", "important", "urgent"])
-    message_counts.to_csv("../frontend/message_counts.csv")
-'''
-
 
 @api.post("/slack/events")
 async def endpoint(req: Request):
