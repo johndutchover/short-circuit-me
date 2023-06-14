@@ -22,7 +22,6 @@ import re
 from typing import Any
 
 import pandas as pd
-from aiohttp.web_request import Request
 from dotenv import load_dotenv
 from fastapi import FastAPI
 from pandas import DataFrame
@@ -30,6 +29,8 @@ from slack_bolt import App
 from slack_bolt.adapter.fastapi import SlackRequestHandler
 from slack_bolt.adapter.socket_mode import SocketModeHandler
 import pathlib
+
+from starlette.requests import Request
 
 cfd = pathlib.Path(__file__).parent
 message_counts_path = cfd / "message_counts.csv"
