@@ -7,6 +7,7 @@ import pymongo
 # root directory. When using Docker, you can use the WORKDIR command to specify the directory where your main script
 # lives.
 
+import pathlib
 import streamlit as st
 import pandas as pd
 from bokeh.plotting import figure
@@ -19,6 +20,9 @@ st.set_page_config(page_title="Simple Dashboard", page_icon="✅")
 load_dotenv()  # read local .env file
 # MongoDB Atlas connection string
 uri = os.environ.get("POETRY_MONGODB_URL")
+
+cfd = pathlib.Path(__file__).parent
+message_counts_path = cfd / "message_counts.csv"
 
 
 # Initialize connection.

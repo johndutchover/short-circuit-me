@@ -5,6 +5,7 @@
 # root directory. When using Docker, you can use the WORKDIR command to specify the directory where your main script
 # lives.
 
+import pathlib
 import streamlit as st
 import pandas as pd
 from bokeh.plotting import figure
@@ -12,6 +13,8 @@ from pandas.errors import EmptyDataError
 
 st.set_page_config(page_title="Simple Dashboard", page_icon="✅")
 
+cfd = pathlib.Path(__file__).parent
+message_counts_path = cfd / "message_counts.csv"
 
 def get_important_notifications():
     return 42
@@ -28,7 +31,7 @@ st.title('Notification Overview Dashboard')
 st.subheader('Slack :zap: :blue[notification] summary')
 
 try:
-    df_messages = pd.read_csv("message_counts.csv", header='infer')
+    df_messages = pd.read_csv(message_counts_path, header='infer')
     st.table(df_messages)
 except EmptyDataError:
     st.text('INFO: The message_counts.csv file is empty')
