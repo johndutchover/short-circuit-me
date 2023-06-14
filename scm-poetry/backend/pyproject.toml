@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "backend"
-version = "0.3.1"
+version = "0.3.2"
 description = "short-circuit-me backend"
 authors = ["John Dutchover <johndutchover@users.noreply.github.com>"]
 readme = "README.md"
