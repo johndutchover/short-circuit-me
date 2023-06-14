@@ -22,8 +22,9 @@ import re
 from typing import Any
 
 import pandas as pd
+from aiohttp.web_request import Request
 from dotenv import load_dotenv
-# from fastapi import FastAPI, Request
+from fastapi import FastAPI
 from pandas import DataFrame
 from slack_bolt import App
 from slack_bolt.adapter.fastapi import SlackRequestHandler
@@ -41,7 +42,7 @@ app = App(
     # signing_secret=os.environ.get("POETRY_SCM_BOT_SIGNINGSECRET") # not required for socket mode
 )
 app_handler = SlackRequestHandler(app)
-# api = FastAPI()
+api = FastAPI()
 
 if os.path.exists(message_counts_path):
     message_counts = pd.read_csv(message_counts_path)
@@ -50,14 +51,14 @@ else:
     message_counts.to_csv(message_counts_path)
 
 
-# @api.post("/slack/events")
-# async def endpoint(req: Request):
-#     """
-#     endpoint which handles incoming requests from Slack
-#     :param req:
-#     :return:
-#     """
-#     return await app_handler.handle(req)
+@api.post("/slack/events")
+async def endpoint(req: Request):
+    """
+     endpoint which handles incoming requests from Slack
+     :param req:
+     :return:
+     """
+    return await app_handler.handle(req)
 
 
 def increase_counter(message_type: str):

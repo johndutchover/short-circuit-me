@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "frontend"
-version = "0.3.2"
+version = "0.3.3"
 description = "short-circuit-me frontend"
 authors = ["John Dutchover <johndutchover@users.noreply.github.com>"]
 readme = "README.md"
@@ -21,6 +21,7 @@ plotly = "^5.14.1"
 bokeh = "2.4.3"
 motor = "^3.1.2"
 pymongo = "^4.3.3"
+aiohttp = "^3.8.4"
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^7.3.1"
