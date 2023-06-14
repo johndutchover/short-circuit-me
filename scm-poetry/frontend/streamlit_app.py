@@ -25,7 +25,7 @@ uri = os.environ.get("POETRY_MONGODB_URL")
 # Uses st.cache_resource to only run once.
 @st.cache_resource
 def init_connection():
-    return pymongo.MongoClient(**st.secrets["mongo"])
+    return pymongo.MongoClient(**st.secrets.db_credentials)
 
 
 client_init = init_connection()
