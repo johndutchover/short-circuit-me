@@ -2,6 +2,7 @@
 # .io/how-to-build-a-real-time-live-dashboard-with-streamlit/#2-how-to-do-a-basic-dashboard-setup
 import os
 
+import pymongo
 # If you are using Streamlit version 1.10.0 or higher, your main script should live in a directory other than the
 # root directory. When using Docker, you can use the WORKDIR command to specify the directory where your main script
 # lives.
@@ -18,10 +19,32 @@ st.set_page_config(page_title="Simple Dashboard", page_icon="✅")
 load_dotenv()  # read local .env file
 # MongoDB Atlas connection string
 uri = os.environ.get("POETRY_MONGODB_URL")
+
+
+# Initialize connection.
+# Uses st.cache_resource to only run once.
+@st.cache_resource
+def init_connection():
+    return pymongo.MongoClient(**st.secrets["mongo"])
+
+
+client_init = init_connection()
+
 # Connect to MongoDB Atlas
 client = MongoClient(os.environ["POETRY_MONGODB_URL"])
-db = client["messagesdb"]
-collection = db["slackcoll"]
+
+
+# Pull data from the collection.
+# Uses st.cache_data to only rerun when the query changes or after 10 min.
+@st.cache_data(ttl=600)
+def get_data():
+    db = client["messagesdb"]
+    items = db.mycollection.find()
+    items = list(items)  # make hashable for st.cache_data
+    return items
+
+
+items = get_data()
 
 
 def get_important_notifications():
