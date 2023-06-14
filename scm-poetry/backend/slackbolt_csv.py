@@ -1,5 +1,5 @@
 """
-Module backend.slackbolt_app
+Module backend.slackbolt_csv
 
 This module provides a collection of functions/classes for performing various operations.
 
