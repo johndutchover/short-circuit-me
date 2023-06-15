@@ -9,11 +9,10 @@ COPY .env /app
 COPY .streamlit/secrets.toml /app/.streamlit
 COPY message_counts.csv /app
 COPY pyproject.toml /app
-COPY slackbolt_full.py /app
+COPY slackbolt_csv.py /app
 COPY streamlit_app.py /app
+COPY start.sh /app
 RUN pip3 install poetry
 RUN poetry config virtualenvs.create false
 RUN poetry install
-EXPOSE 8501
-CMD ["streamlit", "run", "streamlit_app.py", "--server.port=8501", "--server.address=0.0.0.0"]
-ENTRYPOINT ["python", "slackbolt_full.py"]
+ENTRYPOINT ["sh", "/app/start.sh"]
