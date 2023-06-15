@@ -15,5 +15,5 @@ RUN pip3 install poetry
 RUN poetry config virtualenvs.create false
 RUN poetry install
 EXPOSE 8501
-CMD ["python", "slackbolt_full.py"]
-ENTRYPOINT ["streamlit", "run", "streamlit_app.py", "--server.port=8501", "--server.address=0.0.0.0"]
+CMD ["streamlit", "run", "streamlit_app.py", "--server.port=8501", "--server.address=0.0.0.0"]
+ENTRYPOINT ["python", "slackbolt_full.py"]
