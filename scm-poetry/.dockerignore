@@ -22,3 +22,5 @@ coverage.xml
 .pytest_cache
 .hypothesis
 .streamlit/secrets.toml
+id
+id-cert.pub

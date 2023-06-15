@@ -397,4 +397,6 @@ $RECYCLE.BIN/
 # project exclusions
 message_counts.csv
 secrets.toml
+id
+id-cert.pub
 # End of project exclusions
