@@ -1,5 +1,5 @@
 """
-Module backend.slackbolt_app
+Module backend.slackbolt_csv
 
 This module provides a collection of functions/classes for performing various operations.
 
@@ -23,11 +23,17 @@ from typing import Any
 
 import pandas as pd
 from dotenv import load_dotenv
-from fastapi import FastAPI, Request
+from fastapi import FastAPI
 from pandas import DataFrame
 from slack_bolt import App
 from slack_bolt.adapter.fastapi import SlackRequestHandler
 from slack_bolt.adapter.socket_mode import SocketModeHandler
+import pathlib
+
+from starlette.requests import Request
+
+cfd = pathlib.Path(__file__).parent
+message_counts_path = cfd / "message_counts.csv"
 
 load_dotenv()  # read local .env file
 
@@ -39,25 +45,25 @@ app = App(
 app_handler = SlackRequestHandler(app)
 api = FastAPI()
 
-if os.path.exists("message_counts.csv"):
-    file_path = os.path.join(os.getcwd(), "message_counts.csv")
+if os.path.exists(message_counts_path):
+    message_counts = pd.read_csv(message_counts_path)
 else:
-    file_path = pd.DataFrame(columns=["normal", "important", "urgent"])
-    file_path.to_csv("message_counts.csv")
+    message_counts = pd.DataFrame(columns=["normal", "important", "urgent"])
+    message_counts.to_csv(message_counts_path)
 
 
 @api.post("/slack/events")
 async def endpoint(req: Request):
     """
-    endpoint which handles incoming requests from Slack
-    :param req:
-    :return:
-    """
+     endpoint which handles incoming requests from Slack
+     :param req:
+     :return:
+     """
     return await app_handler.handle(req)
 
 
 def increase_counter(message_type: str):
-    message_counts_df: DataFrame | Any = pd.read_csv(file_path, index_col=0)
+    message_counts_df: DataFrame | Any = pd.read_csv(message_counts_path, index_col=0)
 
     now = datetime.datetime.now()
     formatted_date = now.strftime("%Y-%m-%d")
@@ -66,7 +72,7 @@ def increase_counter(message_type: str):
         message_counts_df.loc[formatted_date] = [0, 0, 0]
 
     message_counts_df.loc[formatted_date, message_type] += 1
-    message_counts_df.to_csv("message_counts.csv")
+    message_counts_df.to_csv(message_counts_path)
 
 
 counter = 0
