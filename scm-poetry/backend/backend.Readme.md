@@ -7,6 +7,7 @@ Slack App: ShortCircuitMe
 
 ### Slack | Bolt for Python
 https://slack.dev/bolt-python/concepts
+[slack_bolt.adapter.socket_mode.aiohttp](https://github.com/slackapi/bolt-python/tree/main/slack_bolt/adapter/socket_mode/aiohttp) is **based on** PyPi Project [aiohttp](https://pypi.org/project/aiohttp/) (asyncio-based)
 
 #### Socket Mode
 https://api.slack.com/apis/connections/socket
