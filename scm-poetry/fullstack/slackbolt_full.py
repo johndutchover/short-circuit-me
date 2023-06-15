@@ -145,7 +145,7 @@ if __name__ == "__main__":
     handler = SocketModeHandler(app, os.environ["POETRY_SCM_XAPP_TOKEN"]).start()
 
 """
-Module backend.slackbolt_csv
+Module backend.slackbolt_full
 
 asynchronous Python backend for a Slack bot, utilizing the Slack Bolt and FastAPI frameworks
 

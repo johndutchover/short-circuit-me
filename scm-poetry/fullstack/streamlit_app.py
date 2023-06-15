@@ -22,7 +22,7 @@ load_dotenv()  # read local .env file
 uri = os.environ.get("POETRY_MONGODB_URL")
 
 cfd = pathlib.Path(__file__).parent
-message_counts_path = cfd / "/bolt/message_counts.csv"
+message_counts_path = cfd / "message_counts.csv"
 
 
 # Initialize connection.
@@ -66,7 +66,7 @@ st.title('Notification Overview Dashboard')
 st.subheader('Slack :zap: :blue[notification] summary')
 
 try:
-    df_messages = pd.read_csv(message_counts_path, header='infer')
+    df_messages = pd.read_csv("message_counts.csv", header='infer')
     st.table(df_messages)
 except EmptyDataError:
     st.text('INFO: The message_counts.csv file is empty')
