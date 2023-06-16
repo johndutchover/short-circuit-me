@@ -18,6 +18,31 @@ from pymongo import MongoClient
 st.set_page_config(page_title="Simple Dashboard", page_icon="✅")
 
 load_dotenv()  # read local .env file
+
+
+# Check password function
+def check_password():
+    # Check if password has been entered correctly
+    if st.session_state.get("password_correct"):
+        return True
+    else:
+        password = st.text_input("Password", type="password")
+        if password == os.environ.get("PASSWORD"):
+            st.session_state["password_correct"] = True
+            return True
+        else:
+            st.error("Incorrect password")
+            return False
+
+
+# Prompt for password
+if not check_password():
+    st.stop()
+
+if check_password():
+    st.write("Here goes your normal Streamlit app...")
+    st.button("Click me")
+
 # MongoDB Atlas connection string
 uri = os.environ.get("POETRY_MONGODB_URL")
 
