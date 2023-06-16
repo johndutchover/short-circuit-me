@@ -1,36 +1,15 @@
-"""
-Module backend.slackbolt_csv
-
-asynchronous Python backend for a Slack bot, utilizing the Slack Bolt and FastAPI frameworks
-
-Functions:
-    - endpoint(req)
-    - handle_message_events(body, logger)
-    - increase_counter(message_type)
-    - message_urgent(message, say)
-
-Classes:
-    - N/A
-
-Usage:
-    from module_name import function_name_1, ClassName1
-    ...
-"""
 import datetime
 import os
-import re
 from typing import Any
 
 import pandas as pd
 from dotenv import load_dotenv
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 from pandas import DataFrame
 from slack_bolt import App
 from slack_bolt.adapter.fastapi import SlackRequestHandler
 from slack_bolt.adapter.socket_mode import SocketModeHandler
 import pathlib
-
-from starlette.requests import Request
 
 cfd = pathlib.Path(__file__).parent
 message_counts_path = cfd / "message_counts.csv"
@@ -63,64 +42,61 @@ api = FastAPI()
 
 if os.path.exists(message_counts_path):
     message_counts = pd.read_csv(message_counts_path)
-    message_counts.set_index(['date', 'user_id'], inplace=True)
 else:
-    message_counts = pd.DataFrame(columns=["date", "user_id", "normal", "important", "urgent"])
-    message_counts.set_index(['date', 'user_id'], inplace=True)
-    message_counts.to_csv(message_counts_path)
+    message_counts = pd.DataFrame(columns=["formatted_date", "normal", "important", "urgent"])  # Include formatted_date column
+    message_counts.to_csv(message_counts_path, index=False)
 
 
 @api.post("/slack/events")
 async def endpoint(req: Request):
     """
-     endpoint which handles incoming requests from Slack
-     :param req:
-     :return:
-     """
+    Endpoint which handles incoming requests from Slack.
+    :param req: Request object
+    :return: Awaitable response
+    """
     return await app_handler.handle(req)
 
 
 def increase_counter(message_type: str, user_id: str):
     message_counts_df: DataFrame | Any = pd.read_csv(message_counts_path)
-    message_counts_df.set_index(['date', 'user_id'], inplace=True)
 
     now = datetime.datetime.now()
     formatted_date = now.strftime("%Y-%m-%d")
 
-    # Check if the date-user_id combination already exists
-    if (formatted_date, user_id) not in message_counts_df.index:
+    # Check if the date already exists in the DataFrame
+    if formatted_date in message_counts_df['formatted_date'].values:
+        # Update the count of the corresponding message_type
+        message_counts_df.loc[
+            message_counts_df['formatted_date'] == formatted_date,
+            message_type
+        ] += 1
+    else:
         # Create a new row with zeros
-        message_counts_df.loc[(formatted_date, user_id), :] = [0, 0, 0]
+        new_row = pd.DataFrame(
+            {
+                "formatted_date": formatted_date,
+                "normal": 0,
+                "important": 0,
+                "urgent": 0
+            },
+            index=[0]
+        )
+        # Increment the count of the corresponding message_type
+        new_row[message_type] += 1
+        message_counts_df = pd.concat([message_counts_df, new_row], ignore_index=True)
 
-    # Increase the count of the corresponding message_type
-    message_counts_df.loc[(formatted_date, user_id), message_type] += 1
-
-    message_counts_df.reset_index().to_csv(message_counts_path, index=False)
-
-
-counter = 0
-counter_important = 0
-counter_urgent = 0
-
-# Add middleware / listeners here
-# args here: https://slack.dev/bolt-python/api-docs/slack_bolt/kwargs_injection/args.html
-
-str_p1 = r"(?:help)"
-regex_p1 = re.compile(str_p1, flags=re.I)
-str_p2 = r"(?:important)"
-regex_p2 = re.compile(str_p2, flags=re.I)
-str_p3 = r"(?:hello)"
-regex_p3 = re.compile(str_p3, flags=re.I)
+    message_counts_df.drop_duplicates(subset=['formatted_date'], keep='last', inplace=True)
+    message_counts_df.to_csv(message_counts_path, index=False)
 
 
-@app.message(regex_p1)
+@app.message(r"(?:help)")
 def message_urgent(message, say):
     """
-    increment counter of Priority 1 (urgent) string matches
-    say() sends a message to the channel where the event was triggered
-    :param message:
-    :param say:
-    :return:
+    Increment counter of Priority 1 (urgent) string matches.
+    Say() sends a message to the channel where the event was triggered.
+    :param message: Message object
+    :param say: Say function
+    :return: None
     """
     say(
         blocks=[
@@ -139,20 +115,20 @@ def message_urgent(message, say):
     increase_counter('urgent', message['user'])
 
 
-@app.message(regex_p2)
-def message_urgent(message, say):
+@app.message(r"(?:important)")
+def message_important(message, say):
     """
-    increment counter of Priority 2 (important) string matches
-    say() sends a message to the channel where the event was triggered
-    :param message:
-    :param say:
-    :return:
+    Increment counter of Priority 2 (important) string matches.
+    Say() sends a message to the channel where the event was triggered.
+    :param message: Message object
+    :param say: Say function
+    :return: None
     """
     say(
         blocks=[
             {
                 "type": "section",
-                "text": {"type": "mrkdwn", "text": f"<@{message['user']}>Can it wait until Monday?"},
+                "text": {"type": "mrkdwn", "text": f"<@{message['user']}> Can it wait until Monday?"},
                 "accessory": {
                     "type": "button",
                     "text": {"type": "plain_text", "text": "Click to record a message"},
@@ -160,26 +136,32 @@ def message_urgent(message, say):
                 }
             }
         ],
-        text=f"Please record at ths tone <@{message['user']}>!"
+        text=f"Please record at this time <@{message['user']}>!"
     )
     increase_counter('important', message['user'])
 
 
 @app.event("message")
 def handle_message(event, client):
-    # Grab the sender's user id
+    """
+    Event handler for normal messages.
+    Increments the 'normal' count.
+    :param event: Event object
+    :param client: Slack client
+    :return: None
+    """
     user_id = event["user"]
-    increase_counter('normal', event["user"])
+    increase_counter('normal', user_id)
 
 
 @app.action("button_click")
 def action_button_click(body, ack, say):
     """
-    Acknowledge the action
-    :param body:
-    :param ack:
-    :param say:
-    :return:
+    Acknowledge the action.
+    :param body: Action payload
+    :param ack: Acknowledge function
+    :param say: Say function
+    :return: None
     """
     ack()
     say(f"<@{body['user']['id']}> clicked the button")
@@ -187,4 +169,5 @@ def action_button_click(body, ack, say):
 
 # Start app using WebSockets
 if __name__ == "__main__":
-    handler = SocketModeHandler(app, os.environ["POETRY_SCM_XAPP_TOKEN"]).start()
+    handler = SocketModeHandler(app, os.environ["POETRY_SCM_XAPP_TOKEN"])
+    handler.start()
