@@ -40,11 +40,14 @@ def find_user_by_id(user_id):
 
 api = FastAPI()
 
-if os.path.exists(message_counts_path):
+if os.path.exists(message_counts_path) and os.stat(message_counts_path).st_size > 0:
     message_counts = pd.read_csv(message_counts_path)
 else:
-    message_counts = pd.DataFrame(columns=["formatted_date", "normal", "important", "urgent"])  # Include formatted_date column
-    message_counts.to_csv(message_counts_path, index=False)
+    message_counts = pd.DataFrame(columns=["level_0", "normal", "important", "urgent"])
+
+message_counts.rename(columns={"level_0": "msg_date"}, inplace=True)
+
+message_counts.to_csv(message_counts_path, index=False)
 
 
 @api.post("/slack/events")
@@ -64,17 +67,17 @@ def increase_counter(message_type: str, user_id: str):
     formatted_date = now.strftime("%Y-%m-%d")
 
     # Check if the date already exists in the DataFrame
-    if formatted_date in message_counts_df['formatted_date'].values:
+    if formatted_date in message_counts_df['msg_date'].values:
         # Update the count of the corresponding message_type
         message_counts_df.loc[
-            message_counts_df['formatted_date'] == formatted_date,
+            message_counts_df['msg_date'] == formatted_date,
             message_type
         ] += 1
     else:
         # Create a new row with zeros
         new_row = pd.DataFrame(
             {
-                "formatted_date": formatted_date,
+                "msg_date": formatted_date,
                 "normal": 0,
                 "important": 0,
                 "urgent": 0
@@ -85,7 +88,6 @@ def increase_counter(message_type: str, user_id: str):
         new_row[message_type] += 1
         message_counts_df = pd.concat([message_counts_df, new_row], ignore_index=True)
 
-    message_counts_df.drop_duplicates(subset=['formatted_date'], keep='last', inplace=True)
     message_counts_df.to_csv(message_counts_path, index=False)
 
 
