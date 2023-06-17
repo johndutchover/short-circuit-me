@@ -1,20 +1,21 @@
-# https://docs.streamlit.io/library/get-started/create-an-app
-# .io/how-to-build-a-real-time-live-dashboard-with-streamlit/#2-how-to-do-a-basic-dashboard-setup
-
-# If you are using Streamlit version 1.10.0 or higher, your main script should live in a directory other than the
-# root directory. When using Docker, you can use the WORKDIR command to specify the directory where your main script
-# lives.
-
 import pathlib
-import streamlit as st
 import pandas as pd
+import streamlit as st
+
 from bokeh.plotting import figure
+from dotenv import load_dotenv
 from pandas.errors import EmptyDataError
 
-st.set_page_config(page_title="Simple Dashboard", page_icon="✅")
+if 'key' not in st.session_state:
+    st.session_state.key = 'shared'
 
-cfd = pathlib.Path(__file__).parent
+st.set_page_config(page_title="Dashboard", page_icon="✅")
+
+load_dotenv('../.env')
+
+cfd = pathlib.Path(__file__).parent.parent
 message_counts_path = cfd / "message_counts.csv"
+
 
 def get_important_notifications():
     return 42
@@ -25,7 +26,7 @@ def get_critical_notifications():
 
 
 # page title
-st.title('Notification Overview Dashboard')
+st.title('Slack Notification Dashboard')
 # body st.text(f'You got {get_important_notifications()} important and {get_critical_notifications()} critical
 # notifications.')
 st.subheader('Slack :zap: :blue[notification] summary')
@@ -74,4 +75,4 @@ st.area_chart(
 # - from VSCode, use "Run Python File" instead of "Run Code" (properly activates venv)
 # - from PyCharm...set default python interpreter to venv
 # - from external terminal, use `poetry shell` followed by:
-#  - `streamlit run 1_home.py`'''
+#  - `streamlit run streamlit_csv.py`'''
