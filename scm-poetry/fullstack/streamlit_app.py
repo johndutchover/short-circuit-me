@@ -48,11 +48,11 @@ cfd = pathlib.Path(__file__).parent
 message_counts_path = cfd / "message_counts.csv"
 
 
-# Initialize connection.
+# Initialize MongoDB connection.
 # Uses st.cache_resource to only run once.
 @st.cache_resource
 def init_connection():
-    return pymongo.MongoClient(**st.secrets.db_credentials)
+    return pymongo.MongoClient(**st.secrets.db_credentials)  # TODO use .env instead
 
 
 client_init = init_connection()
@@ -66,16 +66,16 @@ client = MongoClient(os.environ["POETRY_MONGODB_URL"])
 @st.cache_data(ttl=600)
 def get_data():
     db = client["messagesdb"]
-    items = db.mycollection.find()
-    items = list(items)  # make hashable for st.cache_data
-    return items
+    dbitems = db.mycollection.find()
+    dbitems = list(dbitems)  # make hashable for st.cache_data
+    return dbitems
 
 
 items = get_data()
 
 
 def get_important_notifications():
-    return 42
+    get_data()
 
 
 def get_critical_notifications():
