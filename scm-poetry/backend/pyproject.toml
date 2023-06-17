@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "scm-poetry"
+name = "backend"
 version = "0.3.3"
 description = "short-circuit-me poetry"
 authors = ["John Dutchover <johndutchover@users.noreply.github.com>"]
