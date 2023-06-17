@@ -1,5 +1,3 @@
-# https://docs.streamlit.io/library/get-started/create-an-app
-# .io/how-to-build-a-real-time-live-dashboard-with-streamlit/#2-how-to-do-a-basic-dashboard-setup
 import os
 
 import pymongo
