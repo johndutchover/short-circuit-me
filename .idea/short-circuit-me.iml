@@ -4,6 +4,9 @@
     <content url="file://$MODULE_DIR$">
       <sourceFolder url="file://$MODULE_DIR$/scm-poetry" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/scm-poetry/tests" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/scm-poetry/backend/tests" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/scm-poetry/frontend/tests" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/scm-poetry/fullstack/tests" isTestSource="true" />
       <excludeFolder url="file://$MODULE_DIR$/.env" />
       <excludeFolder url="file://$MODULE_DIR$/scm-poetry/.venv" />
       <excludeFolder url="file://$MODULE_DIR$/.history" />
@@ -24,6 +27,7 @@
       <list>
         <option value="$MODULE_DIR$/scm-poetry/backend" />
         <option value="$MODULE_DIR$/scm-poetry/frontend" />
+        <option value="$MODULE_DIR$/scm-poetry/scm_poetry" />
       </list>
     </option>
   </component>
