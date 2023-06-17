@@ -4,7 +4,7 @@ version = "0.3.3"
 description = "short-circuit-me poetry"
 authors = ["John Dutchover <johndutchover@users.noreply.github.com>"]
 readme = "README.md"
-packages = [{include = "scm-poetry, backend, frontend, fullstack"}]
+packages = [{include = "scm-poetry"}]
 
 [tool.poetry.dependencies]
 python = ">=3.10.0,<3.11.0"
