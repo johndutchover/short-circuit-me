@@ -6,9 +6,6 @@ from bokeh.plotting import figure
 from dotenv import load_dotenv
 from pandas.errors import EmptyDataError
 
-if 'key' not in st.session_state:
-    st.session_state.key = 'shared'
-
 st.set_page_config(page_title="Dashboard", page_icon="✅")
 
 load_dotenv('../.env')
