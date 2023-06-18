@@ -3,7 +3,7 @@ import streamlit as st
 from dotenv import load_dotenv
 from streamlit_extras.switch_page_button import switch_page
 
-load_dotenv('env')
+load_dotenv('.env')
 
 
 # Check password function
@@ -26,4 +26,4 @@ if not check_password():
     st.stop()
 
 if check_password():
-    switch_page("app")
+    switch_page("home")
