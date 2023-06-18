@@ -6,15 +6,16 @@ from bokeh.plotting import figure
 from dotenv import load_dotenv
 from pandas.errors import EmptyDataError
 
-# Check if the password was entered correctly in the first script
+# Check if the password was entered correctly in streamlit_app.py
 if not st.session_state.get("password_correct"):
-    st.error("Access denied. Please enter the password in the previous script.")
+    st.error("Access denied. Please enter the password on the streamlit app page.")
     st.stop()
 
 st.set_page_config(page_title="Dashboard", page_icon="✅")
 
 load_dotenv('../.env')
 
+# parent.parent here to look ../message_counts.csv
 cfd = pathlib.Path(__file__).parent.parent
 message_counts_path = cfd / "message_counts.csv"
 
@@ -47,31 +48,26 @@ df_weekly = pd.DataFrame({
 })
 
 # prepare some data
-x1 = [10, 20, 30, 40, 30, 50, 40]
-y1 = [1, 2, 3, 4, 3, 2, 3]
-y2 = [10, 20, 30, 40, 22, 29, 30]
-y3 = [0, 2, 3, 4, 3, 4, 3]
+x1 = df_weekly['days']
+y1 = df_weekly['important_messages']
+y2 = df_weekly['normal_messages']
+y3 = df_weekly['critical_messages']
 
-# widget (slider)
-values = st.slider(
-    'Select a range of messages to include',
-    0.0, 100.0, (25.0, 75.0))
-st.write('Values:', values)
 
 # bokeh: create a new plot with a title and axis labels
-p = figure(title="Bokeh plot", x_axis_label='messages', y_axis_label='day')
+p = figure(title="Bokeh plot", x_axis_label='days', y_axis_label='messages')
 # add multiple renderers
 p.line(x1, y1, legend_label="Important", color="blue", line_width=2)
 p.line(x1, y2, legend_label="Normal", color="green", line_width=2)
 p.line(x1, y3, legend_label="Critical", color="red", line_width=2)
 st.bokeh_chart(p, use_container_width=True)
 
-# st.area chart
 st.area_chart(
     df_weekly,
-    x="important_messages",
-    y="days"
+    x="days",
+    y=["important_messages", "normal_messages", "critical_messages"]
 )
+
 
 # '''To run this file:
 # - from VSCode, use "Run Python File" instead of "Run Code" (properly activates venv)
