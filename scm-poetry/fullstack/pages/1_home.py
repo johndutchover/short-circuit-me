@@ -6,6 +6,11 @@ from bokeh.plotting import figure
 from dotenv import load_dotenv
 from pandas.errors import EmptyDataError
 
+# Check if the password was entered correctly in the first script
+if not st.session_state.get("password_correct"):
+    st.error("Access denied. Please enter the password in the previous script.")
+    st.stop()
+
 st.set_page_config(page_title="Dashboard", page_icon="✅")
 
 load_dotenv('../.env')

@@ -22,8 +22,8 @@ def check_password():
 
 
 # Prompt for password
-if not check_password():
-    st.stop()
-
 if check_password():
-    switch_page("home")
+    # Set a flag in the session state to indicate that the password is correct
+    st.session_state["password_correct"] = True
+    # Redirect to the second script
+    switch_page('home')
