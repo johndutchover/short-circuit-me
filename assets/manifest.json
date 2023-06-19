@@ -13,7 +13,21 @@
         "bot_user": {
             "display_name": "ShortCircuitMe",
             "always_online": true
-        }
+        },
+        "slash_commands": [
+            {
+                "command": "/addcontact",
+                "description": "Add contact to dict",
+                "usage_hint": "[member ID]",
+                "should_escape": false
+            },
+            {
+                "command": "/getcontact",
+                "description": "Check dict for contact",
+                "usage_hint": "[member ID]",
+                "should_escape": false
+            }
+        ]
     },
     "oauth_config": {
         "scopes": {
@@ -23,9 +37,9 @@
                 "channels:join",
                 "channels:manage",
                 "channels:read",
-                "chat:write.customize",
-                "chat:write.public",
                 "chat:write",
+                "chat:write.customize",
+                "commands",
                 "files:read",
                 "files:write",
                 "groups:history",
@@ -48,9 +62,9 @@
                 "team:read",
                 "usergroups:read",
                 "usergroups:write",
+                "users.profile:read",
                 "users:read",
-                "users:write",
-                "users.profile:read"
+                "users:write"
             ]
         }
     },
