@@ -458,21 +458,23 @@ graph = ["objgraph (>=1.7.2)"]
 
 [[package]]
 name = "dnspython"
-version = "2.1.0"
+version = "2.3.0"
 description = "DNS toolkit"
 optional = false
-python-versions = ">=3.6"
+python-versions = ">=3.7,<4.0"
 files = [
-    {file = "dnspython-2.1.0-py3-none-any.whl", hash = "sha256:95d12f6ef0317118d2a1a6fc49aac65ffec7eb8087474158f42f26a639135216"},
-    {file = "dnspython-2.1.0.zip", hash = "sha256:e4a87f0b573201a0f3727fa18a516b055fd1107e0e5477cded4a2de497df1dd4"},
+    {file = "dnspython-2.3.0-py3-none-any.whl", hash = "sha256:89141536394f909066cabd112e3e1a37e4e654db00a25308b0f130bc3152eb46"},
+    {file = "dnspython-2.3.0.tar.gz", hash = "sha256:224e32b03eb46be70e12ef6d64e0be123a64e621ab4c0822ff6d450d52a540b9"},
 ]
 
 [package.extras]
-curio = ["curio (>=1.2)", "sniffio (>=1.1)"]
-dnssec = ["cryptography (>=2.6)"]
-doh = ["requests", "requests-toolbelt"]
-idna = ["idna (>=2.1)"]
-trio = ["sniffio (>=1.1)", "trio (>=0.14.0)"]
+curio = ["curio (>=1.2,<2.0)", "sniffio (>=1.1,<2.0)"]
+dnssec = ["cryptography (>=2.6,<40.0)"]
+doh = ["h2 (>=4.1.0)", "httpx (>=0.21.1)", "requests (>=2.23.0,<3.0.0)", "requests-toolbelt (>=0.9.1,<0.11.0)"]
+doq = ["aioquic (>=0.9.20)"]
+idna = ["idna (>=2.1,<4.0)"]
+trio = ["trio (>=0.14,<0.23)"]
+wmi = ["wmi (>=1.5.1,<2.0.0)"]
 
 [[package]]
 name = "exceptiongroup"
@@ -2702,5 +2704,5 @@ testing = ["big-O", "flake8 (<5)", "jaraco.functools", "jaraco.itertools", "more
 
 [metadata]
 lock-version = "2.0"
-python-versions = ">=3.10.12"
-content-hash = "a963d4ea06ac81d72eff4c302a390a1af13681392b5b8a21392416a00f337011"
+python-versions = "^3.10.12"
+content-hash = "6d4445d4b76d8cb1d78b2acfac669fc512d70c9b9f90b7294a00053475cf86a7"
