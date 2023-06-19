@@ -4,10 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="97e63a0c-2dc0-450e-871e-651b1ad97c5b" name="Changes" comment="workspace.xml">
+    <list default="true" id="97e63a0c-2dc0-450e-871e-651b1ad97c5b" name="Changes" comment="gitignore">
       <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -349,14 +347,7 @@
       <workItem from="1687043378517" duration="298000" />
       <workItem from="1687195937162" duration="363000" />
       <workItem from="1687196310977" duration="405000" />
-      <workItem from="1687196726975" duration="644000" />
-    </task>
-    <task id="LOCAL-00178" summary="streamlit_app.py conn to mongodb">
-      <created>1686534986588</created>
-      <option name="number" value="00178" />
-      <option name="presentableId" value="LOCAL-00178" />
-      <option name="project" value="LOCAL" />
-      <updated>1686534986588</updated>
+      <workItem from="1687196726975" duration="980000" />
     </task>
     <task id="LOCAL-00179" summary="spec dir not used">
       <created>1686614318972</created>
@@ -694,7 +685,14 @@
       <option name="project" value="LOCAL" />
       <updated>1687197241193</updated>
     </task>
-    <option name="localTasksCounter" value="227" />
+    <task id="LOCAL-00227" summary="gitignore">
+      <created>1687197388185</created>
+      <option name="number" value="00227" />
+      <option name="presentableId" value="LOCAL-00227" />
+      <option name="project" value="LOCAL" />
+      <updated>1687197388185</updated>
+    </task>
+    <option name="localTasksCounter" value="228" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -749,7 +747,6 @@
   <component name="VcsManagerConfiguration">
     <option name="CHECK_NEW_TODO" value="false" />
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="message_counts_path slackbolt_csv.py" />
     <MESSAGE value="pathlib backend" />
     <MESSAGE value="pathlib frontend" />
     <MESSAGE value="backend.Readme.md" />
@@ -774,7 +771,8 @@
     <MESSAGE value="update .gititnore" />
     <MESSAGE value="update .gitignore and .idea/.gitignore" />
     <MESSAGE value="workspace.xml" />
-    <option name="LAST_COMMIT_MESSAGE" value="workspace.xml" />
+    <MESSAGE value="gitignore" />
+    <option name="LAST_COMMIT_MESSAGE" value="gitignore" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/short_circuit_me$slackbolt_app.coverage" NAME="slackbolt_app Coverage Results" MODIFIED="1686188359800" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/scm-poetry/backend" />
