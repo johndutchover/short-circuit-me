@@ -7,7 +7,7 @@ readme = "README.md"
 packages = [{include = "scm-poetry"}]
 
 [tool.poetry.dependencies]
-python = ">=3.10.11,<3.11.0"
+python = ">=3.10.12"
 fastapi = "^0.97.0"
 slack-bolt = "^1.18.0"
 pip-tools = "^6.13.0"
