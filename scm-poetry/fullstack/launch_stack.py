@@ -26,4 +26,4 @@ if check_password():
     # Set a flag in the session state to indicate that the password is correct
     st.session_state["password_correct"] = True
     # Redirect using extras switch_page
-    switch_page('home')
+    switch_page('app')
