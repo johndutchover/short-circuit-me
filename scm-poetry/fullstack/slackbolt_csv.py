@@ -24,6 +24,14 @@ app = App(
 )
 app_handler = SlackRequestHandler(app)
 
+# Initialize a contact dictionary
+contacts = {}
+
+bots_clientid = os.getenv('POETRY_SCM_BOT_CLIENTID')
+
+# Users who are allowed to use the commands
+allowed_users = ["USLACKBOT", bots_clientid]
+
 # Fetch users list using Bolt method
 response = app.client.users_list()
 
@@ -36,6 +44,49 @@ def find_user_by_id(user_id):
     for user in user_dict['users']:
         if user['id'] == user_id:
             return user
+
+
+# Slash command that adds a contact
+@app.command("/addcontact")
+def add_contact(ack, respond, command):
+    # Acknowledge command request
+    ack()
+
+    # Parse the input text
+    split_text = command['text'].split(' ')
+    if len(split_text) == 2:
+        name, info = split_text
+        if name in contacts:
+            respond(f"{name} already exists in contacts. Information not updated.")
+        else:
+            contacts[name] = info
+            respond(f"{name} added to contacts with information: {info}")
+    else:
+        respond("Please use the format '/addcontact name info'")
+
+
+# Slash command that retrieves a contact
+@app.command("/getcontact")
+def get_contact(ack, respond, command):
+    # Acknowledge command request
+    ack()
+
+    name = command['text']
+    if name in contacts:
+        respond(f"Information for {name}: {contacts[name]}")
+    else:
+        respond(f"No contact found for {name}")
+
+
+@app.event("app_mention")
+def handle_app_mentions(body, say, logger):
+    logger.info(body)
+    say("What's up?")
+
+
+@app.event("message")
+def handle_message():
+    pass
 
 
 api = FastAPI()
@@ -57,6 +108,11 @@ async def endpoint(req: Request):
     :param req: Request object
     :return: Awaitable response
     """
+    return await app_handler.handle(req)
+
+
+@api.get("/slack/install")
+async def install(req: Request):
     return await app_handler.handle(req)
 
 
@@ -148,16 +204,6 @@ def say_hello_regex(say, context):
     # regular expression matches are inside of context.matches
     greeting = context['matches'][0]
     say(f"{greeting}, how are you?")
-    increase_counter('normal')
-
-
-@app.event("message")
-def handle_message():
-    """
-    any Slack Events API event
-    The event() method requires an eventType of type str.
-    :return: None
-    """
     increase_counter('normal')
 
 
