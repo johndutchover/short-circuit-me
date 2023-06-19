@@ -28,13 +28,12 @@ app_handler = SlackRequestHandler(app)
 response = app.client.users_list()
 
 # create dict literal and assign users
-user_data = {'users': response['members']}
+user_dict = {'users': response['members']}  # TODO this and related not working
 
 
 # Now, 'user_dict' contains a 'users' key whose value is a list of users.
-
 def find_user_by_id(user_id):
-    for user in user_data['users']:
+    for user in user_dict['users']:
         if user['id'] == user_id:
             return user
 
@@ -65,7 +64,7 @@ def increase_counter(message_type: str):
     message_counts_df: DataFrame | Any = pd.read_csv(message_counts_path)
 
     now = datetime.datetime.now()
-    formatted_date = now.strftime("%Y-%m-%d")
+    formatted_date = now.date().strftime("%Y-%m-%d")
 
     # Check if the date already exists in the DataFrame
     if formatted_date in message_counts_df['msg_date'].values:
