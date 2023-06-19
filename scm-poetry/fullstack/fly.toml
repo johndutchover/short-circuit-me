@@ -7,7 +7,7 @@ app = "scm-frontend-1831"
 primary_region = "ewr"
 
 [experimental]
-features = ["shared-cpu-2x"]
+features = ["shared-cpu-4x"]
 
 [http_service]
   internal_port = 8501
