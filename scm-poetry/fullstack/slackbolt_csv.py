@@ -1,5 +1,6 @@
 import datetime
 import os
+import re
 from typing import Any
 
 import pandas as pd
@@ -60,7 +61,7 @@ async def endpoint(req: Request):
     return await app_handler.handle(req)
 
 
-def increase_counter(message_type: str, user_id: str):
+def increase_counter(message_type: str):
     message_counts_df: DataFrame | Any = pd.read_csv(message_counts_path)
 
     now = datetime.datetime.now()
@@ -91,7 +92,7 @@ def increase_counter(message_type: str, user_id: str):
     message_counts_df.to_csv(message_counts_path, index=False)
 
 
-@app.message(r"(?:help)")
+@app.message(re.compile("(asap|help|urgent)", re.I))
 def message_urgent(message, say):
     """
     Increment counter of Priority 1 (urgent) string matches.
@@ -114,10 +115,10 @@ def message_urgent(message, say):
         ],
         text=f"Hey there <@{message['user']}>!"
     )
-    increase_counter('urgent', message['user'])
+    increase_counter('urgent')
 
 
-@app.message(r"(?:important)")
+@app.message(re.compile("(important|need|soon)", re.I))
 def message_important(message, say):
     """
     Increment counter of Priority 2 (important) string matches.
@@ -140,20 +141,25 @@ def message_important(message, say):
         ],
         text=f"Please record at this time <@{message['user']}>!"
     )
-    increase_counter('important', message['user'])
+    increase_counter('important')
+
+
+@app.message(re.compile("(hi|hello|hey)", re.I))
+def say_hello_regex(say, context):
+    # regular expression matches are inside of context.matches
+    greeting = context['matches'][0]
+    say(f"{greeting}, how are you?")
+    increase_counter('normal')
 
 
 @app.event("message")
-def handle_message(event, client):
+def handle_message():
     """
-    Event handler for normal messages.
-    Increments the 'normal' count.
-    :param event: Event object
-    :param client: Slack client
+    any Slack Events API event
+    The event() method requires an eventType of type str.
     :return: None
     """
-    user_id = event["user"]
-    increase_counter('normal', user_id)
+    increase_counter('normal')
 
 
 @app.action("button_click")
