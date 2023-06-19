@@ -1,10 +1,8 @@
 ## short-circuit-me
 
-[![Pylint](https://github.com/johndutchover/short-circuit-me/actions/workflows/pylint.yml/badge.svg)](https://github.com/johndutchover/short-circuit-me/actions/workflows/pylint.yml)
-
 ### Notification insights for Slack
 
-### Usage
+### Development Usage
 
 #### Makefile
 
@@ -29,3 +27,11 @@
 ##### clean
 - `make clean`
   - cleanup unused containers
+
+### Fullstack Deployment
+- single container for Fly.io
+  - https://scm-frontend-1831.fly.dev/
+
+#### scm-poetry/fullstack
+- fly.toml
+  - `flyctl deploy`
