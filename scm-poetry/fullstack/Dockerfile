@@ -14,7 +14,6 @@ COPY pyproject.toml /app
 COPY slackbolt_csv.py /app
 COPY pages/1_app.py /app/pages
 COPY start.sh /app
-COPY message_counts.csv /app
 
 # Install Poetry and project dependencies
 RUN pip3 install poetry
