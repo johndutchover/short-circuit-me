@@ -32,8 +32,8 @@ def get_critical_notifications():
     return 7
 
 
-st.title('Slack Notification Dashboard')
-st.subheader('Slack :zap: :blue[notification] summary')
+st.title('Notification Dashboard')
+st.subheader('Slack :zap: :blue[message] summary')
 
 try:
     df_messages = pd.read_csv(message_counts_path, header='infer', encoding='utf-8')
@@ -42,11 +42,14 @@ try:
     df_messages['msg_date'] = pd.to_datetime(df_messages['msg_date'])
     st.table(df_messages)
 
-    # Bokeh: create a new plot with a title and axis labels
+    # Bokeh plot with a title and axis labels
     p = figure(title="Bokeh plot", x_axis_label='Date', y_axis_label='Messages', x_axis_type="datetime")
     p.line(df_messages['msg_date'], df_messages['normal'], legend_label="Normal", color="green", line_width=2)
     p.line(df_messages['msg_date'], df_messages['important'], legend_label="Important", color="orange", line_width=2)
     p.line(df_messages['msg_date'], df_messages['urgent'], legend_label="Critical", color="red", line_width=2)
+
+    # Display the Bokeh plot using Streamlit
+    st.bokeh_chart(p, use_container_width=True)
 
     # Define custom tick formatter to display day of the week
     code = """
@@ -57,9 +60,6 @@ try:
     return days[day];
     """
     p.xaxis.formatter = FuncTickFormatter(code=code)
-
-    # Display the Bokeh plot using Streamlit
-    st.bokeh_chart(p, use_container_width=True)
 
     # Plot an area chart
     st.area_chart(df_messages.set_index('msg_date')[['normal', 'important', 'urgent']])
