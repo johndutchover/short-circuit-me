@@ -33,12 +33,6 @@ bots_clientid = os.getenv('POETRY_SCM_BOT_CLIENTID')
 allowed_users = ["USLACKBOT", bots_clientid]
 
 
-# Fetch user info using Bolt method
-def get_user_info(user_id):
-    user_info = app.client.users_info(user=user_id)
-    return user_info
-
-
 # Slash command that adds a contact
 @app.command("/addcontact")
 def add_contact(ack, respond, command):
@@ -48,19 +42,14 @@ def add_contact(ack, respond, command):
     # Get user's ID from the command text
     user_id = command['text']
 
-    # Fetch user info
-    user_info = get_user_info(user_id)
-
-    # Check if the user exists
-    if not user_info['ok']:
-        respond(f"No user found with ID: {user_id}")
-        return
-
-    # Add user to contacts
-    contacts[user_id] = user_info['user']
-
-    # Respond with success message
-    respond(f"User {user_info['user']['real_name']} added to contacts.")
+    # Check if the provided ID is in the correct format
+    if re.match("^U[A-Z0-9]{8,}$", user_id):
+        # Add user to contacts
+        contacts[user_id] = user_id
+        # Respond with success message
+        respond(f"User {user_id} added to contacts.")
+    else:
+        respond("Invalid format. Please provide a valid Slack User ID.")
 
 
 # Slash command that retrieves a contact
@@ -69,11 +58,11 @@ def get_contact(ack, respond, command):
     # Acknowledge command request
     ack()
 
-    name = command['text']
-    if name in contacts:
-        respond(f"Information for {name}: {contacts[name]}")
+    user_id = command['text']
+    if user_id in contacts:
+        respond(f"Contact found for User ID: {contacts[user_id]}")
     else:
-        respond(f"No contact found for {name}")
+        respond(f"No contact found for User ID: {user_id}")
 
 
 @app.event("app_mention")
