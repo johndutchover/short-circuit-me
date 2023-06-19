@@ -1,4 +1,0 @@
-[filesystems]
-  [filesystems.data]
-    source = "data_vol1"
-    destination = "/app/data"
