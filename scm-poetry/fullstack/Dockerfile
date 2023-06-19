@@ -12,7 +12,7 @@ RUN mkdir /app/pages
 COPY .env /app
 COPY pyproject.toml /app
 COPY slackbolt_csv.py /app
-COPY pages/1_home.py /app/pages
+COPY pages/1_app.py /app/pages
 COPY start.sh /app
 COPY message_counts.csv /app
 
