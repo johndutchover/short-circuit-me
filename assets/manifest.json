@@ -1,7 +1,7 @@
 {
     "display_information": {
         "name": "short-circuit-me",
-        "description": "A powerful notification bot",
+        "description": "Notification broker",
         "background_color": "#5c1eeb"
     },
     "features": {
@@ -67,7 +67,7 @@
         "interactivity": {
             "is_enabled": true
         },
-        "org_deploy_enabled": false,
+        "org_deploy_enabled": true,
         "socket_mode_enabled": true,
         "token_rotation_enabled": false
     }
