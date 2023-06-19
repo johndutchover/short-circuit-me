@@ -30,6 +30,8 @@
 .idea/**/usage.statistics.xml
 .idea/**/dictionaries
 .idea/**/shelf
+!.idea/dataSources
+!.idea/dataSources.xml
 
 # AWS User-specific
 .idea/**/aws.xml
