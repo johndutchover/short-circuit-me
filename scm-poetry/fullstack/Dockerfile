@@ -14,11 +14,13 @@ COPY pyproject.toml /app
 COPY slackbolt_csv.py /app
 COPY pages/1_home.py /app/pages
 COPY start.sh /app
+COPY message_counts.csv /app
 
 # Install Poetry and project dependencies
 RUN pip3 install poetry
 RUN poetry config virtualenvs.create false
 RUN poetry install
+
 
 # Expose the necessary port(s) for your Streamlit application
 EXPOSE 8501
