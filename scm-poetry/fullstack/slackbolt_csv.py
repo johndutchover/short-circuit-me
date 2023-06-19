@@ -11,7 +11,8 @@ from slack_bolt.adapter.fastapi import SlackRequestHandler
 from slack_bolt.adapter.socket_mode import SocketModeHandler
 import pathlib
 
-message_counts_path = "/app/data/message_counts.csv"
+cfd = pathlib.Path(__file__).parent.parent
+message_counts_path = os.getenv('MESSAGE_COUNTS_PATH', cfd / "message_counts.csv")
 
 load_dotenv()  # read local .env file
 
