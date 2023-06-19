@@ -32,18 +32,11 @@ bots_clientid = os.getenv('POETRY_SCM_BOT_CLIENTID')
 # Users who are allowed to use the commands
 allowed_users = ["USLACKBOT", bots_clientid]
 
-# Fetch users list using Bolt method
-response = app.client.users_list()
 
-# create dict literal and assign users
-user_dict = {'users': response['members']}  # TODO this and related not working
-
-
-# Now, 'user_dict' contains a 'users' key whose value is a list of users.
-def find_user_by_id(user_id):
-    for user in user_dict['users']:
-        if user['id'] == user_id:
-            return user
+# Fetch user info using Bolt method
+def get_user_info(user_id):
+    user_info = app.client.users_info(user=user_id)
+    return user_info
 
 
 # Slash command that adds a contact
@@ -52,17 +45,22 @@ def add_contact(ack, respond, command):
     # Acknowledge command request
     ack()
 
-    # Parse the input text
-    split_text = command['text'].split(' ')
-    if len(split_text) == 2:
-        name, info = split_text
-        if name in contacts:
-            respond(f"{name} already exists in contacts. Information not updated.")
-        else:
-            contacts[name] = info
-            respond(f"{name} added to contacts with information: {info}")
-    else:
-        respond("Please use the format '/addcontact name info'")
+    # Get user's ID from the command text
+    user_id = command['text']
+
+    # Fetch user info
+    user_info = get_user_info(user_id)
+
+    # Check if the user exists
+    if not user_info['ok']:
+        respond(f"No user found with ID: {user_id}")
+        return
+
+    # Add user to contacts
+    contacts[user_id] = user_info['user']
+
+    # Respond with success message
+    respond(f"User {user_info['user']['real_name']} added to contacts.")
 
 
 # Slash command that retrieves a contact
