@@ -18,6 +18,6 @@ features = ["shared-cpu-4x"]
   max_machines = 1
 
 [mounts]
-source = "mounts.def"
+source = "data_vol1"
 destination = "/app/data"
 readonly = false
