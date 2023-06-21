@@ -42,8 +42,8 @@ def add_contact(ack, respond, command):
     # Get user's ID from the command text
     user_id = command['text']
 
-    # Check if the provided ID is in the correct format
-    if re.match("^U[A-Z0-9]{8,}$", user_id):
+    provided_id_has_correct_format = re.match("^U[A-Z0-9]{8,}$", user_id)
+    if provided_id_has_correct_format:
         # Add user to contacts
         contacts[user_id] = user_id
         # Respond with success message
