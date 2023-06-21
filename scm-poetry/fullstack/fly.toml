@@ -1,0 +1,23 @@
+# fly.toml app configuration file generated for scm-frontend-1831 on 2023-06-17T21:32:25-04:00
+#
+# See https://fly.io/docs/reference/configuration/ for information about how to use this file.
+#
+
+app = "scm-frontend-1831"
+primary_region = "ewr"
+
+[experimental]
+features = ["shared-cpu-4x"]
+
+[http_service]
+  internal_port = 8501
+  force_https = true
+  auto_stop_machines = false
+  auto_start_machines = true
+  min_machines_running = 1
+  max_machines = 1
+
+[mounts]
+source = "mounts.def"
+destination = "/app/data"
+readonly = false

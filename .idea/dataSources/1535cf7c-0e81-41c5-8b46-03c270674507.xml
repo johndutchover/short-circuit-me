@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataSource name="Cluser0">
+  <database-model serializer="dbm" dbms="MONGO" family-id="MONGO" format-version="4.48">
+    <root id="1">
+      <ServerVersion>6.0.6</ServerVersion>
+    </root>
+    <schema id="2" parent="1" name="messagesdb"/>
+    <schema id="3" parent="1" name="admin"/>
+    <schema id="4" parent="1" name="local"/>
+    <table id="5" parent="2" name="slackcoll"/>
+    <column id="6" parent="5" name="_id">
+      <DasType>ObjectId|12s</DasType>
+      <Position>1</Position>
+    </column>
+    <column id="7" parent="5" name="date">
+      <DasType>String|12s</DasType>
+      <Position>2</Position>
+    </column>
+    <column id="8" parent="5" name="important">
+      <DasType>Int32|4s</DasType>
+      <Position>3</Position>
+    </column>
+    <column id="9" parent="5" name="normal">
+      <DasType>Int32|4s</DasType>
+      <Position>4</Position>
+    </column>
+    <column id="10" parent="5" name="urgent">
+      <DasType>Int32|4s</DasType>
+      <Position>5</Position>
+    </column>
+  </database-model>
+</dataSource>

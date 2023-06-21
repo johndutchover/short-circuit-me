@@ -1,7 +1,7 @@
 """
 Module backend.slackbolt_csv
 
-This module provides a collection of functions/classes for performing various operations.
+asynchronous Python backend for a Slack bot, utilizing the Slack Bolt and FastAPI frameworks
 
 Functions:
     - endpoint(req)

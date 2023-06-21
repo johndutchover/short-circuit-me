@@ -74,4 +74,4 @@ st.area_chart(
 # - from VSCode, use "Run Python File" instead of "Run Code" (properly activates venv)
 # - from PyCharm...set default python interpreter to venv
 # - from external terminal, use `poetry shell` followed by:
-#  - `streamlit run streamlit_app.py`'''
+#  - `streamlit run 1_app.py`'''

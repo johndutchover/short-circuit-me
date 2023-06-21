@@ -25,7 +25,8 @@
 # Reference: https://intellij-support.jetbrains.com/hc/en-us/articles/206544839
 
 # User-specific stuff
-.idea/**/workspace.xml
+!.idea/dataSources.xml
+!.idea/dataSources.local.xml
 .idea/**/tasks.xml
 .idea/**/usage.statistics.xml
 .idea/**/dictionaries
@@ -397,4 +398,6 @@ $RECYCLE.BIN/
 # project exclusions
 message_counts.csv
 secrets.toml
+id
+id-cert.pub
 # End of project exclusions
