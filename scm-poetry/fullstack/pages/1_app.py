@@ -23,15 +23,6 @@ env_dir_path = envdir / ".env"
 cfd = pathlib.Path(__file__).parent.parent
 message_counts_path = os.getenv('MESSAGE_COUNTS_PATH', cfd / "message_counts.csv")
 
-
-def get_important_notifications():
-    return 42
-
-
-def get_critical_notifications():
-    return 7
-
-
 st.title('Notification Dashboard')
 st.subheader('Slack :zap: :blue[message] summary')
 
