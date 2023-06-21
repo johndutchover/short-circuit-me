@@ -1,14 +1,13 @@
+import os
 import pathlib
+from datetime import datetime
 
 import pandas as pd
+import pytz
 import streamlit as st
 from bokeh.models import FuncTickFormatter
 from bokeh.plotting import figure
-from dotenv import load_dotenv
 from pandas.errors import EmptyDataError
-from datetime import datetime
-import pytz
-import os
 
 current_utc_time = datetime.utcnow()
 local_timezone = pytz.timezone('America/New_York')  # Replace 'America/New_York' with your desired time zone
@@ -18,19 +17,11 @@ st.set_page_config(page_title="Dashboard", page_icon="✅")
 
 st.write('Current local time:', current_local_time)
 
-load_dotenv('../.env')
+envdir = pathlib.Path(__file__).parent
+env_dir_path = envdir / ".env"
 
 cfd = pathlib.Path(__file__).parent.parent
 message_counts_path = os.getenv('MESSAGE_COUNTS_PATH', cfd / "message_counts.csv")
-
-
-def get_important_notifications():
-    return 42
-
-
-def get_critical_notifications():
-    return 7
-
 
 st.title('Notification Dashboard')
 st.subheader('Slack :zap: :blue[message] summary')

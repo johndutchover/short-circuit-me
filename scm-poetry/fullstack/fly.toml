@@ -1,10 +1,14 @@
-# fly.toml app configuration file generated for scm-frontend-1831 on 2023-06-17T21:32:25-04:00
+# fly.toml app configuration file generated for shortcircuitme on 2023-06-21T09:50:29-04:00
 #
 # See https://fly.io/docs/reference/configuration/ for information about how to use this file.
 #
 
-app = "scm-frontend-1831"
+app = "shortcircuitme"
 primary_region = "ewr"
+
+[[mounts]]
+  source = "data_vol1"
+  destination = "/app/data"
 
 [http_service]
   internal_port = 8501
@@ -12,8 +16,6 @@ primary_region = "ewr"
   auto_stop_machines = false
   auto_start_machines = true
   min_machines_running = 1
-  max_machines = 1
 
-[mounts]
-source="data_vol1"
-destination="/app/data"
+[experimental]
+features = ["shared-cpu-4x"]
