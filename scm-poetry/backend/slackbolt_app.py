@@ -54,12 +54,12 @@ async def endpoint(req: Request):
     return await app_handler.handle(req)
 
 
-str_p1 = r"(?:help)"
-regex_p1 = re.compile(str_p1, flags=re.I)
-str_p2 = r"(?:problem)"
-regex_p2 = re.compile(str_p2, flags=re.I)
-str_p3 = r"(?:hello)"
-regex_p3 = re.compile(str_p3, flags=re.I)
+string_pattern_help = r"(?:help)"
+regex_help = re.compile(string_pattern_help, flags=re.I)
+string_pattern_important = r"(?:important)"
+regex_important = re.compile(string_pattern_important, flags=re.I)
+string_pattern_hello = r"(?:hello)"
+regex_p3 = re.compile(string_pattern_hello, flags=re.I)
 
 
 async def increase_counter(message_type: str):
