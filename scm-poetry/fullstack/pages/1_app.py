@@ -9,11 +9,6 @@ from bokeh.models import FuncTickFormatter
 from bokeh.plotting import figure
 from pandas.errors import EmptyDataError
 
-import os
-import streamlit as st
-from dotenv import load_dotenv
-from streamlit_extras.switch_page_button import switch_page
-
 if not st.session_state.get("password_correct"):
 
     st.write("Please login :)")
