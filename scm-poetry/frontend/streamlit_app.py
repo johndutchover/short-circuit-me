@@ -1,15 +1,9 @@
-# https://docs.streamlit.io/library/get-started/create-an-app
-# .io/how-to-build-a-real-time-live-dashboard-with-streamlit/#2-how-to-do-a-basic-dashboard-setup
 import os
-
-import pymongo
-# If you are using Streamlit version 1.10.0 or higher, your main script should live in a directory other than the
-# root directory. When using Docker, you can use the WORKDIR command to specify the directory where your main script
-# lives.
-
 import pathlib
-import streamlit as st
+
 import pandas as pd
+import pymongo
+import streamlit as st
 from bokeh.plotting import figure
 from dotenv import load_dotenv
 from pandas.errors import EmptyDataError
@@ -49,15 +43,6 @@ def get_data():
 
 
 items = get_data()
-
-
-def get_important_notifications():
-    return 42
-
-
-def get_critical_notifications():
-    return 7
-
 
 # page title
 st.title('Notification Overview Dashboard')
