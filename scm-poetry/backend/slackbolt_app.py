@@ -1,15 +1,16 @@
 import datetime
 import os
+import pathlib
 import re
+
+
 from dotenv import load_dotenv
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 from motor import motor_asyncio
 from pydantic import BaseModel
 from slack_bolt import App
 from slack_bolt.adapter.fastapi import SlackRequestHandler
 from slack_bolt.adapter.socket_mode import SocketModeHandler
-from starlette.requests import Request
-import pathlib
 
 cfd = pathlib.Path(__file__).parent
 message_counts_path = cfd / "message_counts.csv"
