@@ -1,5 +1,6 @@
 import datetime
 import os
+import pathlib
 import re
 from typing import Any
 
@@ -10,7 +11,6 @@ from pandas import DataFrame
 from slack_bolt import App
 from slack_bolt.adapter.fastapi import SlackRequestHandler
 from slack_bolt.adapter.socket_mode import SocketModeHandler
-import pathlib
 
 cfd = pathlib.Path(__file__).parent.parent
 message_counts_path = os.getenv('MESSAGE_COUNTS_PATH', cfd / "message_counts.csv")
