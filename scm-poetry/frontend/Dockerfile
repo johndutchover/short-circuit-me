@@ -3,13 +3,13 @@
 FROM python:3.10.12-slim
 WORKDIR /app
 ENV PYTHONPATH /app
-# Create a directory for streamlit secrets
+
 RUN mkdir /app/.streamlit
+RUN mkdir /app/pages
+
 COPY .env /app
 COPY .streamlit/secrets.toml /app/.streamlit
-COPY message_counts.csv /app
-COPY pyproject.toml /app
-COPY streamlit_app.py /app
+COPY . .
 RUN pip3 install poetry
 RUN poetry config virtualenvs.create false
 RUN poetry install
