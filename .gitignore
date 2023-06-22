@@ -1,6 +1,7 @@
 # Created by https://www.toptal.com/developers/gitignore/api/git,vim,linux,macos,python,windows,visualstudiocode,jetbrains+all,direnv
 # Edit at https://www.toptal.com/developers/gitignore?templates=git,vim,linux,macos,python,windows,visualstudiocode,jetbrains+all,direnv
 
+.idea/dataSources/1535cf7c-0e81-41c5-8b46-03c270674507.xml
 ### direnv ###
 .direnv
 .envrc

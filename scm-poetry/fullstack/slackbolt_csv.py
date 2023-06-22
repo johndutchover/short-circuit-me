@@ -71,11 +71,6 @@ def handle_app_mentions(body, say, logger):
     say("What's up?")
 
 
-@app.event("message")
-def handle_message():
-    pass
-
-
 api = FastAPI()
 
 if os.path.exists(message_counts_path) and os.stat(message_counts_path).st_size > 0:
