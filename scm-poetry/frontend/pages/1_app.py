@@ -11,54 +11,60 @@ from bokeh.plotting import figure
 from pandas.errors import EmptyDataError
 from pymongo import MongoClient
 
-current_utc_time = datetime.utcnow()
-local_timezone = pytz.timezone('America/New_York')  # Replace 'America/New_York' with your desired time zone
-current_local_time = current_utc_time.replace(tzinfo=pytz.utc).astimezone(local_timezone)
+if not st.session_state.get("password_correct"):
 
-st.set_page_config(page_title="Dashboard", page_icon="✅")
+    st.write("Please login :)")
 
-st.write('Current local time:', current_local_time)
+else:
+    current_utc_time = datetime.utcnow()
+    local_timezone = pytz.timezone('America/New_York')  # Replace 'America/New_York' with your desired time zone
+    current_local_time = current_utc_time.replace(tzinfo=pytz.utc).astimezone(local_timezone)
 
-envdir = pathlib.Path(__file__).parent
-env_dir_path = envdir / ".env"
+    st.set_page_config(page_title="Dashboard", page_icon="✅")
 
-cfd = pathlib.Path(__file__).parent.parent
-message_counts_path = os.getenv('MESSAGE_COUNTS_PATH', cfd / "message_counts.csv")
+    st.write('Current local time:', current_local_time)
 
-st.title('Notification Dashboard')
-st.subheader('Slack :zap: :blue[message] summary')
+    envdir = pathlib.Path(__file__).parent
+    env_dir_path = envdir / ".env"
 
-try:
-    df_messages = pd.read_csv(message_counts_path, header='infer', encoding='utf-8')
+    cfd = pathlib.Path(__file__).parent.parent
+    message_counts_path = os.getenv('MESSAGE_COUNTS_PATH', cfd / "message_counts.csv")
 
-    # Convert msg_date to datetime
-    df_messages['msg_date'] = pd.to_datetime(df_messages['msg_date'])
-    st.table(df_messages)
+    st.title('Notification Dashboard')
+    st.subheader('Slack :zap: :blue[message] summary')
 
-    # Bokeh plot with a title and axis labels
-    p = figure(title="Bokeh plot", x_axis_label='Date', y_axis_label='Messages', x_axis_type="datetime")
-    p.line(df_messages['msg_date'], df_messages['normal'], legend_label="Normal", color="green", line_width=2)
-    p.line(df_messages['msg_date'], df_messages['important'], legend_label="Important", color="orange", line_width=2)
-    p.line(df_messages['msg_date'], df_messages['urgent'], legend_label="Critical", color="red", line_width=2)
+    try:
+        df_messages = pd.read_csv(message_counts_path, header='infer', encoding='utf-8')
 
-    # Display the Bokeh plot using Streamlit
-    st.bokeh_chart(p, use_container_width=True)
+        # Convert msg_date to datetime
+        df_messages['msg_date'] = pd.to_datetime(df_messages['msg_date'])
+        st.table(df_messages)
 
-    # Define custom tick formatter to display day of the week
-    code = """
-    var days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-    var date = new Date(tick);
-    var localDate = new Date(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate());
-    var day = localDate.getDay();
-    return days[day];
-    """
-    p.xaxis.formatter = FuncTickFormatter(code=code)
+        # Bokeh plot with a title and axis labels
+        p = figure(title="Bokeh plot", x_axis_label='Date', y_axis_label='Messages', x_axis_type="datetime")
+        p.line(df_messages['msg_date'], df_messages['normal'], legend_label="Normal", color="green", line_width=2)
+        p.line(df_messages['msg_date'], df_messages['important'], legend_label="Important", color="orange",
+               line_width=2)
+        p.line(df_messages['msg_date'], df_messages['urgent'], legend_label="Critical", color="red", line_width=2)
 
-    # Plot an area chart
-    st.area_chart(df_messages.set_index('msg_date')[['normal', 'important', 'urgent']])
+        # Display the Bokeh plot using Streamlit
+        st.bokeh_chart(p, use_container_width=True)
 
-except EmptyDataError:
-    st.text('INFO: The message_counts.csv file is empty')
+        # Define custom tick formatter to display day of the week
+        code = """
+        var days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+        var date = new Date(tick);
+        var localDate = new Date(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate());
+        var day = localDate.getDay();
+        return days[day];
+        """
+        p.xaxis.formatter = FuncTickFormatter(code=code)
+
+        # Plot an area chart
+        st.area_chart(df_messages.set_index('msg_date')[['normal', 'important', 'urgent']])
+
+    except EmptyDataError:
+        st.text('INFO: The message_counts.csv file is empty')
 
 # MongoDB Atlas connection string
 uri = os.environ.get("POETRY_MONGODB_URL")
@@ -82,9 +88,9 @@ client = MongoClient(os.environ["POETRY_MONGODB_URL"])
 @st.cache_data(ttl=600)
 def get_data():
     db = client["messagesdb"]
-    items = db.mycollection.find()
-    items = list(items)  # make hashable for st.cache_data
-    return items
+    item = db.mycollection.find()
+    item = list(item)  # make hashable for st.cache_data
+    return item
 
 
 items = get_data()
