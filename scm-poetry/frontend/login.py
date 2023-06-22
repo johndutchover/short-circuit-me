@@ -3,7 +3,7 @@ import streamlit as st
 from dotenv import load_dotenv
 from streamlit_extras.switch_page_button import switch_page
 
-load_dotenv('.env')
+load_dotenv('.env') # TODO add pathlib
 
 
 # Check password function
@@ -22,7 +22,7 @@ def check_password():
 
 
 # Prompt for password
-if check_password():
+if check_password():  # TODO: add user-based login
     # Set a flag in the session state to indicate that the password is correct
     st.session_state["password_correct"] = True
     # Redirect using extras switch_page
