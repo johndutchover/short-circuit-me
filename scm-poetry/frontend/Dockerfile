@@ -1,6 +1,6 @@
 # syntax=docker/dockerfile:1
 
-FROM python:3.10.11-slim
+FROM python:3.10.12-slim
 WORKDIR /app
 ENV PYTHONPATH /app
 # Create a directory for streamlit secrets
