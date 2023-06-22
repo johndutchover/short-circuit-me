@@ -14,29 +14,9 @@ import streamlit as st
 from dotenv import load_dotenv
 from streamlit_extras.switch_page_button import switch_page
 
-cfd = pathlib.Path(__file__).parent
-
-load_dotenv('./../.env')
-
-
-# Check password function
-def check_password():
-    # Check if password has been entered correctly
-    if st.session_state.get("password_correct"):
-        return True
-    else:
-        password = st.text_input("Password", type="password")
-        if password == os.environ.get("PASSWORD"):
-            st.session_state["password_correct"] = True
-            return True
-        else:
-            st.error("Incorrect password")
-            return False
-
-
 if not st.session_state.get("password_correct"):
 
-    st.write("Please login")
+    st.write("Please login :)")
 
 else:
     current_utc_time = datetime.utcnow()
