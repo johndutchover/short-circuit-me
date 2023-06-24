@@ -1,2 +1,2 @@
 #!/bin/sh
-python slackbolt_app.py
+python slackbolt_api.py

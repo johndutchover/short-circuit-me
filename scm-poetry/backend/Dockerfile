@@ -3,7 +3,6 @@
 FROM python:3.10.12-slim
 WORKDIR /app
 ENV PYTHONPATH /app
-ENV MESSAGE_COUNTS_PATH=/app/data/message_counts.csv
 
 COPY .env .
 COPY . .

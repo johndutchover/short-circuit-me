@@ -5,10 +5,10 @@ import re
 from dotenv import load_dotenv
 from fastapi import FastAPI, Request
 from motor import motor_asyncio
-from pydantic import BaseModel
 from slack_bolt import App
-from slack_bolt.adapter.fastapi import SlackRequestHandler
 from slack_bolt.adapter.socket_mode import SocketModeHandler
+from slack_bolt.adapter.fastapi import SlackRequestHandler
+
 
 load_dotenv()  # read local .env file
 
@@ -16,38 +16,37 @@ app = App(
     token=os.environ.get("POETRY_SCM_XOXB_TOKEN"),
     signing_secret=os.environ.get("POETRY_SCM_BOT_SIGNINGSECRET")
 )
+
+fapi = FastAPI()
+
 app_handler = SlackRequestHandler(app)
 
+# Initialize a contact dictionary
+contacts = {}
 
-# Define the data model Pydantic
-class Item(BaseModel):
-    msg_date: str
-    count1: int
-    flag: int
-    count2: int
-    count3: int
+bots_clientid = os.getenv('POETRY_SCM_BOT_CLIENTID')
 
+# Users who are allowed to use the commands
+allowed_users = ["USLACKBOT", bots_clientid]
 
 # MongoDB connection string
 uri = os.environ.get("POETRY_MONGODB_URL")
 # Set the Stable API version when creating a new client
-client = motor_asyncio.AsyncIOMotorClient(os.environ["POETRY_MONGODB_URL"])
+client = motor_asyncio.AsyncIOMotorClient(uri)
 # database name in MongoDB
 db = client["messagesdb"]
 # collection name in MongoDB
 collection = db["slackcoll"]
 
-api = FastAPI()
 
-
-@api.post("/slack/events")
-async def endpoint(req: Request):
+@fapi.post("/slack/events")
+def endpoint(req: Request):
     """
-    endpoint which handles incoming requests from Slack
+    FastAPI endpoint receive Slack and process with SlackRequestHandler
     :param req:
     :return:
     """
-    return await app_handler.handle(req)
+    return app_handler.handle(req)
 
 
 async def increase_counter(message_type: str):
@@ -75,14 +74,7 @@ async def increase_counter(message_type: str):
 
 
 @app.message(re.compile("(asap|help|urgent)", re.I))
-async def message_urgent(message, say):
-    """
-    Increment counter of Priority 1 (urgent) string matches.
-    Say() sends a message to the channel where the event was triggered.
-    :param message: Message object
-    :param say: Say function
-    :return: None
-    """
+def message_urgent(message, say):
     say(
         blocks=[
             {
@@ -97,18 +89,11 @@ async def message_urgent(message, say):
         ],
         text=f"Hey there <@{message['user']}>!"
     )
-    await increase_counter('urgent')
+    return increase_counter('urgent')
 
 
 @app.message(re.compile("(important|need|soon)", re.I))
-async def message_important(message, say):
-    """
-    Increment counter of Priority 2 (important) string matches.
-    Say() sends a message to the channel where the event was triggered.
-    :param message: Message object
-    :param say: Say function
-    :return: None
-    """
+def message_important(message, say):
     say(
         blocks=[
             {
@@ -123,28 +108,25 @@ async def message_important(message, say):
         ],
         text=f"Please record at this time <@{message['user']}>!"
     )
-    await increase_counter('important')
+    return increase_counter('important')
 
 
 @app.message(re.compile("(hi|hello|hey)", re.I))
-async def say_hello_regex(say, context):
+def say_hello_regex(say, context):
     # regular expression matches are inside of context.matches
     greeting = context['matches'][0]
     say(f"{greeting}, how are you?")
-    await increase_counter('normal')
+
+    # TODO: get user_id from message
+    user_id = "test"
+    increase_counter_based_on_user_id(user_id=user_id)
 
 
-@app.action("button_click")
-def action_button_click(body, ack, say):
-    """
-    Acknowledge the action.
-    :param body: Action payload
-    :param ack: Acknowledge function
-    :param say: Say function
-    :return: None
-    """
-    ack()
-    say(f"<@{body['user']['id']}> clicked the button")
+def increase_counter_based_on_user_id(user_id: str):
+    if user_id in contacts.keys():
+        increase_counter("important")
+    else:
+        increase_counter("normal")
 
 
 # Start app using WebSockets
