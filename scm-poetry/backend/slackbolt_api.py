@@ -1,25 +1,24 @@
 import datetime
 import os
 import re
-import asyncio
 
 from dotenv import load_dotenv
 from fastapi import FastAPI, Request
 from motor import motor_asyncio
-from slack_bolt import App
-from slack_bolt.adapter.socket_mode import SocketModeHandler
-from slack_bolt.adapter.fastapi import SlackRequestHandler
+from slack_bolt.adapter.socket_mode.async_handler import AsyncSocketModeHandler
+from slack_bolt.async_app import AsyncApp
+from slack_bolt.adapter.fastapi.async_handler import AsyncSlackRequestHandler
 
 load_dotenv()  # read local .env file
 
-app = App(
+bolt = AsyncApp(
     token=os.environ.get("POETRY_SCM_XOXB_TOKEN"),
     signing_secret=os.environ.get("POETRY_SCM_BOT_SIGNINGSECRET")
 )
 
-fapi = FastAPI()
+api = FastAPI()
 
-app_handler = SlackRequestHandler(app)
+app_handler = AsyncSlackRequestHandler(bolt)
 
 # Initialize a contact dictionary
 contacts = {}
@@ -39,14 +38,9 @@ db = client["messagesdb"]
 collection = db["slackcoll"]
 
 
-@fapi.post("/slack/events")
+@api.post("/slack/events")
 async def endpoint(req: Request):
-    """
-    FastAPI endpoint receive Slack and process with SlackRequestHandler
-    :param req:
-    :return:
-    """
-    await app_handler.handle(req)
+    return await app_handler.handle(req)
 
 
 async def increase_counter(message_type: str):
@@ -73,9 +67,9 @@ async def increase_counter(message_type: str):
         print(f"{message_type} is not a valid key in the document")
 
 
-@app.message(re.compile("(asap|help|urgent)", re.I))
-def message_urgent(message, say):
-    say(
+@bolt.message(re.compile("(asap|help|urgent)", re.I))
+async def message_urgent(message, say):
+    await say(
         blocks=[
             {
                 "type": "section",
@@ -89,12 +83,12 @@ def message_urgent(message, say):
         ],
         text=f"Hey there <@{message['user']}>!"
     )
-    asyncio.create_task(increase_counter('urgent'))  # asyncio.create_task to schedule the coroutine
+    await increase_counter('urgent')
 
 
-@app.message(re.compile("(important|priority|soon)", re.I))
-def message_important(message, say):
-    say(
+@bolt.message(re.compile("(important|priority|soon)", re.I))
+async def message_important(message, say):
+    await say(
         blocks=[
             {
                 "type": "section",
@@ -108,28 +102,28 @@ def message_important(message, say):
         ],
         text=f"Please record at this time <@{message['user']}>!"
     )
-    asyncio.create_task(increase_counter('important'))  # asyncio.create_task to schedule the coroutine
+    await increase_counter('important')
 
 
-@app.message(re.compile("(hi|hello|hey)", re.I))
-def say_hello_regex(say, context):
-    # regular expression matches are inside of context.matches
+@bolt.message(re.compile("(hi|hello|hey)", re.I))
+async def say_hello_regex(say, context):
     greeting = context['matches'][0]
-    say(f"{greeting}, how are you?")
-
-    # TODO: get user_id from message
+    await say(f"{greeting}, how are you?")
     user_id = "test"
-    increase_counter_based_on_user_id(user_id=user_id)
+    await increase_counter_based_on_user_id(user_id=user_id)
 
 
-def increase_counter_based_on_user_id(user_id: str):
+async def increase_counter_based_on_user_id(user_id: str):
     if user_id in contacts.keys():
-        asyncio.create_task(increase_counter("important"))  # asyncio.create_task to schedule the coroutine
+        await increase_counter("important")
     else:
-        asyncio.create_task(increase_counter("normal"))  # asyncio.create_task to schedule the coroutine
+        await increase_counter("normal")
 
 
-# Start app using WebSockets
+async def main():
+    handler = AsyncSocketModeHandler(bolt, os.environ["POETRY_SCM_XAPP_TOKEN"])
+    await handler.start_async()
+
 if __name__ == "__main__":
-    handler = SocketModeHandler(app, os.environ["POETRY_SCM_XAPP_TOKEN"])
-    handler.start()
+    import asyncio
+    asyncio.run(main())
