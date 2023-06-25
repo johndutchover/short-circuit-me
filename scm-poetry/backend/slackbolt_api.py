@@ -90,7 +90,7 @@ def message_urgent(message, say):
         ],
         text=f"Hey there <@{message['user']}>!"
     )
-    asyncio.create_task(increase_counter("urgent"))  # using asyncio.create_task to schedule the coroutine
+    asyncio.create_task(increase_counter('urgent'))  # using asyncio.create_task to schedule the coroutine
 
 
 @app.message(re.compile("(important|need|soon)", re.I))
