@@ -1,4 +1,4 @@
-# fly.toml app configuration file generated for shortcircuitme on 2023-06-22T11:07:11-04:00
+# fly.toml app configuration file generated for shortcircuitme on 2023-06-25T16:00:27-04:00
 #
 # See https://fly.io/docs/reference/configuration/ for information about how to use this file.
 #
@@ -6,16 +6,9 @@
 app = "shortcircuitme"
 primary_region = "ewr"
 
-[[mounts]]
-  source = "data_vol1"
-  destination = "/app/data"
-
 [http_service]
   internal_port = 8501
   force_https = true
   auto_stop_machines = false
   auto_start_machines = false
   min_machines_running = 1
-
-[experimental]
-features = ["shared-cpu-4x"]
