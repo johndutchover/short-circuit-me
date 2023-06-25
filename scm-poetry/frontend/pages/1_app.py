@@ -70,6 +70,7 @@ else:
 
     try:
         df_messages = pd.DataFrame(list(collection.find()))
+        print(df_messages.columns)
         st.table(df_messages)
 
         # Bokeh plot with a title and axis labels
