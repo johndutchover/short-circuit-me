@@ -11,16 +11,51 @@ from bokeh.plotting import figure
 from pandas.errors import EmptyDataError
 from pymongo import MongoClient
 
+# MongoDB connection string
+uri = os.environ.get("POETRY_MONGODB_URL")
+
+st.set_page_config(page_title="Dashboard", page_icon="✅")
+
 if not st.session_state.get("password_correct"):
 
     st.write("Please login :)")
 
 else:
+    # Initialize connection.
+    # Uses st.cache_resource to only run once.
+    @st.cache_resource
+    def init_connection():
+        return pymongo.MongoClient(**st.secrets.db_credentials)
+
+
+    client_init = init_connection()
+
+    client = MongoClient(uri)
+
+    db = client['messagesdb']
+    collection = db['slackcoll']
+
+    # Convert MongoDB documents to DataFrame
+    df_messages = pd.DataFrame(list(collection.find()))
+
+    # Only include documents where 'field1' is 'value1', and only include 'field2' and 'field3' in the output
+    # df_messages = pd.DataFrame(list(collection.find({'field1': 'value1'}, {'field2': 1, 'field3': 1})))
+
+    # Pull data from the collection.
+    # Uses st.cache_data to only rerun when the query changes or after 10 min.
+    @st.cache_data(ttl=600)
+    def get_data():
+        db1 = client["messagesdb"]
+        item = db1.collection.find()
+        item = list(item)  # make hashable for st.cache_data
+        return item
+
+
+    items = get_data()
+
     current_utc_time = datetime.utcnow()
     local_timezone = pytz.timezone('America/New_York')  # Replace 'America/New_York' with your desired time zone
     current_local_time = current_utc_time.replace(tzinfo=pytz.utc).astimezone(local_timezone)
-
-    st.set_page_config(page_title="Dashboard", page_icon="✅")
 
     st.write('Current local time:', current_local_time)
 
@@ -34,10 +69,7 @@ else:
     st.subheader('Slack :zap: :blue[message] summary')
 
     try:
-        df_messages = pd.read_csv(message_counts_path, header='infer', encoding='utf-8')
-
-        # Convert msg_date to datetime
-        df_messages['msg_date'] = pd.to_datetime(df_messages['msg_date'])
+        df_messages = pd.DataFrame(list(collection.find()))
         st.table(df_messages)
 
         # Bokeh plot with a title and axis labels
@@ -65,32 +97,3 @@ else:
 
     except EmptyDataError:
         st.text('INFO: The message_counts.csv file is empty')
-
-# MongoDB Atlas connection string
-uri = os.environ.get("POETRY_MONGODB_URL")
-
-
-# Initialize connection.
-# Uses st.cache_resource to only run once.
-@st.cache_resource
-def init_connection():
-    return pymongo.MongoClient(**st.secrets.db_credentials)
-
-
-client_init = init_connection()
-
-# Connect to MongoDB Atlas
-client = MongoClient(os.environ["POETRY_MONGODB_URL"])
-
-
-# Pull data from the collection.
-# Uses st.cache_data to only rerun when the query changes or after 10 min.
-@st.cache_data(ttl=600)
-def get_data():
-    db = client["messagesdb"]
-    item = db.mycollection.find()
-    item = list(item)  # make hashable for st.cache_data
-    return item
-
-
-items = get_data()
