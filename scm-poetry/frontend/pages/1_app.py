@@ -62,14 +62,11 @@ else:
     envdir = pathlib.Path(__file__).parent
     env_dir_path = envdir / ".env"
 
-    cfd = pathlib.Path(__file__).parent.parent
-    message_counts_path = os.getenv('MESSAGE_COUNTS_PATH', cfd / "message_counts.csv")
-
     st.title('Notification Dashboard')
     st.subheader('Slack :zap: :blue[message] summary')
 
     try:
-        df_messages = pd.DataFrame(list(collection.find()))
+        df_messages = pd.DataFrame(list(collection.find({}, {"_id": 0})))
         print(df_messages.columns)
         st.table(df_messages)
 
@@ -97,4 +94,4 @@ else:
         st.area_chart(df_messages.set_index('msg_date')[['normal', 'important', 'urgent']])
 
     except EmptyDataError:
-        st.text('INFO: The message_counts.csv file is empty')
+        st.text('INFO: Database is empty')
