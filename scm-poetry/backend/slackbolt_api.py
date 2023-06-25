@@ -41,20 +41,20 @@ collection = db["slackcoll"]
 
 
 @fapi.post("/slack/events")
-def endpoint(req: Request):
+async def endpoint(req: Request):
     """
     FastAPI endpoint receive Slack and process with SlackRequestHandler
     :param req:
     :return:
     """
-    return app_handler.handle(req)
+    return await app_handler.handle(req)
 
 
 async def increase_counter(message_type: str):
     now = datetime.datetime.now()
     formatted_date = now.strftime("%Y-%m-%d")
 
-    current_data = await collection.find_one({"date": formatted_date})
+    current_data = await collection.find_one({"msg_date": formatted_date})
 
     if current_data is None:
         new_data = {
