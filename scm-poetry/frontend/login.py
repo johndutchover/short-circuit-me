@@ -1,9 +1,11 @@
 import os
+import pathlib
+
 import streamlit as st
-from dotenv import load_dotenv
 from streamlit_extras.switch_page_button import switch_page
 
-load_dotenv('.env') # TODO add pathlib
+envdir = pathlib.Path(__file__).parent
+env_dir_path = envdir / ".env"
 
 
 # Check password function
