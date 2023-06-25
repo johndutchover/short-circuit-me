@@ -90,7 +90,7 @@ def message_urgent(message, say):
         ],
         text=f"Hey there <@{message['user']}>!"
     )
-    asyncio.create_task(increase_counter("urgent"))  # using asyncio.create_task to schedule the coroutine
+    asyncio.create_task(increase_counter('urgent'))  # using asyncio.create_task to schedule the coroutine
 
 
 @app.message(re.compile("(important|need|soon)", re.I))
@@ -125,9 +125,9 @@ def say_hello_regex(say, context):
 
 def increase_counter_based_on_user_id(user_id: str):
     if user_id in contacts.keys():
-        increase_counter("important")
+        asyncio.create_task(increase_counter("important"))
     else:
-        increase_counter("normal")
+        asyncio.create_task(increase_counter("normal"))
 
 
 # Start app using WebSockets
