@@ -1,6 +1,7 @@
 import datetime
 import os
 import re
+import asyncio
 
 from dotenv import load_dotenv
 from fastapi import FastAPI, Request
@@ -68,7 +69,7 @@ async def increase_counter(message_type: str):
 
     if message_type in new_data:
         new_data[message_type] += 1
-        await collection.replace_one({"date": formatted_date}, new_data)
+        await collection.replace_one({"msg_date": formatted_date}, new_data)
     else:
         print(f"{message_type} is not a valid key in the document")
 
@@ -89,7 +90,7 @@ def message_urgent(message, say):
         ],
         text=f"Hey there <@{message['user']}>!"
     )
-    return increase_counter('urgent')
+    asyncio.create_task(increase_counter("urgent"))  # using asyncio.create_task to schedule the coroutine
 
 
 @app.message(re.compile("(important|need|soon)", re.I))
@@ -108,7 +109,7 @@ def message_important(message, say):
         ],
         text=f"Please record at this time <@{message['user']}>!"
     )
-    return increase_counter('important')
+    asyncio.create_task(increase_counter('important'))  # using asyncio.create_task to schedule the coroutine
 
 
 @app.message(re.compile("(hi|hello|hey)", re.I))
