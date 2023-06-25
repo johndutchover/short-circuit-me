@@ -10,7 +10,6 @@ from slack_bolt import App
 from slack_bolt.adapter.socket_mode import SocketModeHandler
 from slack_bolt.adapter.fastapi import SlackRequestHandler
 
-
 load_dotenv()  # read local .env file
 
 app = App(
@@ -47,14 +46,14 @@ async def endpoint(req: Request):
     :param req:
     :return:
     """
-    return await app_handler.handle(req)
+    await app_handler.handle(req)
 
 
 async def increase_counter(message_type: str):
     now = datetime.datetime.now()
     formatted_date = now.strftime("%Y-%m-%d")
 
-    current_data = await collection.find_one({"msg_date": formatted_date})
+    current_data = collection.find_one({"msg_date": formatted_date})
 
     if current_data is None:
         new_data = {
@@ -90,10 +89,10 @@ def message_urgent(message, say):
         ],
         text=f"Hey there <@{message['user']}>!"
     )
-    asyncio.create_task(increase_counter('urgent'))  # using asyncio.create_task to schedule the coroutine
+    asyncio.create_task(increase_counter('urgent'))  # asyncio.create_task to schedule the coroutine
 
 
-@app.message(re.compile("(important|need|soon)", re.I))
+@app.message(re.compile("(important|priority|soon)", re.I))
 def message_important(message, say):
     say(
         blocks=[
@@ -109,7 +108,7 @@ def message_important(message, say):
         ],
         text=f"Please record at this time <@{message['user']}>!"
     )
-    asyncio.create_task(increase_counter('important'))  # using asyncio.create_task to schedule the coroutine
+    asyncio.create_task(increase_counter('important'))  # asyncio.create_task to schedule the coroutine
 
 
 @app.message(re.compile("(hi|hello|hey)", re.I))
@@ -125,17 +124,12 @@ def say_hello_regex(say, context):
 
 def increase_counter_based_on_user_id(user_id: str):
     if user_id in contacts.keys():
-        asyncio.create_task(increase_counter("important"))
+        asyncio.create_task(increase_counter("important"))  # asyncio.create_task to schedule the coroutine
     else:
-        asyncio.create_task(increase_counter("normal"))
+        asyncio.create_task(increase_counter("normal"))  # asyncio.create_task to schedule the coroutine
 
 
 # Start app using WebSockets
 if __name__ == "__main__":
     handler = SocketModeHandler(app, os.environ["POETRY_SCM_XAPP_TOKEN"])
     handler.start()
-'''
-# Start your app
-if __name__ == "__main__":
-    app.start(port=int(os.environ.get("PORT", 3000)))
-'''
