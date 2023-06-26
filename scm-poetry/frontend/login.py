@@ -4,7 +4,7 @@ import pathlib
 import streamlit as st
 from streamlit_extras.switch_page_button import switch_page
 
-envdir = pathlib.Path(__file__).parent
+envdir = pathlib.Path(__file__)
 env_dir_path = envdir / ".env"
 
 
