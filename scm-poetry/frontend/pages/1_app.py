@@ -11,6 +11,9 @@ from bokeh.plotting import figure
 from pandas.errors import EmptyDataError
 from pymongo import MongoClient
 
+envdir = pathlib.Path(__file__).parent
+env_dir_path = envdir / ".env"
+
 # MongoDB connection string
 uri = os.environ.get("POETRY_MONGODB_URL")
 
@@ -46,7 +49,7 @@ else:
     @st.cache_data(ttl=600)
     def get_data():
         db1 = client["messagesdb"]
-        item = db1.collection.find()
+        item = db1.slackcoll.find()
         item = list(item)  # make hashable for st.cache_data
         return item
 
