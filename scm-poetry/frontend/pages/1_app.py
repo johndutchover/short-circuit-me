@@ -11,7 +11,7 @@ from bokeh.plotting import figure
 from pandas.errors import EmptyDataError
 from pymongo import MongoClient
 
-envdir = pathlib.Path(__file__).parent.parent
+envdir = pathlib.Path(__file__).parent
 env_dir_path = envdir / ".env"
 
 # MongoDB connection string
