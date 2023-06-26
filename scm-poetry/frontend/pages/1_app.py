@@ -77,9 +77,6 @@ else:
                line_width=2)
         p.line(df_messages['msg_date'], df_messages['urgent'], legend_label="Critical", color="red", line_width=2)
 
-        # Display the Bokeh plot using Streamlit
-        st.bokeh_chart(p, use_container_width=True)
-
         # Define custom tick formatter to display day of the week
         code = """
         var days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
@@ -89,6 +86,9 @@ else:
         return days[day];
         """
         p.xaxis.formatter = FuncTickFormatter(code=code)
+
+        # Display the Bokeh plot using Streamlit
+        st.bokeh_chart(p, use_container_width=True)
 
         # Plot an area chart
         st.area_chart(df_messages.set_index('msg_date')[['normal', 'important', 'urgent']])
