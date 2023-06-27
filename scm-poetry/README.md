@@ -2,44 +2,67 @@
 
 ## project structure
 ```text
-├── .streamlit/
-│ └── secrets.toml
 ├── scm-poetry/
 ├── .gitignore
 ├── .python-version
 ├── Makefile
+├── poetry.lock
+├── poetry.toml
+├── README.md
+├── short-circuit-me.code-workspace
 ```
 
 ### Poetry project: scm-poetry/
 
 ```text
 ├── backend
+│ └── .dockerignore
 │ └── .env
 │ └── __init__.py
+│ └── backend.Readme.md
 │ └── atlas_motor_conn.py
 │ └── Dockerfile
-│ └── message_counts.csv (primary)
+│ └── fly.toml
 │ └── poetry.lock
 │ └── pyproject.toml
-│ └── slackbolt_app.py [MongoDB]
-│ └── slackbolt_csv.py [csv]
-├── data
-│ └── message_counts.csv (copy)
+│ └── slackbolt_api.py
 ├── frontend
+│ └── .streamlit
+    ├── secrets.toml
+│ └── .env
+│ └── pages
+    ├── 1_app.py
+    ├── __init__.py
+│ └── .dockerignore
+│ └── __init__.py
+│ └── Dockerfile
+│ └── fly.toml
+│ └── frontend.Readme.md
+│ └── login.py
+│ └── poetry.lock
+│ └── pyproject.toml
+│ └── start_streamlit.sh
+├── fullstack
+│ └── .streamlit
+    ├── secrets.toml
+│ └── pages
+    ├── 1_app.py
+    ├── __init__.py
+│ └── .dockerignore
 │ └── .env
 │ └── __init__.py
 │ └── Dockerfile
-│ └── entrypoint.sh
-│ └── message_counts.csv (copy)
-│ └── poetry.lock
+│ └── fly.toml
+│ └── login.py
+│ └── message_counts.csv
 │ └── pyproject.toml
-│ └── streamlit_app.py [MongoDB]
-│ └── streamlit_csv.py [csv]
+│ └── login.py
+│ └── start.sh
 ├── scm_poetry
 │ └── __init__.py
 └── tests
     ├── __init__.py
-├── .python-version
+├── .dockerignore
 ├── .message_counts.csv
 ├── poetry.lock
 ├── pyproject.toml

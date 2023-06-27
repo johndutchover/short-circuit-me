@@ -4,19 +4,35 @@ Slack App: ShortCircuitMe
 ## Components
 
 ### FastAPI
+- Endpoint for Slack events
+  - [Events API](https://api.slack.com/apis/connections/events-api)
+
+### MongoDB Atlas
+- FastAPI connects to MongoDB using the [Motor (Async)](https://www.mongodb.com/docs/drivers/motor/) driver.
 
 ### Slack | Bolt for Python
-https://slack.dev/bolt-python/concepts
-[slack_bolt.adapter.socket_mode.aiohttp](https://github.com/slackapi/bolt-python/tree/main/slack_bolt/adapter/socket_mode/aiohttp) is **based on** PyPi Project [aiohttp](https://pypi.org/project/aiohttp/) (asyncio-based)
+App needs to be compatible with asyncio’s async/await programming model
+- AsyncSocketModeHandler used to run AsyncApp
 
-#### Socket Mode
+#### [Async version of Bolt](https://slack.dev/bolt-python/concepts#async)
+- AsyncApp relies on [AIOHTTP](https://pypi.org/project/aiohttp/)
+
+#### Bolt Adapters
+- slack_bolt.adapter.socket_mode (PyPI: slack_sdk)
+  - fastapi
+  - socket_mode
+
+##### Socket Mode
 https://api.slack.com/apis/connections/socket
-Note: Apps using Socket Mode are not currently allowed in the public [Slack App Directory](https://slack.com/apps).
-- created by calling the [apps.connections.open](https://api.slack.com/methods/apps.connections.open) method.
+
+###### Method access
+- created at _runtime_ by calling the [apps.connections.open](https://api.slack.com/methods/apps.connections.open) method.
+
+```text
+NOTE
+Apps using Socket Mode are not currently allowed in the public [Slack App Directory](https://slack.com/apps).
+```
 
 ##### Behavior
-- app connects to Slack via a WebSocket connection and receives data from Slack over the socket connection
-- does **not** require exposing a public HTTP Request URL
-
-##### Features
-- allows your app to use the Slack [Events API](https://api.slack.com/apis/connections/events-api)
+Slack will use a WebSocket URL to communicate with ShortCircuitMe
+- Receives data from Slack over the socket connection.

@@ -1,5 +1,6 @@
 import datetime
 import os
+import pathlib
 import re
 from typing import Any
 
@@ -10,7 +11,6 @@ from pandas import DataFrame
 from slack_bolt import App
 from slack_bolt.adapter.fastapi import SlackRequestHandler
 from slack_bolt.adapter.socket_mode import SocketModeHandler
-import pathlib
 
 cfd = pathlib.Path(__file__).parent.parent
 message_counts_path = os.getenv('MESSAGE_COUNTS_PATH', cfd / "message_counts.csv")
@@ -186,7 +186,11 @@ def say_hello_regex(say, context):
     # regular expression matches are inside of context.matches
     greeting = context['matches'][0]
     say(f"{greeting}, how are you?")
-    increase_counter('normal')
+
+    # TODO: get user_id from message
+    user_id = "test"
+
+    increase_counter_based_on_user_id(user_id=user_id)
 
 
 @app.action("button_click")
@@ -200,6 +204,14 @@ def action_button_click(body, ack, say):
     """
     ack()
     say(f"<@{body['user']['id']}> clicked the button")
+
+
+def increase_counter_based_on_user_id(user_id: str):
+
+    if user_id in contacts.keys():
+        increase_counter("important")
+    else:
+        increase_counter("normal")
 
 
 # Start app using WebSockets
