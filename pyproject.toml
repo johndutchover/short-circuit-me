@@ -1,11 +1,14 @@
 [tool.poetry]
 name = "short-circuit-me"
-version = "0.3.3"
+version = "0.4.0"
 description = "short-circuit-me poetry"
 authors = ["John Dutchover <johndutchover@users.noreply.github.com>"]
 readme = "README.md"
-packages = [{include = "scm-poetry"}]
-
+packages = [
+  { include = "backend" },
+  { include = "frontend" },
+  { include = "fullstack" }
+]
 [tool.poetry.dependencies]
 python = "^3.10.12"
 fastapi = "^0.97.0"

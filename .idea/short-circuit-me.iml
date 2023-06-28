@@ -13,7 +13,6 @@
       <excludeFolder url="file://$MODULE_DIR$/scm-poetry/.history" />
       <excludeFolder url="file://$MODULE_DIR$/scm-poetry/backend/.venv" />
       <excludeFolder url="file://$MODULE_DIR$/scm-poetry/frontend/.venv" />
-      <excludeFolder url="file://$MODULE_DIR$/.vscode" />
       <excludeFolder url="file://$MODULE_DIR$/scm-poetry/.vscode" />
       <excludeFolder url="file://$MODULE_DIR$/scm-poetry/frontend/.streamlit" />
       <excludeFolder url="file://$MODULE_DIR$/scm-poetry/fullstack/.venv" />
@@ -23,14 +22,5 @@
     </content>
     <orderEntry type="jdk" jdkName="Poetry (short-circuit-me)" jdkType="Python SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
-  </component>
-  <component name="PyNamespacePackagesService">
-    <option name="namespacePackageFolders">
-      <list>
-        <option value="$MODULE_DIR$/scm-poetry/backend" />
-        <option value="$MODULE_DIR$/scm-poetry/frontend" />
-        <option value="$MODULE_DIR$/scm-poetry/scm_poetry" />
-      </list>
-    </option>
   </component>
 </module>
