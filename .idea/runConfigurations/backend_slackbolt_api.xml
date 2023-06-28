@@ -1,16 +1,16 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="streamlit run login" type="PythonConfigurationType" factoryName="Python">
+  <configuration default="false" name="backend_slackbolt_api" type="PythonConfigurationType" factoryName="Python">
     <module name="short-circuit-me" />
     <option name="INTERPRETER_OPTIONS" value="" />
     <option name="PARENT_ENVS" value="true" />
     <option name="SDK_HOME" value="" />
-    <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/scm-poetry/fullstack" />
+    <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/backend" />
     <option name="IS_MODULE_SDK" value="true" />
     <option name="ADD_CONTENT_ROOTS" value="true" />
     <option name="ADD_SOURCE_ROOTS" value="true" />
     <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
-    <option name="SCRIPT_NAME" value="$PROJECT_DIR$/.venv/bin/streamlit" />
-    <option name="PARAMETERS" value="run login.py" />
+    <option name="SCRIPT_NAME" value="$PROJECT_DIR$/backend/slackbolt_api.py" />
+    <option name="PARAMETERS" value="" />
     <option name="SHOW_COMMAND_LINE" value="true" />
     <option name="EMULATE_TERMINAL" value="false" />
     <option name="MODULE_MODE" value="false" />

@@ -625,13 +625,13 @@ test = ["pytest (>=6)"]
 
 [[package]]
 name = "faker"
-version = "18.11.1"
+version = "18.11.2"
 description = "Faker is a Python package that generates fake data for you."
 optional = false
 python-versions = ">=3.7"
 files = [
-    {file = "Faker-18.11.1-py3-none-any.whl", hash = "sha256:02980fe15acd58861305568bae0a277680792a505a5a45a309d352f79c452dd1"},
-    {file = "Faker-18.11.1.tar.gz", hash = "sha256:df4ee36d058a6a96de9d5e645571ef8536946a0b62db841494f8a3bc3bcdc5af"},
+    {file = "Faker-18.11.2-py3-none-any.whl", hash = "sha256:21c2c29638e98502f3bba9ad6a4f07a4b09c5e2150bb491ff02411a5888f6955"},
+    {file = "Faker-18.11.2.tar.gz", hash = "sha256:ec6e2824bb1d3546b36c156324b9df6bca5a3d6d03adf991e6a5586756dcab9d"},
 ]
 
 [package.dependencies]
@@ -2476,13 +2476,13 @@ full = ["httpx (>=0.22.0)", "itsdangerous", "jinja2", "python-multipart", "pyyam
 
 [[package]]
 name = "streamlit"
-version = "1.23.1"
+version = "1.24.0"
 description = "A faster way to build and share data apps"
 optional = false
-python-versions = ">=3.7, !=3.9.7"
+python-versions = ">=3.8, !=3.9.7"
 files = [
-    {file = "streamlit-1.23.1-py2.py3-none-any.whl", hash = "sha256:02cd55a95acd20d73ff03866956ba6e98d71041ee4728dbfef05cf17069d1bb9"},
-    {file = "streamlit-1.23.1.tar.gz", hash = "sha256:af95a78f9d291f12f779cf66a2bdadfafd8a46fe4fcc6ed281492640ed37bf1e"},
+    {file = "streamlit-1.24.0-py2.py3-none-any.whl", hash = "sha256:102b07d196650f8f35841e35381427cdfcf98b3767c57b28a99af5a8bf22e8b1"},
+    {file = "streamlit-1.24.0.tar.gz", hash = "sha256:3525face94c78792733c56d63a36b48845150e3ba67bb50a19adb4c5975a8225"},
 ]
 
 [package.dependencies]
@@ -2531,13 +2531,13 @@ streamlit = ">=1.2"
 
 [[package]]
 name = "streamlit-card"
-version = "0.0.5"
+version = "0.0.61"
 description = "A streamlit component, to make UI cards"
 optional = false
 python-versions = ">=3.8"
 files = [
-    {file = "streamlit-card-0.0.5.tar.gz", hash = "sha256:c6656d57396a7498b25d557f63d06c7336738612bff11681256693be3628c30f"},
-    {file = "streamlit_card-0.0.5-py3-none-any.whl", hash = "sha256:ccf13904b076d5d85618bb559cc1c1768874173f4f320e8e24a65b59f0d12342"},
+    {file = "streamlit-card-0.0.61.tar.gz", hash = "sha256:1a5414d2d7f7aa0cdd3f6d5780b6c9a172ac784bad7260707638c9f054f1240d"},
+    {file = "streamlit_card-0.0.61-py3-none-any.whl", hash = "sha256:055f59440d3cce6d16f761bd9a861383b0c9bbe56dd73b82a3d62dab24e054e5"},
 ]
 
 [package.dependencies]
