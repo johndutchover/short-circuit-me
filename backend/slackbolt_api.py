@@ -48,7 +48,7 @@ async def endpoint(req: Request):
 @bolt.command("/help-slack-bolt")
 async def command(ack, body):
     user_id = body["user_id"]
-    await ack(f"I have alerted the authorities <@{user_id}>!")
+    await ack(f"Request for help has been sent <@{user_id}>!")
 
 
 # Slash command that adds a contact
@@ -145,17 +145,15 @@ async def message_priority(message, say):
     await increase_counter('priority')
 
 
-'''
 @bolt.message(re.compile("(hi|hello|hey)", re.I))
 async def say_hello_regex(say, context):
     greeting = context['matches'][0]
     await say(f"{greeting}, how are you?")
-    user_id = "test"
-    # await increase_counter_based_on_user_id(user_id=user_id)
-'''
+    user_id = "U059Y617831"
+    await increase_counter_based_on_user_id(user_id=user_id)
 
 
-@bolt.message(re.compile("(hi|hello|hey)", re.I))
+@bolt.event("message")
 async def check_starred(context: AsyncBoltContext, message: dict, starredcontacts: AsyncWebClient):
     bot_id = context.bot_user_id
     # Get the list of items starred by the bot
@@ -163,7 +161,8 @@ async def check_starred(context: AsyncBoltContext, message: dict, starredcontact
     # Check if the received message is in the list of starred items
     for item in result['items']:
         if 'message' in item and item['message']['ts'] == message['ts']:
-            await increase_counter("priority")
+            print("starred")
+            await increase_counter_based_on_user_id(user_id=bot_id)
 
 
 async def increase_counter_based_on_user_id(user_id: str):
