@@ -45,11 +45,42 @@ async def endpoint(req: Request):
     return await app_handler.handle(req)
 
 
-@bolt.command("/help-bolt-python")
-# or app.command(re.compile(r"/hello-.+"))(test_command)
+@bolt.command("/help-slack-bolt")
 async def command(ack, body):
     user_id = body["user_id"]
     await ack(f"I have alerted the authorities <@{user_id}>!")
+
+
+# Slash command that adds a contact
+@bolt.command("/add-contact")
+async def add_contact(ack, respond, commandadd):
+    # Acknowledge command request
+    await ack()
+
+    # Get user's ID from the command text
+    user_id = commandadd['text']
+
+    provided_id_has_correct_format = re.match("^U[A-Z0-9]{8,}$", user_id)
+    if provided_id_has_correct_format:
+        # Add user to contacts
+        contacts[user_id] = user_id
+        # Respond with success message
+        respond(f"User {user_id} added to contacts.")
+    else:
+        respond("Invalid format. Please provide a valid Slack User ID.")
+
+
+# Slash command that retrieves a contact
+@bolt.command("/get-contact")
+async def get_contact(ack, respond, commandget):
+    # Acknowledge command request
+    await ack()
+
+    user_id = commandget['text']
+    if user_id in contacts:
+        respond(f"Contact found for User ID: {contacts[user_id]}")
+    else:
+        respond(f"No contact found for User ID: {user_id}")
 
 
 async def increase_counter(message_type: str):
