@@ -45,6 +45,13 @@ async def endpoint(req: Request):
     return await app_handler.handle(req)
 
 
+@bolt.command("/help-bolt-python")
+# or app.command(re.compile(r"/hello-.+"))(test_command)
+async def command(ack, body):
+    user_id = body["user_id"]
+    await ack(f"I have alerted the authorities <@{user_id}>!")
+
+
 async def increase_counter(message_type: str):
     now = datetime.datetime.now()
     formatted_date = now.strftime("%Y-%m-%d")
@@ -55,7 +62,7 @@ async def increase_counter(message_type: str):
         new_data = {
             "msg_date": formatted_date,
             "normal": 0,
-            "important": 0,
+            "priority": 0,
             "urgent": 0
         }
         await collection.insert_one(new_data)
@@ -69,7 +76,7 @@ async def increase_counter(message_type: str):
         print(f"{message_type} is not a valid key in the document")
 
 
-@bolt.message(re.compile("(asap|help|urgent)", re.I))
+@bolt.message(re.compile("(asap|help|critical)", re.I))
 async def message_urgent(message, say):
     await say(
         blocks=[
@@ -88,8 +95,8 @@ async def message_urgent(message, say):
     await increase_counter('urgent')
 
 
-@bolt.message(re.compile("(important|priority|soon)", re.I))
-async def message_important(message, say):
+@bolt.message(re.compile("(important|urgent|soon)", re.I))
+async def message_priority(message, say):
     await say(
         blocks=[
             {
@@ -104,30 +111,33 @@ async def message_important(message, say):
         ],
         text=f"Please record at this time <@{message['user']}>!"
     )
-    await increase_counter('important')
+    await increase_counter('priority')
 
 
+'''
 @bolt.message(re.compile("(hi|hello|hey)", re.I))
 async def say_hello_regex(say, context):
     greeting = context['matches'][0]
     await say(f"{greeting}, how are you?")
     user_id = "test"
-    await increase_counter_based_on_user_id(user_id=user_id)
+    # await increase_counter_based_on_user_id(user_id=user_id)
+'''
 
 
-async def check_starred(context: AsyncBoltContext, message: dict, clientweb: AsyncWebClient):
+@bolt.message(re.compile("(hi|hello|hey)", re.I))
+async def check_starred(context: AsyncBoltContext, message: dict, starredcontacts: AsyncWebClient):
     bot_id = context.bot_user_id
     # Get the list of items starred by the bot
-    result = await clientweb.stars_list(user=bot_id)
+    result = await starredcontacts.stars_list(user=bot_id)
     # Check if the received message is in the list of starred items
     for item in result['items']:
         if 'message' in item and item['message']['ts'] == message['ts']:
-            await increase_counter_based_on_user_id(user_id=bot_id)
+            await increase_counter("priority")
 
 
 async def increase_counter_based_on_user_id(user_id: str):
     if user_id in contacts.keys():
-        await increase_counter("important")
+        await increase_counter("priority")
     else:
         await increase_counter("normal")
 
