@@ -8,6 +8,8 @@ from motor import motor_asyncio
 from slack_bolt.adapter.fastapi.async_handler import AsyncSlackRequestHandler
 from slack_bolt.adapter.socket_mode.async_handler import AsyncSocketModeHandler
 from slack_bolt.async_app import AsyncApp
+from slack_bolt.context.async_context import AsyncBoltContext
+from slack_sdk.web.async_client import AsyncWebClient
 
 load_dotenv()  # read local .env file
 
@@ -113,6 +115,16 @@ async def say_hello_regex(say, context):
     await increase_counter_based_on_user_id(user_id=user_id)
 
 
+async def check_starred(context: AsyncBoltContext, message: dict, clientweb: AsyncWebClient):
+    bot_id = context.bot_user_id
+    # Get the list of items starred by the bot
+    result = await clientweb.stars_list(user=bot_id)
+    # Check if the received message is in the list of starred items
+    for item in result['items']:
+        if 'message' in item and item['message']['ts'] == message['ts']:
+            await increase_counter_based_on_user_id(user_id=bot_id)
+
+
 async def increase_counter_based_on_user_id(user_id: str):
     if user_id in contacts.keys():
         await increase_counter("important")
@@ -124,6 +136,8 @@ async def main():
     handler = AsyncSocketModeHandler(bolt, os.environ["POETRY_SCM_XAPP_TOKEN"])
     await handler.start_async()
 
+
 if __name__ == "__main__":
     import asyncio
+
     asyncio.run(main())
