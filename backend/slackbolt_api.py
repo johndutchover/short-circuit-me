@@ -28,7 +28,7 @@ my_contacts = {}
 bots_clientid = os.getenv('POETRY_SCM_BOT_CLIENTID')
 
 # Users who are allowed to use the commands
-allowed_users = ["USLACKBOT", bots_clientid]
+allowed_users = ["USLACKBOT", bots_clientid]  # TODO does not appear to be used
 
 # MongoDB connection string
 uri = os.environ.get("POETRY_MONGODB_URL")
