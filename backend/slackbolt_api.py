@@ -23,7 +23,7 @@ api = FastAPI()
 app_handler = AsyncSlackRequestHandler(bolt)
 
 # Initialize a contact dictionary
-contacts = {}
+my_contacts = {}
 
 bots_clientid = os.getenv('POETRY_SCM_BOT_CLIENTID')
 
@@ -45,25 +45,26 @@ async def endpoint(req: Request):
     return await app_handler.handle(req)
 
 
+# Slash command help-slack-bolt
 @bolt.command("/help-slack-bolt")
-async def command(ack, body):
+async def slash_help(ack, body):
     user_id = body["user_id"]
     await ack(f"Request for help has been sent <@{user_id}>!")
 
 
-# Slash command that adds a contact
+# Slash command add-contact
 @bolt.command("/add-contact")
 async def add_contact(ack, respond, commandadd):
     # Acknowledge command request
-    await ack()
+    ack()
 
     # Get user's ID from the command text
-    user_id = commandadd['text']
+    user_id = await commandadd['text']
 
     provided_id_has_correct_format = re.match("^U[A-Z0-9]{8,}$", user_id)
     if provided_id_has_correct_format:
         # Add user to contacts
-        contacts[user_id] = user_id
+        my_contacts[user_id] = user_id
         # Respond with success message
         respond(f"User {user_id} added to contacts.")
     else:
@@ -74,11 +75,11 @@ async def add_contact(ack, respond, commandadd):
 @bolt.command("/get-contact")
 async def get_contact(ack, respond, commandget):
     # Acknowledge command request
-    await ack()
+    ack()
 
-    user_id = commandget['text']
-    if user_id in contacts:
-        respond(f"Contact found for User ID: {contacts[user_id]}")
+    user_id = await commandget['text']
+    if user_id in my_contacts:
+        respond(f"Contact found for User ID: {my_contacts[user_id]}")
     else:
         respond(f"No contact found for User ID: {user_id}")
 
@@ -166,7 +167,7 @@ async def check_starred(context: AsyncBoltContext, message: dict, starredcontact
 
 
 async def increase_counter_based_on_user_id(user_id: str):
-    if user_id in contacts.keys():
+    if user_id in my_contacts.keys():
         await increase_counter("priority")
     else:
         await increase_counter("normal")
