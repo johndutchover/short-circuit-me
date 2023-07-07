@@ -40,6 +40,32 @@ db = client["messagesdb"]
 collection = db["slackcoll"]
 
 
+# Define a button click action
+@bolt.action("click_button_notify")
+async def handle_button_click(ack, body):
+    # Acknowledge the action request
+    ack()
+
+    # Extract information from the action payload
+    user_id = body["user"]["id"]
+
+    # Perform any desired action here
+    # For example, you can send a message in response to the button click
+    await bolt.client.chat_postMessage(
+        channel=user_id,
+        text="Notify Button clicked!",
+        blocks=[
+            {
+                "type": "section",
+                "text": {
+                    "type": "plain_text",
+                    "text": "Your request has been sent!",
+                },
+            }
+        ],
+    )
+
+
 @api.post("/slack/events")
 async def endpoint(req: Request):
     return await app_handler.handle(req)
@@ -48,7 +74,7 @@ async def endpoint(req: Request):
 # Slash command help-slack-bolt
 @bolt.command("/help-slack-bolt")
 async def slash_help(ack, body):
-    user_id = body["user_id"]
+    user_id = await body["user_id"]
     await ack(f"Request for help has been sent <@{user_id}>!")
 
 
@@ -118,7 +144,7 @@ async def message_urgent(message, say):
                 "accessory": {
                     "type": "button",
                     "text": {"type": "plain_text", "text": "Click to escalate"},
-                    "action_id": "button_click"
+                    "action_id": "click_button_notify"
                 }
             }
         ],
@@ -137,7 +163,7 @@ async def message_priority(message, say):
                 "accessory": {
                     "type": "button",
                     "text": {"type": "plain_text", "text": "Click to record a message"},
-                    "action_id": "button_click"
+                    "action_id": "click_button_notify"
                 }
             }
         ],
@@ -150,8 +176,7 @@ async def message_priority(message, say):
 async def say_hello_regex(say, context):
     greeting = context['matches'][0]
     await say(f"{greeting}, how are you?")
-    user_id = "U059Y617831"
-    await increase_counter_based_on_user_id(user_id=user_id)
+    await increase_counter("normal")
 
 
 @bolt.event("message")
