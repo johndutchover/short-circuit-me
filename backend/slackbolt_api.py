@@ -28,7 +28,7 @@ my_contacts = {}
 bots_clientid = os.getenv('POETRY_SCM_BOT_CLIENTID')
 
 # Users who are allowed to use the commands
-allowed_users = ["USLACKBOT", bots_clientid]  # TODO does not appear to be used
+allowed_bot_users = ["USLACKBOT", bots_clientid]
 
 # MongoDB connection string
 uri = os.environ.get("POETRY_MONGODB_URL")
@@ -154,16 +154,16 @@ async def say_hello_regex(say, context):
 
 # Slack COMMAND Handler
 @bolt.command("/help-slack-bolt")
-async def slash_help(ack, body):
-    user_id = await body["user_id"]
+async def slash_help(ack, body, say):
+    user_id = body["user_id"]
     await ack(f"Request for help has been sent <@{user_id}>!")
 
     # Check if the user is allowed to use the command
-    if command['user_id'] in allowed_users:
+    if user_id in allowed_bot_users:
         # Respond to the command
-        await say(f"Hello, <@{command['user_id']}>")
+        await say(f"Hello, <@{user_id}>")
     else:
-        await say(f"Sorry, <@{command['user_id']}>, you are not allowed to use this command.")
+        await say(f"Sorry, <@{user_id}>, you are not allowed to use this command.")
 
 
 # Slack COMMAND Handler
