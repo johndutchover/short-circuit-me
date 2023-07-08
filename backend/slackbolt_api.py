@@ -8,8 +8,6 @@ from motor import motor_asyncio
 from slack_bolt.adapter.fastapi.async_handler import AsyncSlackRequestHandler
 from slack_bolt.adapter.socket_mode.async_handler import AsyncSocketModeHandler
 from slack_bolt.async_app import AsyncApp
-from slack_bolt.context.async_context import AsyncBoltContext
-from slack_sdk.web.async_client import AsyncWebClient
 
 load_dotenv()  # read local .env file
 
@@ -48,7 +46,7 @@ async def endpoint(req: Request):
 
 # Slack ACTION Handler
 @bolt.action("click_button_notify")
-async def handle_button_click(ack, body):  # method is a callback for Slack button action
+async def handle_button_escalate(ack, body):  # method is a callback for Slack button action
     # Acknowledge the action request
     ack()
 
@@ -71,8 +69,33 @@ async def handle_button_click(ack, body):  # method is a callback for Slack butt
     )
 
 
+# Slack ACTION Handler
+@bolt.action("click_button_monday")
+async def handle_button_monday(ack, body):  # method is a callback for Slack button action
+    # Acknowledge the action request
+    ack()
+
+    # Extract information from the action payload
+    user_id = body["user"]["id"]
+
+    # perform action
+    await bolt.client.chat_postMessage(
+        channel=user_id,
+        text="Great, it will be escalated on Monday!",
+        blocks=[
+            {
+                "type": "section",
+                "text": {
+                    "type": "plain_text",
+                    "text": "Your request has been sent!",
+                },
+            }
+        ],
+    )
+
+
 # Slack EVENT Handler
-@bolt.event("message")
+@bolt.event(re.compile("message.im", re.I))
 async def message_escalate(message, say):
     await say(
         blocks=[
@@ -86,32 +109,19 @@ async def message_escalate(message, say):
                 }
             }
         ],
-        text=f"Message has been escalated <@{message['user']}>!"
+        text=f"Bolt event has been escalated <@{message['user']}>!"
     )
     await increase_counter('urgent')
 
 
-# Slack EVENT Handler
-@bolt.event("message")
-async def check_starred(context: AsyncBoltContext, message: dict, starredcontacts: AsyncWebClient):
-    bot_id = context.bot_user_id
-    # Get the list of items starred by the bot
-    result = await starredcontacts.stars_list(user=bot_id)
-    # Check if the received message is in the list of starred items
-    for item in result['items']:
-        if 'message' in item and item['message']['ts'] == message['ts']:
-            print("starred")
-            await increase_counter_based_on_user_id(user_id=bot_id)
-
-
 # Slack MESSAGE Handler: urgent
-@bolt.message(re.compile("(asap|help|critical)", re.I))
+@bolt.message(re.compile("(asap|critical|urgent)", re.I))
 async def message_urgent(message, say):
     await say(
         blocks=[
             {
                 "type": "section",
-                "text": {"type": "mrkdwn", "text": f"Do you need help <@{message['user']}>?"},
+                "text": {"type": "mrkdwn", "text": f"Do you need urgent help <@{message['user']}>?"},
                 "accessory": {
                     "type": "button",
                     "text": {"type": "plain_text", "text": "Click to escalate"},
@@ -125,7 +135,7 @@ async def message_urgent(message, say):
 
 
 # Slack MESSAGE Handler: priority
-@bolt.message(re.compile("(important|urgent|soon)", re.I))
+@bolt.message(re.compile("(important|help|soon)", re.I))
 async def message_priority(message, say):
     await say(
         blocks=[
@@ -134,8 +144,8 @@ async def message_priority(message, say):
                 "text": {"type": "mrkdwn", "text": f"<@{message['user']}> Can it wait until Monday?"},
                 "accessory": {
                     "type": "button",
-                    "text": {"type": "plain_text", "text": "Click to record a message"},
-                    "action_id": "click_button_notify"
+                    "text": {"type": "plain_text", "text": "If not, click to escalate."},
+                    "action_id": "click_button_monday"
                 }
             }
         ],
@@ -146,13 +156,13 @@ async def message_priority(message, say):
 
 # Slack MESSAGE Handler: normal
 @bolt.message(re.compile("(hi|hello|hey)", re.I))
-async def say_hello_regex(say, context):
+async def message_normal(say, context):
     greeting = context['matches'][0]
     await say(f"{greeting}, how are you?")
     await increase_counter("normal")
 
 
-# Slack COMMAND Handler
+# Slack COMMAND Handler: help-slack-bolt
 @bolt.command("/help-slack-bolt")
 async def slash_help(ack, body, say):
     user_id = body["user_id"]
@@ -166,7 +176,7 @@ async def slash_help(ack, body, say):
         await say(f"Sorry, <@{user_id}>, you are not allowed to use this command.")
 
 
-# Slack COMMAND Handler
+# Slack COMMAND Handler: add-contact
 @bolt.command("/add-contact")
 async def add_contact(ack, respond, commandadd):
     # Acknowledge command request
@@ -185,7 +195,7 @@ async def add_contact(ack, respond, commandadd):
         respond("Invalid format. Please provide a valid Slack User ID.")
 
 
-# Slack COMMAND Handler
+# Slack COMMAND Handler: get-contact
 @bolt.command("/get-contact")
 async def get_contact(ack, respond, commandget):
     # Acknowledge command request
