@@ -6,6 +6,9 @@
 app = "shortcircuitme"
 primary_region = "ewr"
 
+[build]
+  ignorefile = "./.dockerignore"
+
 [http_service]
   internal_port = 8501
   force_https = true
