@@ -1,3 +1,4 @@
+import asyncio
 import datetime
 import os
 import re
@@ -29,7 +30,7 @@ bots_clientid = os.getenv('POETRY_SCM_BOT_CLIENTID')
 allowed_bot_users = ["USLACKBOT", bots_clientid]
 
 # MongoDB connection string
-uri = os.environ.get("POETRY_MONGODB_URL")
+uri = os.environ["POETRY_MONGODB_URL"]
 # Set the Stable API version when creating a new client
 client = motor_asyncio.AsyncIOMotorClient(uri)
 # database name in MongoDB
@@ -42,6 +43,13 @@ collection = db["slackcoll"]
 @api.post("/slack/events")
 async def endpoint(req: Request):
     return await app_handler.handle(req)
+
+
+# Listen for event from Events API
+@bolt.event("app_mention")
+async def mention_handler(body, say):
+    user = body['event']['user']
+    await say(f'Hello, <@{user}>!')
 
 
 # Slack ACTION Handler
@@ -94,27 +102,7 @@ async def handle_button_monday(ack, body):  # method is a callback for Slack but
     )
 
 
-# Slack EVENT Handler
-@bolt.event(re.compile("message.im", re.I))
-async def message_escalate(message, say):
-    await say(
-        blocks=[
-            {
-                "type": "section",
-                "text": {"type": "mrkdwn", "text": f"Do you need to escalate this <@{message['user']}>?"},
-                "accessory": {
-                    "type": "button",
-                    "text": {"type": "plain_text", "text": "Click to escalate"},
-                    "action_id": "click_button_notify"
-                }
-            }
-        ],
-        text=f"Bolt event has been escalated <@{message['user']}>!"
-    )
-    await increase_counter('urgent')
-
-
-# Slack MESSAGE Handler: urgent
+# Slack MESSAGE Handler: convenience method to listen for `message` events (urgent)
 @bolt.message(re.compile("(asap|critical|urgent)", re.I))
 async def message_urgent(message, say):
     await say(
@@ -134,9 +122,15 @@ async def message_urgent(message, say):
     await increase_counter('urgent')
 
 
-# Slack MESSAGE Handler: priority
+# Slack MESSAGE Handler: convenience method to listen for `message` events (priority)
 @bolt.message(re.compile("(important|help|soon)", re.I))
 async def message_priority(message, say):
+    channel_type = message["channel_type"]
+    if channel_type != "im":
+        print("not direct message")
+        return
+
+    dm_channel = message["channel"]
     await say(
         blocks=[
             {
@@ -149,12 +143,12 @@ async def message_priority(message, say):
                 }
             }
         ],
-        text=f"Please record at this time <@{message['user']}>!"
+        text=f"Recorded in {dm_channel} <@{message['user']}>!"
     )
     await increase_counter('priority')
 
 
-# Slack MESSAGE Handler: normal
+# Slack MESSAGE Handler: convenience method to listen for `message` events (normal)
 @bolt.message(re.compile("(hi|hello|hey)", re.I))
 async def message_normal(say, context):
     greeting = context['matches'][0]
@@ -162,7 +156,7 @@ async def message_normal(say, context):
     await increase_counter("normal")
 
 
-# Slack COMMAND Handler: help-slack-bolt
+# Slack COMMAND Handler: listen for help-slack-bolt
 @bolt.command("/help-slack-bolt")
 async def slash_help(ack, body, say):
     user_id = body["user_id"]
@@ -176,7 +170,7 @@ async def slash_help(ack, body, say):
         await say(f"Sorry, <@{user_id}>, you are not allowed to use this command.")
 
 
-# Slack COMMAND Handler: add-contact
+# Slack COMMAND Handler: listen for add-contact
 @bolt.command("/add-contact")
 async def add_contact(ack, respond, commandadd):
     # Acknowledge command request
@@ -195,7 +189,7 @@ async def add_contact(ack, respond, commandadd):
         respond("Invalid format. Please provide a valid Slack User ID.")
 
 
-# Slack COMMAND Handler: get-contact
+# Slack COMMAND Handler: listen for get-contact
 @bolt.command("/get-contact")
 async def get_contact(ack, respond, commandget):
     # Acknowledge command request
@@ -233,13 +227,6 @@ async def increase_counter(message_type: str):
         print(f"{message_type} is not a valid key in the document")
 
 
-async def increase_counter_based_on_user_id(user_id: str):
-    if user_id in my_contacts.keys():
-        await increase_counter("priority")
-    else:
-        await increase_counter("normal")
-
-
 # starts the Socket Mode handler using the AsyncApp instance
 async def main():
     handler = AsyncSocketModeHandler(bolt, os.environ["POETRY_SCM_XAPP_TOKEN"])
@@ -247,6 +234,5 @@ async def main():
 
 
 if __name__ == "__main__":
-    import asyncio
 
     asyncio.run(main())
