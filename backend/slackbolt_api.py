@@ -52,6 +52,20 @@ async def mention_handler(body, say):
     await say(f'Hello, <@{user}>!')
 
 
+# Listen for event from Events API
+@bolt.event("messages.mpim")
+async def mention_handler(body, say):
+    user = body['event']['user']
+    await say(f'Multi-party Hello, <@{user}>!')
+
+
+# Listen for event from Events API
+@bolt.event("messages.im")
+async def mention_handler(body, say):
+    user = body['event']['user']
+    await say(f'DM Hello, <@{user}>!')
+
+
 # Slack ACTION Handler
 @bolt.action("click_button_notify")
 async def handle_button_escalate(ack, body):  # method is a callback for Slack button action
@@ -125,12 +139,6 @@ async def message_urgent(message, say):
 # Slack MESSAGE Handler: convenience method to listen for `message` events (priority)
 @bolt.message(re.compile("(important|help|soon)", re.I))
 async def message_priority(message, say):
-    channel_type = message["channel_type"]
-    if channel_type != "im":
-        print("not direct message")
-        return
-
-    dm_channel = message["channel"]
     await say(
         blocks=[
             {
@@ -143,7 +151,7 @@ async def message_priority(message, say):
                 }
             }
         ],
-        text=f"Recorded in {dm_channel} <@{message['user']}>!"
+        text=f"<@{message['user']}> recorded!"
     )
     await increase_counter('priority')
 
