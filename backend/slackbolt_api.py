@@ -70,7 +70,7 @@ async def mention_handler(body, say):
 @bolt.action("click_button_notify")
 async def handle_button_escalate(ack, body):  # method is a callback for Slack button action
     # Acknowledge the action request
-    ack()
+    await ack()
 
     # Extract information from the action payload
     user_id = body["user"]["id"]
@@ -95,7 +95,7 @@ async def handle_button_escalate(ack, body):  # method is a callback for Slack b
 @bolt.action("click_button_monday")
 async def handle_button_monday(ack, body):  # method is a callback for Slack button action
     # Acknowledge the action request
-    ack()
+    await ack()
 
     # Extract information from the action payload
     user_id = body["user"]["id"]
@@ -182,7 +182,7 @@ async def slash_help(ack, body, say):
 @bolt.command("/add-contact")
 async def add_contact(ack, respond, commandadd):
     # Acknowledge command request
-    ack()
+    await ack()
 
     # Get user's ID from the command text
     user_id = await commandadd['text']
@@ -192,22 +192,22 @@ async def add_contact(ack, respond, commandadd):
         # Add user to contacts
         my_contacts[user_id] = user_id
         # Respond with success message
-        respond(f"User {user_id} added to contacts.")
+        await respond(f"User {user_id} added to contacts.")
     else:
-        respond("Invalid format. Please provide a valid Slack User ID.")
+        await respond("Invalid format. Please provide a valid Slack User ID.")
 
 
 # Slack COMMAND Handler: listen for get-contact
 @bolt.command("/get-contact")
 async def get_contact(ack, respond, commandget):
     # Acknowledge command request
-    ack()
+    await ack()
 
     user_id = await commandget['text']
     if user_id in my_contacts:
-        respond(f"Contact found for User ID: {my_contacts[user_id]}")
+        await respond(f"Contact found for User ID: {my_contacts[user_id]}")
     else:
-        respond(f"No contact found for User ID: {user_id}")
+        await respond(f"No contact found for User ID: {user_id}")
 
 
 # Database Function
