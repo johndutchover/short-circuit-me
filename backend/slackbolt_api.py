@@ -67,52 +67,88 @@ async def mention_handler(body, say):
 
 
 # Slack ACTION Handler
-@bolt.action("click_button_notify")
+@bolt.action("action_button_notify")
 async def handle_button_escalate(ack, body):  # method is a callback for Slack button action
     # Acknowledge the action request
     await ack()
 
     # Extract information from the action payload
-    user_id = body["user"]["id"]
+    channel_id = body["channel"]["id"]  # Get the ID of the channel
 
     # perform action
     await bolt.client.chat_postMessage(
-        channel=user_id,
+        channel=channel_id,
         text="Notify Button clicked!",
         blocks=[
             {
+                "type": "divider",
+            },
+            {
                 "type": "section",
                 "text": {
-                    "type": "plain_text",
-                    "text": "Your request has been sent!",
+                    "type": "mrkdwn",
+                    "text": "*Choose one:*"
+                }
+            },
+            {
+                "type": "section",
+                "text": {
+                    "type": "mrkdwn",
+                    "text": "Escalate - it is urgent:"
                 },
+                "accessory": {
+                    "type": "button",
+                    "text": {
+                        "type": "plain_text",
+                        "text": "Escalate immediately",
+                    },
+                    "value": "click_button_urgent",
+                    "action_id": "click_button_urgent"
+                }
+            },
+            {
+                "type": "section",
+                "text": {
+                    "type": "mrkdwn",
+                    "text": "Important - but it can wait:"
+                },
+                "accessory": {
+                    "type": "button",
+                    "text": {
+                        "type": "plain_text",
+                        "text": "Notify tomorrow at 09:00",
+                    },
+                    "value": "click_button_important",
+                    "action_id": "click_button_important"
+                }
             }
         ],
     )
 
 
-# Slack ACTION Handler
-@bolt.action("click_button_monday")
-async def handle_button_monday(ack, body):  # method is a callback for Slack button action
-    # Acknowledge the action request
+@bolt.action("click_button_urgent")
+async def handle_urgent_button_click(ack, body):
+    # Acknowledge the button request
     await ack()
 
-    # Extract information from the action payload
-    user_id = body["user"]["id"]
-
-    # perform action
+    # Perform your action here for the "Escalate immediately" button
     await bolt.client.chat_postMessage(
-        channel=user_id,
-        text="Great, it will be escalated on Monday!",
-        blocks=[
-            {
-                "type": "section",
-                "text": {
-                    "type": "plain_text",
-                    "text": "Your request has been sent!",
-                },
-            }
-        ],
+        channel=body['user']['id'],
+        text="Urgent escalation in process!",
+        response_type="ephemeral"
+    )
+
+
+@bolt.action("click_button_important")
+async def handle_important_button_click(ack, body):
+    # Acknowledge the button request
+    await ack()
+
+    # Perform your action here for the "Notify tomorrow" button
+    await bolt.client.chat_postMessage(
+        channel=body['user']['id'],
+        text="Your issue will be addressed tomorrow.",
+        response_type="ephemeral"
     )
 
 
@@ -127,7 +163,7 @@ async def message_urgent(message, say):
                 "accessory": {
                     "type": "button",
                     "text": {"type": "plain_text", "text": "Click to escalate"},
-                    "action_id": "click_button_notify"
+                    "action_id": "action_button_notify"
                 }
             }
         ],
@@ -146,8 +182,8 @@ async def message_priority(message, say):
                 "text": {"type": "mrkdwn", "text": f"<@{message['user']}> Can it wait until Monday?"},
                 "accessory": {
                     "type": "button",
-                    "text": {"type": "plain_text", "text": "If not, click to escalate."},
-                    "action_id": "click_button_monday"
+                    "text": {"type": "plain_text", "text": "If not, click here."},
+                    "action_id": "action_button_notify"
                 }
             }
         ],
@@ -242,5 +278,4 @@ async def main():
 
 
 if __name__ == "__main__":
-
     asyncio.run(main())
