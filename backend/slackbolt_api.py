@@ -1,5 +1,6 @@
 import asyncio
 import datetime
+import logging
 import os
 import re
 
@@ -9,8 +10,11 @@ from motor import motor_asyncio
 from slack_bolt.adapter.fastapi.async_handler import AsyncSlackRequestHandler
 from slack_bolt.adapter.socket_mode.async_handler import AsyncSocketModeHandler
 from slack_bolt.async_app import AsyncApp
+from slack_sdk.errors import SlackApiError
 
 load_dotenv()  # read local .env file
+
+logger_slackbolt = logging.getLogger(__name__)
 
 bolt = AsyncApp(
     token=os.environ.get("POETRY_SCM_XOXB_TOKEN"),
@@ -144,12 +148,25 @@ async def handle_important_button_click(ack, body):
     # Acknowledge the button request
     await ack()
 
-    # Perform your action here for the "Notify tomorrow" button
-    await bolt.client.chat_postMessage(
-        channel=body['user']['id'],
-        text="Your issue will be addressed tomorrow.",
-        response_type="ephemeral"
-    )
+    # Create a timestamp for tomorrow at 8:40 AM
+    tomorrow = datetime.date.today() + datetime.timedelta(days=0)
+    scheduled_time = datetime.time(hour=8, minute=56)
+    schedule_timestamp = datetime.datetime.combine(tomorrow, scheduled_time).strftime('%s')
+
+    try:
+        # Call the chat.scheduleMessage method using the WebClient
+        result = await bolt.client.chat_scheduleMessage(
+            channel=body['user']['id'],
+            text=f"Your issue will be addressed on {schedule_timestamp}.",
+            response_type="ephemeral",
+            post_at=schedule_timestamp,
+            token=bolt.client.token
+        )
+        # Log the result
+        logger_slackbolt.info(result)
+
+    except SlackApiError as e:
+        logger_slackbolt.error("Error scheduling message: {}".format(e))
 
 
 # Slack MESSAGE Handler: convenience method to listen for `message` events (urgent)
@@ -179,10 +196,10 @@ async def message_priority(message, say):
         blocks=[
             {
                 "type": "section",
-                "text": {"type": "mrkdwn", "text": f"<@{message['user']}> Can it wait until Monday?"},
+                "text": {"type": "mrkdwn", "text": f"<@{message['user']}> Important message menu:"},
                 "accessory": {
                     "type": "button",
-                    "text": {"type": "plain_text", "text": "If not, click here."},
+                    "text": {"type": "plain_text", "text": "Click here."},
                     "action_id": "action_button_notify"
                 }
             }
