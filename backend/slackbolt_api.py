@@ -148,9 +148,9 @@ async def handle_important_button_click(ack, body):
     # Acknowledge the button request
     await ack()
 
-    # Create a timestamp for tomorrow at 8:40 AM
+    # Create a timestamp for future date and time
     tomorrow = datetime.date.today() + datetime.timedelta(days=0)
-    scheduled_time = datetime.time(hour=8, minute=56)
+    scheduled_time = datetime.time(hour=9, minute=15)
     schedule_timestamp = datetime.datetime.combine(tomorrow, scheduled_time).strftime('%s')
 
     try:
@@ -199,7 +199,7 @@ async def message_priority(message, say):
                 "text": {"type": "mrkdwn", "text": f"<@{message['user']}> Important message menu:"},
                 "accessory": {
                     "type": "button",
-                    "text": {"type": "plain_text", "text": "Click here."},
+                    "text": {"type": "plain_text", "text": "Open Escalation Menu"},
                     "action_id": "action_button_notify"
                 }
             }
