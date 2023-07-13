@@ -149,7 +149,7 @@ async def handle_important_button_click(ack, body):
     await ack()
 
     # Calculate the timestamp for 5 minutes from now
-    scheduled_time = datetime.datetime.now() + datetime.timedelta(minutes=5)
+    scheduled_time = datetime.datetime.now() + datetime.timedelta(days=1)
     schedule_timestamp = scheduled_time.strftime('%s')
 
     # Convert timestamp to datetime object
@@ -174,7 +174,7 @@ async def handle_important_button_click(ack, body):
                     "type": "section",
                     "text": {
                         "type": "mrkdwn",
-                        "text": "Remind me tomorrow at 9AM."
+                        "text": f"Remind me at {formatted_time}."
                     },
                     "accessory": {
                         "type": "button",
@@ -187,7 +187,7 @@ async def handle_important_button_click(ack, body):
                     }
                 }
             ],
-            user="YOUR_BOT_USER_ID"
+            user=bots_clientid
         )
         # Log the result
         logger_slackbolt.info(result)
