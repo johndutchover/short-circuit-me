@@ -120,7 +120,7 @@ async def handle_button_escalate(ack, body):  # method is a callback for Slack b
                     "type": "button",
                     "text": {
                         "type": "plain_text",
-                        "text": "Notify tomorrow at 09:00",
+                        "text": "Remind me tomorrow at 09:00",
                     },
                     "value": "click_button_important",
                     "action_id": "click_button_important"
@@ -148,24 +148,52 @@ async def handle_important_button_click(ack, body):
     # Acknowledge the button request
     await ack()
 
-    # Create a timestamp for future date and time
-    tomorrow = datetime.date.today() + datetime.timedelta(days=0)
-    scheduled_time = datetime.time(hour=9, minute=15)
-    schedule_timestamp = datetime.datetime.combine(tomorrow, scheduled_time).strftime('%s')
+    # Calculate the timestamp for 5 minutes from now
+    scheduled_time = datetime.datetime.now() + datetime.timedelta(minutes=5)
+    schedule_timestamp = scheduled_time.strftime('%s')
+
+    # Convert timestamp to datetime object
+    scheduled_datetime = datetime.datetime.fromtimestamp(int(schedule_timestamp))
+
+    # Convert datetime to human-readable format
+    formatted_time = scheduled_datetime.strftime('%Y-%m-%d %H:%M:%S')
+
+    # Extract the channel ID from the incoming request or any other relevant information
+    channel_id = body['channel']['id']
 
     try:
         # Call the chat.scheduleMessage method using the WebClient
         result = await bolt.client.chat_scheduleMessage(
-            channel=body['user']['id'],
-            text=f"Your issue will be addressed on {schedule_timestamp}.",
+            channel=channel_id,
+            text="Choose when to be reminded:",
             response_type="ephemeral",
             post_at=schedule_timestamp,
-            token=bolt.client.token
+            token=bolt.client.token,
+            blocks=[
+                {
+                    "type": "section",
+                    "text": {
+                        "type": "mrkdwn",
+                        "text": "Remind me tomorrow at 9AM."
+                    },
+                    "accessory": {
+                        "type": "button",
+                        "text": {
+                            "type": "plain_text",
+                            "text": "Important"
+                        },
+                        "action_id": "click_button_important",
+                        "style": "primary"
+                    }
+                }
+            ],
+            user="YOUR_BOT_USER_ID"
         )
         # Log the result
         logger_slackbolt.info(result)
 
     except SlackApiError as e:
+        # Log the error
         logger_slackbolt.error("Error scheduling message: {}".format(e))
 
 
