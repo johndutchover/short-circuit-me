@@ -51,9 +51,13 @@ async def endpoint(req: Request):
 
 # Listen for event from Events API
 @bolt.event("app_mention")
-async def mention_handler(body, say):
+async def mention_handler(body):
     user = body['event']['user']
-    await say(f'Hello, <@{user}>!')
+    await bolt.client.chat_postEphemeral(
+        channel=body['event']['channel'],
+        user=user,
+        text=f'Hello, <@{user}>!'
+    )
 
 
 # Listen for event from Events API
@@ -98,13 +102,13 @@ async def handle_button_escalate(ack, body):  # method is a callback for Slack b
                 "type": "section",
                 "text": {
                     "type": "mrkdwn",
-                    "text": "Escalate - it is urgent:"
+                    "text": "Escalate ->"
                 },
                 "accessory": {
                     "type": "button",
                     "text": {
                         "type": "plain_text",
-                        "text": "Escalate immediately",
+                        "text": "Immediately",
                     },
                     "value": "click_button_urgent",
                     "action_id": "click_button_urgent"
@@ -136,10 +140,10 @@ async def handle_urgent_button_click(ack, body):
     await ack()
 
     # Perform your action here for the "Escalate immediately" button
-    await bolt.client.chat_postMessage(
+    await bolt.client.chat_postEphemeral(
         channel=body['user']['id'],
-        text="Urgent escalation in process!",
-        response_type="ephemeral"
+        user=body['user']['id'],
+        text="Your message has been escalated!"
     )
 
 
@@ -148,25 +152,42 @@ async def handle_important_button_click(ack, body):
     # Acknowledge the button request
     await ack()
 
-    # Calculate the timestamp for 5 minutes from now
-    scheduled_time = datetime.datetime.now() + datetime.timedelta(days=1)
-    schedule_timestamp = scheduled_time.strftime('%s')
-
-    # Convert timestamp to datetime object
-    scheduled_datetime = datetime.datetime.fromtimestamp(int(schedule_timestamp))
-
-    # Convert datetime to human-readable format
-    formatted_time = scheduled_datetime.strftime('%Y-%m-%d %H:%M:%S')
-
-    # Extract the channel ID from the incoming request or any other relevant information
-    channel_id = body['channel']['id']
+    try:
+        # Send an ephemeral message to the user who clicked the button
+        await bolt.client.chat_postEphemeral(
+            channel=body['channel']['id'],
+            user=body['user']['id'],
+            text="Your message is important and will be escalated tomorrow."
+        )
+    except SlackApiError as e:
+        logger_slackbolt.error(f"Error in handle_important_button_click: {e}")
 
     try:
+        # Calculate the timestamp for 09:00 the next day
+        now = datetime.datetime.now()
+        scheduled_time = now.replace(hour=9, minute=0, second=0, microsecond=0) + datetime.timedelta(days=1)
+
+        # If it's already past 09:00 today, this will still schedule for 09:00 tomorrow.
+        # If it's not yet 09:00 today, this will schedule for 09:00 today,
+        # so we add one day to make sure it's always tomorrow.
+        if now.hour >= 9:
+            scheduled_time += datetime.timedelta(days=1)
+
+        schedule_timestamp = scheduled_time.strftime('%s')
+
+        # Convert timestamp to datetime object
+        scheduled_datetime = datetime.datetime.fromtimestamp(int(schedule_timestamp))
+
+        # Convert datetime to human-readable format
+        formatted_time = scheduled_datetime.strftime('%Y-%m-%d %H:%M:%S')
+
+        # Extract the channel ID from the incoming request or any other relevant information
+        channel_id = body['channel']['id']
+
         # Call the chat.scheduleMessage method using the WebClient
         result = await bolt.client.chat_scheduleMessage(
             channel=channel_id,
             text="Choose when to be reminded:",
-            response_type="ephemeral",
             post_at=schedule_timestamp,
             token=bolt.client.token,
             blocks=[
@@ -174,16 +195,7 @@ async def handle_important_button_click(ack, body):
                     "type": "section",
                     "text": {
                         "type": "mrkdwn",
-                        "text": f"Remind me at {formatted_time}."
-                    },
-                    "accessory": {
-                        "type": "button",
-                        "text": {
-                            "type": "plain_text",
-                            "text": "Important"
-                        },
-                        "action_id": "click_button_important",
-                        "style": "primary"
+                        "text": f"Reminder set for {formatted_time} UTC."
                     }
                 }
             ],
@@ -199,40 +211,57 @@ async def handle_important_button_click(ack, body):
 
 # Slack MESSAGE Handler: convenience method to listen for `message` events (urgent)
 @bolt.message(re.compile("(asap|critical|urgent)", re.I))
-async def message_urgent(message, say):
-    await say(
-        blocks=[
+async def message_urgent(message):
+    user = message['user']
+    channel = message['channel']
+    await bolt.client.chat_postEphemeral(
+        channel=channel,
+        user=user,
+        text=f"Would you like to escalate this <@{user}>?",
+        attachments=[
             {
-                "type": "section",
-                "text": {"type": "mrkdwn", "text": f"Do you need urgent help <@{message['user']}>?"},
-                "accessory": {
-                    "type": "button",
-                    "text": {"type": "plain_text", "text": "Click to escalate"},
-                    "action_id": "action_button_notify"
-                }
+                "fallback": "Upgrade your Slack client to use messages like these.",
+                "color": "#3AA3E3",
+                "attachment_type": "default",
+                "callback_id": "action_button_notify",
+                "actions": [
+                    {
+                        "name": "action",
+                        "text": "Click to escalate",
+                        "type": "button",
+                        "value": "click_button_urgent"
+                    }
+                ]
             }
-        ],
-        text=f"Hey there <@{message['user']}>!"
+        ]
     )
     await increase_counter('urgent')
 
 
 # Slack MESSAGE Handler: convenience method to listen for `message` events (priority)
 @bolt.message(re.compile("(important|help|soon)", re.I))
-async def message_priority(message, say):
-    await say(
-        blocks=[
+async def message_priority(message):
+    user = message['user']
+    channel = message['channel']
+    await bolt.client.chat_postEphemeral(
+        channel=channel,
+        user=user,
+        attachments=[
             {
-                "type": "section",
-                "text": {"type": "mrkdwn", "text": f"<@{message['user']}> Important message menu:"},
-                "accessory": {
-                    "type": "button",
-                    "text": {"type": "plain_text", "text": "Open Escalation Menu"},
-                    "action_id": "action_button_notify"
-                }
+                "fallback": "Upgrade your Slack client to use messages like these.",
+                "color": "#3AA3E3",
+                "attachment_type": "default",
+                "callback_id": "action_button_notify",
+                "actions": [
+                    {
+                        "name": "action",
+                        "text": "Open Escalation Menu",
+                        "type": "button",
+                        "value": "click_button_important"
+                    }
+                ]
             }
-        ],
-        text=f"<@{message['user']}> recorded!"
+        ]
     )
     await increase_counter('priority')
 
