@@ -151,7 +151,6 @@ async def handle_urgent_button_click(ack, body):
 async def handle_important_button_click(ack, body):
     # Acknowledge the button request
     await ack()
-
     try:
         # Send an ephemeral message to the user who clicked the button
         await bolt.client.chat_postEphemeral(
@@ -159,10 +158,7 @@ async def handle_important_button_click(ack, body):
             user=body['user']['id'],
             text="Your message is important and will be escalated tomorrow."
         )
-    except SlackApiError as e:
-        logger_slackbolt.error(f"Error in handle_important_button_click: {e}")
 
-    try:
         # Calculate the timestamp for 09:00 the next day
         now = datetime.datetime.now()
         scheduled_time = now.replace(hour=9, minute=0, second=0, microsecond=0) + datetime.timedelta(days=1)
@@ -203,10 +199,9 @@ async def handle_important_button_click(ack, body):
         )
         # Log the result
         logger_slackbolt.info(result)
-
     except SlackApiError as e:
         # Log the error
-        logger_slackbolt.error("Error scheduling message: {}".format(e))
+        logger_slackbolt.error(f"Error in handle_important_button_click: {e}")
 
 
 # Slack MESSAGE Handler: convenience method to listen for `message` events (urgent)
