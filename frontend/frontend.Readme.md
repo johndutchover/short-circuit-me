@@ -3,6 +3,10 @@ Slack App: ShortCircuitMe
 
 ## Components
 
+Prerequisites include:
+- `.env` 
+- `.streamlit/secrets.toml`
+
 ### Streamlit
 
 #### Bokeh plots
