@@ -2,6 +2,8 @@
 Slack App: ShortCircuitMe
 
 ## Components
+Prerequisites include:
+- `.env`
 
 ### FastAPI
 - Endpoint for Slack events
