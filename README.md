@@ -7,7 +7,6 @@
 ```text
 ├── backend
 │ └── .dockerignore
-│ └── .env
 │ └── __init__.py
 │ └── backend.Readme.md
 │ └── Dockerfile
@@ -16,10 +15,6 @@
 │ └── pyproject.toml
 │ └── slackbolt_api.py
 │ └── start_bolt.sh
-├── frontend
-│ └── .streamlit
-    ├── secrets.toml
-│ └── .env
 │ └── pages
     ├── 1_app.py
     ├── __init__.py
@@ -32,19 +27,11 @@
 │ └── poetry.lock
 │ └── pyproject.toml
 │ └── start_streamlit.sh
-├── fullstack
-│ └── .streamlit
-    ├── secrets.toml
-│ └── pages
-    ├── 1_app.py
-    ├── __init__.py
 │ └── .dockerignore
-│ └── .env
 │ └── __init__.py
 │ └── Dockerfile
 │ └── fly.toml
 │ └── login.py
-│ └── message_counts.csv
 │ └── pyproject.toml
 │ └── login.py
 │ └── start.sh
@@ -62,16 +49,7 @@
 ├── short-circuit-me.code-workspace
 ```
 
-### Development Usage
-
-To run this file using poetry:
-
-```text
-poetry shell
-streamlit run streamlit_csv.py
-```
-
-To run this file:
+IDE notes:
 
 - from VSCode, use "Run Python File" instead of "Run Code" (properly activates venv)
 - from PyCharm...set Python interpreter to .venv/bin/python
