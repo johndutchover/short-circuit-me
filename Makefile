@@ -1,35 +1,17 @@
-# Makefile
+deploy-backend:
+	$(shell cd backend && flyctl deploy)
 
-# Build the application
-build:
-	docker build -t frontend scm-poetry/frontend
-	docker build -t backend scm-poetry/backend
+deploy-frontend:
+	$(shell cd frontend && flyctl deploy)
 
-build_front:
-	docker build -t frontend scm-poetry/frontend
+stop-frontend:
+	$(shell cd frontend && flyctl scale count 0 -y)
 
-build_back:
-	docker build -t backend scm-poetry/backend
+stop-backend:
+	$(shell cd backend && flyctl scale count 0 -y)
 
-run:
-	docker run --name backend -d -p 3000:3000 backend:latest
-	docker run --name frontend -d -p 8501:8501 frontend:latest
-	sleep 7
-	open http://localhost:8501
+start-frontend:
+	$(shell cd frontend && flyctl scale count 1 -y)
 
-run_front:
-	docker run --name frontend -d -p 8501:8501 frontend:latest
-
-run_back:
-	docker run --name backend -d -p 3000:3000 backend:latest
-
-stop:
-	docker stop backend
-	docker stop frontend
-
-start:
-	docker start backend
-	docker start frontend
-
-clean:
-	docker system prune -f
+start-backend:
+	$(shell cd backend && flyctl scale count 1 -y)
