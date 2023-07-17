@@ -393,8 +393,11 @@ $RECYCLE.BIN/
 *.lnk
 
 # End of https://www.toptal.com/developers/gitignore/api/git,vim,linux,macos,direnv,python,windows,visualstudiocode,pycharm+iml
+
 # project exclusions
+# streamlit secrets
 secrets.toml
+# fly ssh keys
 id
 id-cert.pub
 # End of project exclusions
