@@ -6,7 +6,7 @@
     },
     "features": {
         "app_home": {
-            "home_tab_enabled": true,
+            "home_tab_enabled": false,
             "messages_tab_enabled": true,
             "messages_tab_read_only_enabled": false
         },
@@ -16,66 +16,79 @@
         },
         "slash_commands": [
             {
-                "command": "/addcontact",
-                "description": "Add contact to dict",
-                "usage_hint": "[member ID]",
+                "command": "/help-slack-bolt",
+                "description": "request help",
                 "should_escape": false
             },
             {
-                "command": "/getcontact",
-                "description": "Check dict for contact",
-                "usage_hint": "[member ID]",
+                "command": "/add-contact",
+                "description": "Add a contact",
+                "usage_hint": "[Member ID]",
+                "should_escape": false
+            },
+            {
+                "command": "/get-contact",
+                "description": "Retrieve a contact",
+                "usage_hint": "[Member ID]",
                 "should_escape": false
             }
         ]
     },
     "oauth_config": {
         "scopes": {
+            "user": [
+                "groups:history",
+                "im:history",
+                "mpim:history",
+                "chat:write",
+                "channels:history",
+                "im:read"
+            ],
             "bot": [
                 "app_mentions:read",
                 "channels:history",
-                "channels:join",
-                "channels:manage",
-                "channels:read",
                 "chat:write",
                 "chat:write.customize",
                 "commands",
-                "files:read",
-                "files:write",
                 "groups:history",
                 "groups:read",
                 "groups:write",
                 "im:history",
                 "im:read",
                 "im:write",
-                "links:read",
-                "links:write",
                 "mpim:history",
                 "mpim:read",
                 "mpim:write",
                 "pins:read",
                 "pins:write",
-                "reactions:read",
-                "reactions:write",
-                "reminders:read",
-                "reminders:write",
-                "team:read",
                 "usergroups:read",
-                "usergroups:write",
                 "users.profile:read",
                 "users:read",
-                "users:write"
+                "users:write",
+                "metadata.message:read"
             ]
         }
     },
     "settings": {
         "event_subscriptions": {
+            "user_events": [
+                "channel_history_changed",
+                "group_history_changed",
+                "im_created",
+                "im_history_changed",
+                "message.channels",
+                "message.groups",
+                "message.im"
+            ],
             "bot_events": [
                 "app_mention",
+                "channel_history_changed",
+                "group_history_changed",
+                "im_history_changed",
                 "message.channels",
                 "message.groups",
                 "message.im",
-                "message.mpim"
+                "pin_added"
             ]
         },
         "interactivity": {

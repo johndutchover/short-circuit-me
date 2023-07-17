@@ -41,6 +41,9 @@ else:
     # Convert MongoDB documents to DataFrame
     df_messages = pd.DataFrame(list(collection.find()))
 
+    print(df_messages.head())  # Check the first few rows of the DataFrame
+    print(df_messages.info())  # Print information about the DataFrame
+
     # Only include documents where 'field1' is 'value1', and only include 'field2' and 'field3' in the output
     # df_messages = pd.DataFrame(list(collection.find({'field1': 'value1'}, {'field2': 1, 'field3': 1})))
 
@@ -73,10 +76,13 @@ else:
         print(df_messages.columns)
         st.table(df_messages)
 
+        # Convert msg_date to datetime format if needed
+        df_messages['msg_date'] = pd.to_datetime(df_messages['msg_date'])
+
         # Bokeh plot with a title and axis labels
-        p = figure(title="Bokeh plot", x_axis_label='Date', y_axis_label='Messages', x_axis_type="datetime")
+        p = figure(title="Bokeh plot of Messages", x_axis_label='Date', y_axis_label='Messages', x_axis_type="datetime")
         p.line(df_messages['msg_date'], df_messages['normal'], legend_label="Normal", color="green", line_width=2)
-        p.line(df_messages['msg_date'], df_messages['important'], legend_label="Important", color="orange",
+        p.line(df_messages['msg_date'], df_messages['priority'], legend_label="Priority", color="orange",
                line_width=2)
         p.line(df_messages['msg_date'], df_messages['urgent'], legend_label="Critical", color="red", line_width=2)
 
@@ -94,7 +100,7 @@ else:
         st.bokeh_chart(p, use_container_width=True)
 
         # Plot an area chart
-        st.area_chart(df_messages.set_index('msg_date')[['normal', 'important', 'urgent']])
+        st.area_chart(df_messages.set_index('msg_date')[['normal', 'priority', 'urgent']])
 
     except EmptyDataError:
         st.text('INFO: Database is empty')
