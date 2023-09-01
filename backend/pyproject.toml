@@ -6,7 +6,7 @@ authors = ["John Dutchover <johndutchover@users.noreply.github.com>"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
-python = "^3.10.12"
+python = "^3.10.13"
 fastapi = "^0.97.0"
 slack-bolt = "^1.18.0"
 pip-tools = "^6.13.0"
