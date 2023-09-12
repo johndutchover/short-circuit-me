@@ -11,8 +11,7 @@ from bokeh.plotting import figure
 from pandas.errors import EmptyDataError
 from pymongo import MongoClient
 
-"""
-This module provides frontend web functionality
+"""This module provides frontend web functionality
 
 Author: John Dutchover
 
@@ -32,7 +31,6 @@ uri = os.environ.get("POETRY_MONGODB_URL")
 st.set_page_config(page_title="Dashboard", page_icon="✅")
 
 if not st.session_state.get("password_correct"):
-
     st.write("Please login :)")
 
 else:
@@ -42,13 +40,12 @@ else:
     def init_connection():
         return pymongo.MongoClient(**st.secrets.db_credentials)
 
-
     client_init = init_connection()
 
     client = MongoClient(uri)
 
-    db = client['messagesdb']
-    collection = db['slackcoll']
+    db = client["messagesdb"]
+    collection = db["slackcoll"]
 
     # Convert MongoDB documents to DataFrame
     df_messages = pd.DataFrame(list(collection.find()))
@@ -68,20 +65,23 @@ else:
         item = list(item)  # make hashable for st.cache_data
         return item
 
-
     items = get_data()
 
     current_utc_time = datetime.utcnow()
-    local_timezone = pytz.timezone('America/New_York')  # Replace 'America/New_York' with your desired time zone
-    current_local_time = current_utc_time.replace(tzinfo=pytz.utc).astimezone(local_timezone)
+    local_timezone = pytz.timezone(
+        "America/New_York"
+    )  # Replace 'America/New_York' with your desired time zone
+    current_local_time = current_utc_time.replace(tzinfo=pytz.utc).astimezone(
+        local_timezone
+    )
 
-    st.write('Current local time:', current_local_time)
+    st.write("Current local time:", current_local_time)
 
     envdir = pathlib.Path(__file__).parent
     env_dir_path = envdir / ".env"
 
-    st.title('Notification Dashboard')
-    st.subheader('Slack :zap: :blue[message] summary')
+    st.title("Notification Dashboard")
+    st.subheader("Slack :zap: :blue[message] summary")
 
     try:
         df_messages = pd.DataFrame(list(collection.find({}, {"_id": 0})))
@@ -89,14 +89,36 @@ else:
         st.table(df_messages)
 
         # Convert msg_date to datetime format if needed
-        df_messages['msg_date'] = pd.to_datetime(df_messages['msg_date'])
+        df_messages["msg_date"] = pd.to_datetime(df_messages["msg_date"])
 
         # Bokeh plot with a title and axis labels
-        p = figure(title="Bokeh plot of Messages", x_axis_label='Date', y_axis_label='Messages', x_axis_type="datetime")
-        p.line(df_messages['msg_date'], df_messages['normal'], legend_label="Normal", color="green", line_width=2)
-        p.line(df_messages['msg_date'], df_messages['priority'], legend_label="Priority", color="orange",
-               line_width=2)
-        p.line(df_messages['msg_date'], df_messages['urgent'], legend_label="Critical", color="red", line_width=2)
+        p = figure(
+            title="Bokeh plot of Messages",
+            x_axis_label="Date",
+            y_axis_label="Messages",
+            x_axis_type="datetime",
+        )
+        p.line(
+            df_messages["msg_date"],
+            df_messages["normal"],
+            legend_label="Normal",
+            color="green",
+            line_width=2,
+        )
+        p.line(
+            df_messages["msg_date"],
+            df_messages["priority"],
+            legend_label="Priority",
+            color="orange",
+            line_width=2,
+        )
+        p.line(
+            df_messages["msg_date"],
+            df_messages["urgent"],
+            legend_label="Critical",
+            color="red",
+            line_width=2,
+        )
 
         # Define custom tick formatter to display day of the week
         CODE = """
@@ -112,7 +134,9 @@ else:
         st.bokeh_chart(p, use_container_width=True)
 
         # Plot an area chart
-        st.area_chart(df_messages.set_index('msg_date')[['normal', 'priority', 'urgent']])
+        st.area_chart(
+            df_messages.set_index("msg_date")[["normal", "priority", "urgent"]]
+        )
 
     except EmptyDataError:
-        st.text('INFO: Database is empty')
+        st.text("INFO: Database is empty")
