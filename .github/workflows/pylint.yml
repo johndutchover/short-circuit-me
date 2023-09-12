@@ -12,10 +12,6 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - name: Set POETRY_PROJECT_DIR
-        run: |
-          export POETRY_PROJECT_DIR=short-circuit-me
-
       - name: Set up Python ${{ matrix.python-version }}
         uses: actions/setup-python@v4
         with:
