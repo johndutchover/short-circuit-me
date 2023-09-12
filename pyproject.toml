@@ -6,8 +6,7 @@ authors = ["John Dutchover <johndutchover@users.noreply.github.com>"]
 readme = "README.md"
 packages = [
   { include = "backend" },
-  { include = "frontend" },
-  { include = "fullstack" }
+  { include = "frontend" }
 ]
 [tool.poetry.dependencies]
 anyio = ">=4.0.0"
