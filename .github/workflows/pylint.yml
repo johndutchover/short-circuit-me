@@ -39,11 +39,11 @@ jobs:
       - run: python -m pip install --upgrade pip
 
       - name: pylint backend
-        working-directory: backend
+        working-directory: ./backend
         run: |
           poetry run pylint --init-hook="import sys; sys.path.append('backend')" $(git ls-files '*.py')
 
       - name: pylint frontend
-        working-directory: frontend
+        working-directory: ./frontend
         run: |
           poetry run pylint --init-hook="import sys; sys.path.append('frontend')" $(git ls-files '*.py')
