@@ -13,7 +13,7 @@ jobs:
       - uses: actions/checkout@v3
 
       - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v2
         with:
           python-version: ${{ matrix.python-version }}
 
@@ -24,24 +24,21 @@ jobs:
           poetry config virtualenvs.in-project true
 
       - name: Cache Poetry virtualenv
-        uses: actions/cache@v3
-        id: cache
+        uses: actions/cache@v2
         with:
-          path: ~/.virtualenvs
-          key: poetry-${{ hashFiles('short-circuit-me/pyproject.toml') }}
+          path: ~/.cache/pypoetry/virtualenvs
+          key: ${{ runner.os }}-poetry-${{ hashFiles('pyproject.toml') }}
           restore-keys: |
-            poetry-${{ hashFiles('short-circuit-me/pyproject.toml') }}
+            ${{ runner.os }}-poetry-
 
       - name: Install Dependencies
         run: poetry install
-        if: steps.cache.outputs.cache-hit != 'true'
 
-      - run: python -m pip install --upgrade pip
+      - name: Upgrade pip
+        run: poetry run pip install --upgrade pip
 
       - name: pylint backend
-        working-directory: short-circuit-me/backend
-        run: poetry run pylint $(git ls-files '*.py')
+        run: poetry run pylint backend/**/*.py
 
       - name: pylint frontend
-        working-directory: short-circuit-me/frontend
-        run: poetry run pylint $(git ls-files '*.py')
+        run: poetry run pylint frontend/**/*.py
