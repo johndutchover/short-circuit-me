@@ -1,13 +1,13 @@
 [tool.poetry]
 name = "short-circuit-me"
-version = "0.5.0"
+version = "0.5.1"
 description = "short-circuit-me poetry"
 authors = ["John Dutchover <johndutchover@users.noreply.github.com>"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
 anyio = ">=4.0.0"
-python = "^3.10.13"
+python = ">=3.10.12, <=3.10.13"
 fastapi = ">=0.103.0"
 slack-bolt = "^1.18.0"
 pip-tools = "^7.3.0"
@@ -21,7 +21,7 @@ asyncio = "^3.4.3"
 numpy = "^1.24.3"
 pandas = "^2.0.2"
 plotly = "^5.14.1"
-bokeh = "2.4.3"
+bokeh = "^3.2.2"
 motor = "^3.1.2"
 pymongo = "^4.3.3"
 streamlit-extras = "^0.3.2"
