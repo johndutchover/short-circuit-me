@@ -11,6 +11,18 @@ from bokeh.plotting import figure
 from pandas.errors import EmptyDataError
 from pymongo import MongoClient
 
+"""
+This module provides frontend web functionality
+
+Author: John Dutchover
+
+Functions:
+- list
+
+Usage:
+- tbd
+"""
+
 envdir = pathlib.Path(__file__).parent
 env_dir_path = envdir / ".env"
 
@@ -87,14 +99,14 @@ else:
         p.line(df_messages['msg_date'], df_messages['urgent'], legend_label="Critical", color="red", line_width=2)
 
         # Define custom tick formatter to display day of the week
-        code = """
+        CODE = """
         var days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
         var date = new Date(tick);
         var localDate = new Date(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate());
         var day = localDate.getDay();
         return days[day];
         """
-        p.xaxis.formatter = FuncTickFormatter(code=code)
+        p.xaxis.formatter = FuncTickFormatter(code=CODE)
 
         # Display the Bokeh plot using Streamlit
         st.bokeh_chart(p, use_container_width=True)
