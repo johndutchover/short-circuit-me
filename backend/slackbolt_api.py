@@ -11,6 +11,16 @@ from slack_bolt.adapter.fastapi.async_handler import AsyncSlackRequestHandler
 from slack_bolt.adapter.socket_mode.async_handler import AsyncSocketModeHandler
 from slack_bolt.async_app import AsyncApp
 from slack_sdk.errors import SlackApiError
+"""This module provides backend API functionality
+
+Author: John Dutchover
+
+Functions:
+- list
+
+Usage:
+- tbd
+"""
 
 load_dotenv()  # read local .env file
 
@@ -199,9 +209,9 @@ async def handle_important_button_click(ack, body):
         )
         # Log the result
         logger_slackbolt.info(result)
-    except SlackApiError as e:
+    except SlackApiError as slack_api_error:
         # Log the error
-        logger_slackbolt.error(f"Error in handle_important_button_click: {e}")
+        logger_slackbolt.error(f"Error in handle_important_button_click: {slack_api_error}")
 
 
 # Slack MESSAGE Handler: convenience method to listen for `message` events (urgent)
