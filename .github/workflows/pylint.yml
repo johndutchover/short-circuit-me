@@ -28,9 +28,9 @@ jobs:
         id: cache
         with:
           path: ~/.virtualenvs
-          key: poetry-${{ hashFiles('**/poetry.lock') }}
+          key: poetry-${{ hashFiles('short-circuit-me/pyproject.toml') }}
           restore-keys: |
-            poetry-${{ hashFiles('**/poetry.lock') }}
+            poetry-${{ hashFiles('short-circuit-me/pyproject.toml') }}
 
       - name: Install Dependencies
         run: poetry install
