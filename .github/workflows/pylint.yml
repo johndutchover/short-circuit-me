@@ -39,11 +39,9 @@ jobs:
       - run: python -m pip install --upgrade pip
 
       - name: pylint backend
-        working-directory: ${{ steps.cache.outputs.directory }}/short-circuit-me/backend
-        run: |
-          poetry run pylint --init-hook="import sys; sys.path.append('backend')" $(git ls-files '*.py')
+        working-directory: ..
+        run: poetry run pylint --init-hook="import sys; sys.path.append('backend')" $(git ls-files '*.py')
 
       - name: pylint frontend
-        working-directory: ${{ steps.cache.outputs.directory }}/short-circuit-me/frontend
-        run: |
-          poetry run pylint --init-hook="import sys; sys.path.append('frontend')" $(git ls-files '*.py')
+        working-directory: ..
+        run: poetry run pylint --init-hook="import sys; sys.path.append('frontend')" $(git ls-files '*.py')
