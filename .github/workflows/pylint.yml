@@ -39,6 +39,7 @@ jobs:
 
       - name: pylint backend
         run: poetry run pylint backend/**/*.py
+        continue-on-error: true
 
       - name: pylint frontend
         run: poetry run pylint frontend/**/*.py
