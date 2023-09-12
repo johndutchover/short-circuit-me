@@ -26,13 +26,9 @@ jobs:
           pip install pylint
       - name: pylint backend
         working-directory: .
-        env:
-          PYTHONPATH: ${{ github.workspace }}/backend
         run: |
-          poetry run pylint $(git ls-files '*.py') backend/
+          poetry run pylint --init-hook="import sys; sys.path.append('backend')" $(git ls-files '*.py') backend/
       - name: pylint frontend/
         working-directory: .
-        env:
-          PYTHONPATH: ${{ github.workspace }}/frontend
         run: |
-          poetry run pylint $(git ls-files '*.py') frontend/
+          poetry run pylint --init-hook="import sys; sys.path.append('frontend')" $(git ls-files '*.py') frontend/
