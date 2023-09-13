@@ -1,3 +1,13 @@
+"""This module provides frontend web functionality
+
+        Author: John Dutchover
+
+        Functions:
+        - list
+
+        Usage:
+        - tbd
+"""
 import os
 import pathlib
 from datetime import datetime
@@ -10,17 +20,6 @@ from bokeh.models import FuncTickFormatter
 from bokeh.plotting import figure
 from pandas.errors import EmptyDataError
 from pymongo import MongoClient
-
-"""This module provides frontend web functionality
-
-Author: John Dutchover
-
-Functions:
-- list
-
-Usage:
-- tbd
-"""
 
 envdir = pathlib.Path(__file__).parent
 env_dir_path = envdir / ".env"
@@ -38,7 +37,13 @@ else:
     # Uses st.cache_resource to only run once.
     @st.cache_resource
     def init_connection():
+        """
+
+        :return:
+        :rtype:
+        """
         return pymongo.MongoClient(**st.secrets.db_credentials)
+
 
     client_init = init_connection()
 
@@ -53,6 +58,7 @@ else:
     print(df_messages.head())  # Check the first few rows of the DataFrame
     print(df_messages.info())  # Print information about the DataFrame
 
+
     # Only include documents where 'field1' is 'value1', and only include 'field2' and 'field3' in the output
     # df_messages = pd.DataFrame(list(collection.find({'field1': 'value1'}, {'field2': 1, 'field3': 1})))
 
@@ -60,10 +66,16 @@ else:
     # Uses st.cache_data to only rerun when the query changes or after 10 min.
     @st.cache_data(ttl=600)
     def get_data():
+        """
+
+        :return:
+        :rtype:
+        """
         db1 = client["messagesdb"]
         item = db1.slackcoll.find()
         item = list(item)  # make hashable for st.cache_data
         return item
+
 
     items = get_data()
 
