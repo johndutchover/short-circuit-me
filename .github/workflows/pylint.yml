@@ -1,4 +1,4 @@
-name: Pylint
+name: Code Quality
 
 on:
   workflow_dispatch:
@@ -33,10 +33,6 @@ jobs:
       - name: Install Dependencies
         run: poetry install --no-root
 
-      - name: pylint backend
-        run: poetry run pylint backend/**/*.py
-        continue-on-error: true
-
-      - name: pylint frontend
-        run: poetry run pylint frontend/**/*.py
-        continue-on-error: true
+      - name: Pylint
+        run: poetry run pylint --recursive=y backend frontend
+        # continue-on-error: true
