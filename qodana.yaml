@@ -12,7 +12,7 @@ profile:
 #include:
 #  - name: <SomeEnabledInspectionId>
 include:
-  - CheckDependencyLicenses
+  - name: CheckDependencyLicenses
 
 #exclude:
 #  - name: <SomeDisabledInspectionId>
