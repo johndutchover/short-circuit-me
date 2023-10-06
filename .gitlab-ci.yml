@@ -3,7 +3,7 @@ qodana:
     - main
     - merge_requests
   image:
-    name: jetbrains/qodana-python
+    name: jetbrains/qodana-python-community
     entrypoint: [""]
   variables:
     QODANA_TOKEN: $qodana_token
