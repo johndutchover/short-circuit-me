@@ -1,8 +1,8 @@
 [tool.poetry]
 name = "short-circuit-me"
-version = "0.5.2"
+version = "0.5.5"
 description = "short-circuit-me poetry"
-authors = ["John Dutchover <johndutchover@users.noreply.github.com>"]
+authors = ["John Dutchover <1983909-johndutchover@users.noreply.gitlab.com>"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
