@@ -10,7 +10,7 @@ RUN mkdir /app/pages
 COPY .env /app
 COPY .streamlit/secrets.toml /app/.streamlit
 COPY . .
-RUN pip3 install poetry --no-root
+RUN pip3 install poetry
 RUN poetry config virtualenvs.create false
 RUN poetry install
 EXPOSE 8501
