@@ -147,7 +147,8 @@ else:
 
         # Plot an area chart
         st.area_chart(
-            df_messages.set_index("msg_date")[["normal", "priority", "urgent"]]
+            df_messages.set_index("msg_date", inplace=True),
+            df_messages[["normal", "priority", "urgent"]]
         )
 
     except EmptyDataError:
