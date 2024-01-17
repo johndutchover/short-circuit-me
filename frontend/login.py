@@ -3,6 +3,16 @@ import pathlib
 import streamlit as st
 from dotenv import load_dotenv
 from streamlit_extras.switch_page_button import switch_page
+"""
+
+        Author: John Dutchover
+
+        Functions:
+        - check_password
+
+        Usage:
+        - login page
+"""
 
 env_path = pathlib.Path(__file__).parent / ".env"
 load_dotenv(env_path)
@@ -13,14 +23,13 @@ def check_password():
     # Check if password has been entered correctly
     if st.session_state.get("password_correct"):
         return True
+    password = st.text_input("Password", type="password")
+    if password == os.environ.get("PASSWORD"):
+        st.session_state["password_correct"] = True
+        return True
     else:
-        password = st.text_input("Password", type="password")
-        if password == os.environ.get("PASSWORD"):
-            st.session_state["password_correct"] = True
-            return True
-        else:
-            st.error("Incorrect password")
-            return False
+        st.error("Incorrect password")
+        return False
 
 
 # Prompt for password
