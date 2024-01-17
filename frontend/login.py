@@ -3,7 +3,6 @@
         Author: John Dutchover
 
         Functions:
-        - check_password
 
         Usage:
         - login page
