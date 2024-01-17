@@ -3,10 +3,21 @@
         Author: John Dutchover
 
         Functions:
-        - list
+        - endpoint - Handles POST requests to /slack/events endpoint
+        - mention_handler_im - Handles "app_mention" events
+        - mention_handler_mpim - Handles "messages.im" events
+        - handle_button_escalate - Handles "action_button_notify" action
+        - handle_urgent_button_click - Handles "click_button_urgent" action
+        - handle_important_button_click - Handles "click_button_important" action
+        - message_urgent - Handles messages matching urgent regex
+        - message_priority - Handles messages matching priority regex
+        - message_normal - Handles messages matching normal regex
+        - slash_help - Handles "/help-slack-bolt" command
+        - add_contact - Handles "/add-contact" command
+        - get_contact - Handles "/get-contact" command
+        - increase_counter - Increases message counter in database
+        -main - Starts socket mode handler
 
-        Usage:
-        - tbd
 """
 import asyncio
 import datetime
@@ -72,14 +83,14 @@ async def mention_handler(body):
 
 # Listen for event from Events API
 @bolt.event("messages.mpim")
-async def mention_handler(body, say):
+async def mention_handler_mpim(body, say):
     user = body['event']['user']
     await say(f'Multi-party Hello, <@{user}>!')
 
 
 # Listen for event from Events API
 @bolt.event("messages.im")
-async def mention_handler(body, say):
+async def mention_handler_im(body, say):
     user = body['event']['user']
     await say(f'DM Hello, <@{user}>!')
 
