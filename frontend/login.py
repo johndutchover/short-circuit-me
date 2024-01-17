@@ -26,9 +26,8 @@ def check_password():
     if password == os.environ.get("PASSWORD"):
         st.session_state["password_correct"] = True
         return True
-    else:
-        st.error("Incorrect password")
-        return False
+    st.error("Incorrect password")
+    return False
 
 
 # Prompt for password
