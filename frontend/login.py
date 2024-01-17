@@ -1,3 +1,8 @@
+import os
+import pathlib
+import streamlit as st
+from dotenv import load_dotenv
+from streamlit_extras.switch_page_button import switch_page
 """
 
         Author: John Dutchover
@@ -8,11 +13,6 @@
         Usage:
         - login page
 """
-import os
-import pathlib
-import streamlit as st
-from dotenv import load_dotenv
-from streamlit_extras.switch_page_button import switch_page
 
 env_path = pathlib.Path(__file__).parent / ".env"
 load_dotenv(env_path)
@@ -27,8 +27,9 @@ def check_password():
     if password == os.environ.get("PASSWORD"):
         st.session_state["password_correct"] = True
         return True
-    st.error("Incorrect password")
-    return False
+    else:
+        st.error("Incorrect password")
+        return False
 
 
 # Prompt for password
