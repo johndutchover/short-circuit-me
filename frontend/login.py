@@ -1,8 +1,3 @@
-import os
-import pathlib
-import streamlit as st
-from dotenv import load_dotenv
-from streamlit_extras.switch_page_button import switch_page
 """
 
         Author: John Dutchover
@@ -13,6 +8,11 @@ from streamlit_extras.switch_page_button import switch_page
         Usage:
         - login page
 """
+import os
+import pathlib
+import streamlit as st
+from dotenv import load_dotenv
+from streamlit_extras.switch_page_button import switch_page
 
 env_path = pathlib.Path(__file__).parent / ".env"
 load_dotenv(env_path)
