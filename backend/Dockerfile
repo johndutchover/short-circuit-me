@@ -1,15 +1,18 @@
 # syntax=docker/dockerfile:1
-
 FROM python:3.10.13-slim-bookworm
 WORKDIR /app
 ENV PYTHONPATH /app
 
-COPY .env .
-COPY . .
+# Copy only the necessary files
+COPY .env pyproject.toml poetry.lock ./
 
-RUN pip3 install poetry
-RUN poetry config virtualenvs.create false
-RUN poetry install
+# Install poetry and project dependencies
+RUN pip install --no-cache-dir poetry \
+    && poetry config virtualenvs.create false \
+    && poetry install --no-interaction --no-ansi
+
+# Copy the remaining project files
+COPY . .
 
 EXPOSE 3000
 
