@@ -19,6 +19,13 @@ coverage.xml
 .pytest_cache
 .hypothesis
 venv
+.venv
 id
 build
 package
+.history
+.idea
+.vscode
+.github
+tests
+fly.toml
