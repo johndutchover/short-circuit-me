@@ -1,17 +1,8 @@
 deploy-backend:
-	cd backend && flyctl deploy
-
-deploy-frontend:
-	cd frontend && flyctl deploy
-
-start-frontend:
-	shell cd frontend && flyctl scale count 1 -y
+	flyctl deploy --config backend/fly.toml -a shortcircuitme-backend
 
 start-backend:
-	shell cd backend && flyctl scale count 1 -y
-
-stop-frontend:
-	shell cd frontend && flyctl scale count 0 -y
+	flyctl scale count 1 -y -a shortcircuitme-backend
 
 stop-backend:
-	shell cd backend && flyctl scale count 0 -y
+	flyctl scale count 0 -y -a shortcircuitme-backend
