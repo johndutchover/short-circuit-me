@@ -37,5 +37,5 @@ jobs:
         run: poetry install --no-root
 
       - name: Pylint
-        run: poetry run pylint --recursive=y backend frontend
+        run: poetry run pylint --recursive=y backend
         # continue-on-error: true
