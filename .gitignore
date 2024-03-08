@@ -400,4 +400,6 @@ secrets.toml
 # fly ssh keys
 id
 id-cert.pub
+# test report
+report.md
 # End of project exclusions
