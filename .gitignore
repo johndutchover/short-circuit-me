@@ -403,3 +403,4 @@ id-cert.pub
 # test report
 report.md
 # End of project exclusions
+.pixi/*
