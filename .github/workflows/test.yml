@@ -23,3 +23,5 @@ jobs:
           auth-token: ${{ secrets.PREFIX_DEV_TOKEN }}
           cache-write: ${{ github.event_name == 'push' && github.ref_name == 'main' }}
       - run: pixi run test
+        env:
+          SLACK_BOT_TOKEN: ${{ secrets.POETRY_SCM_XAPP_TOKEN }}
