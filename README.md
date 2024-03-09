@@ -1,6 +1,6 @@
 # short-circuit-me
 
-[![Pylint](https://github.com/johndutchover/short-circuit-me/actions/workflows/pylint.yml/badge.svg)](https://github.com/johndutchover/short-circuit-me/actions/workflows/pylint.yml)
+[![Pylint](https://github.com/johndutchover/short-circuit-me/actions/workflows/test.yml/badge.svg)](https://github.com/johndutchover/short-circuit-me/actions/workflows/test.yml)
 
 ## Notification insights for Slack
 
