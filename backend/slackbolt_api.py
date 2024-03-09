@@ -227,10 +227,10 @@ async def handle_important_button_click(ack, body):
 
 # Slack MESSAGE Handler: convenience method to listen for `message` events (urgent)
 @bolt.message(re.compile("(asap|critical|urgent)", re.I))
-async def message_urgent(message):
-    user = message['user']
-    channel = message['channel']
-    await bolt.client.chat_postEphemeral(
+async def message_urgent(event, slack_client):
+    user = event['user']
+    channel = event['channel']
+    await slack_client.chat_postEphemeral(
         channel=channel,
         user=user,
         text=f"Would you like to escalate this <@{user}>?",
