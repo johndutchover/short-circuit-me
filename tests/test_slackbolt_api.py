@@ -1,15 +1,21 @@
 # test_slackbolt_api.py
 
 import pytest
-from backend.slackbolt_api import message_urgent
-import asyncio
+import asyncio  # Import asyncio module
+from backend.slackbolt_api import message_urgent, bolt
+
+# ... (other imports)
 
 @pytest.fixture
 def mock_slack_client(mocker):
     return mocker.MagicMock()
 
+@pytest.fixture
+def app():
+    return bolt
+
 @pytest.mark.asyncio
-async def test_message_urgent(mock_slack_client):
+async def test_message_urgent(app, mock_slack_client):
     # Create a mock message event
     mock_message_event = {
         'user': 'USER_ID',
