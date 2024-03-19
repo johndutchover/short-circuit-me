@@ -1,16 +1,17 @@
 [project]
 name = "scm-backend"
-version = "0.1.0"
 description = "Add a short description here"
+version = "0.1.0"
 authors = ["John Dutchover <1983909-johndutchover@users.noreply.gitlab.com>"]
 channels = ["conda-forge"]
-platforms = ["linux-64", "linux-aarch64", "osx-64", "osx-arm64"]
+platforms = ["linux-64", "linux-aarch64", "win-64", "osx-64", "osx-arm64"]
 
 [tasks]
 postinstall-e = "pip install --no-build-isolation --no-deps --disable-pip-version-check -e ."
 postinstall = "pip install --no-build-isolation --no-deps --disable-pip-version-check ."
 start-d =  { cmd = "python slackbolt_api.py" }
 start =  { cmd = "python slackbolt_api.py", cwd = "backend" }
+lint = "pre-commit run --all"
 
 [dependencies]
 python = ">3.10,<=3.12"
@@ -29,6 +30,7 @@ watchdog = ">=4.0.0,<4.1"
 pytest-md = ">=0.2.0,<0.3"
 pytest = ">=8.0.2,<8.1"
 pytest-mock = ">=3.12.0,<3.13"
+pre-commit = ">=3.6.2,<3.7"
 
 [host-dependencies]
 python = "*"
