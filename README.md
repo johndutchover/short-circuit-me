@@ -16,7 +16,8 @@
 
 ### GitHub
 - Pytest (as defined in pixi.toml)
-  - `pytest --md=report.md`
+  - Pytest :`pytest --md=report.md`
+  - [GitLab Semgrep analyzer](https://gitlab.com/gitlab-org/security-products/analyzers/semgrep)
 
 ### TeamCity Pipelines
 - Building container in early access version of TeamCity Pipelines.
