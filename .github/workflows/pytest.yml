@@ -1,5 +1,4 @@
 name: Pytest
-description: Pixi pytest workflow
 
 on:
   push:
