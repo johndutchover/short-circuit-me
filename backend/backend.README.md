@@ -2,8 +2,11 @@
 Slack App: ShortCircuitMe
 
 ## Components
-Prerequisites include:
+Development environment uses:
 - `.env`
+
+Backend in Fly deployment uses fly secrets:
+- `fly secrets import < .env`
 
 ### FastAPI
 - Endpoint for Slack events

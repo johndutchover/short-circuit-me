@@ -1,4 +1,5 @@
-name: Code Quality
+name: Pytest
+description: Pixi pytest workflow
 
 on:
   push:
@@ -28,3 +29,8 @@ jobs:
       - run: pixi run test
         env:
           SLACK_BOT_TOKEN: ${{ secrets.POETRY_SCM_XAPP_TOKEN }}
+      - name: Upload Markdown Report as Artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: test-reports
+          path: report.md

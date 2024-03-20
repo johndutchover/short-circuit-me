@@ -9,9 +9,12 @@ platforms = ["linux-64", "linux-aarch64", "win-64", "osx-64", "osx-arm64"]
 [tasks]
 postinstall-e = "pip install --no-build-isolation --no-deps --disable-pip-version-check -e ."
 postinstall = "pip install --no-build-isolation --no-deps --disable-pip-version-check ."
-start-d =  { cmd = "python slackbolt_api.py" }
-start =  { cmd = "python slackbolt_api.py", cwd = "backend" }
+start =  { cmd = "python slackbolt_api.py" }
+start-daemon =  { cmd = "python slackbolt_api.py", cwd = "backend" }
 lint = "pre-commit run --all"
+deploy = "flyctl deploy --config fly.toml -a shortcircuitme-backend"
+start-dev = "flyctl scale count 1 -y -a shortcircuitme-backend"
+stop-dev = "flyctl scale count 0 -y -a shortcircuitme-backend"
 
 [dependencies]
 python = ">3.10,<=3.12"

@@ -6,7 +6,17 @@
 
 ### IDE notes:
 
-- from VSCode, use "Run Python File" instead of "Run Code" (properly activates venv)
-- from JetBrains...set Python interpreter to .venv/bin/python (backend/frontend)
-- from external terminal, use `poetry shell` followed by:
-    `streamlit run login.py`
+- from JetBrains...set Python "Virtual Environment" interpreter to existing:
+  - `.pixi/envs/default/bin/python`
+
+## CI/CD
+
+### GitLab
+- [Qodana Cloud](https://www.jetbrains.com/help/qodana/cloud-about.html)
+
+### GitHub
+- Pytest (as defined in pixi.toml)
+  - `pytest --md=report.md`
+
+### TeamCity Pipelines
+- Building container in early access version of TeamCity Pipelines.

@@ -31,4 +31,4 @@ COPY backend/slackbolt_api.py backend/start_bolt.sh /app/
 
 EXPOSE 3000
 
-ENTRYPOINT ["pixi", "run", "-e", "prod", "start-d"]
+ENTRYPOINT ["pixi", "run", "-e", "prod", "start"]
