@@ -35,6 +35,9 @@ pytest = ">=8.0.2,<8.1"
 pytest-mock = ">=3.12.0,<3.13"
 pre-commit = ">=3.6.2,<3.7"
 
+[target.unix.dependencies]
+pixi-pycharm = "*"
+
 [host-dependencies]
 python = "*"
 pip = "*"
