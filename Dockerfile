@@ -6,7 +6,7 @@ ENV INSTALL_DIR=/usr/local/bin
 ENV REPO=prefix-dev/pixi
 ENV PLATFORM=unknown-linux-musl
 ENV PROJECT_NAME=pixi-in-docker
-ENV PYTHONPATH /app
+ENV PYTHONPATH=/app
 
 # Install apt-utils first to avoid debconf warning
 RUN apt-get update \
